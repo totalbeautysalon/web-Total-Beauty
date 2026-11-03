@@ -156,40 +156,13 @@
         <h2 class="section-title">Cursos de Capacitación</h2>
       </div>
 
-      <!-- Barra de Filtros por Categoría con Desplazamiento Táctil en Móviles -->
-      <div class="category-filter-bar" role="tablist" aria-label="Filtro de cursos">
-        <button type="button" class="filter-btn active" data-filter="all">Todos</button>
-        <button type="button" class="filter-btn" data-filter="estilismo">Estilismo &amp; Cabello</button>
-        <button type="button" class="filter-btn" data-filter="colorimetria">Colorimetría</button>
-        <button type="button" class="filter-btn" data-filter="maquillaje">Maquillaje</button>
-        <button type="button" class="filter-btn" data-filter="unas-mirada">Uñas &amp; Mirada</button>
-      </div>
+      <!-- Barra Dinámica de Filtros por Categoría (Generada según Cursos Disponibles) -->
+      <div class="category-filter-bar" id="categoryFilterBar" role="tablist" aria-label="Filtro de cursos"></div>
 
       <!-- Cuadrícula Dinámica de Cursos (Configurados en Panel Admin y Firebase) -->
       <div class="courses-grid" id="coursesGrid">
         
-        <!-- Curso por Defecto Inicial (1 solo curso activo) -->
-        <article class="course-card" data-category="colorimetria">
-          <div class="course-card-header">
-            <span class="course-mode-badge">90% Práctico</span>
-            <span class="course-duration">Presencial • Modelos Reales</span>
-          </div>
-          <div class="course-card-body">
-            <span class="course-category-tag">Colorimetría &amp; Estilismo</span>
-            <h3 class="course-title">Curso de Colorimetría Avanzada &amp; Balayage Profesional</h3>
-            <p class="course-desc">
-              Capacitación intensiva y personalizada en formulación de tintes, técnicas de difuminado balayage, neutralización de reflejos y trabajo directo sobre modelos reales en cabina.
-            </p>
-            <ul class="course-topics-list">
-              <li class="course-topic-item"><span class="dot"></span><span>Práctica continua en estaciones con modelos reales</span></li>
-              <li class="course-topic-item"><span class="dot"></span><span>10% teoría sobre visagismo capilar y fondos de aclaración</span></li>
-              <li class="course-topic-item"><span class="dot"></span><span>Entrega de Constancia de Finalización oficial</span></li>
-            </ul>
-            <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20y%20temario%20del%20Curso%20de%20Colorimetr%C3%ADa%20Avanzada%20y%20Balayage." target="_blank" rel="noopener noreferrer" class="btn-inquire">
-              <span>Solicitar Plan del Curso</span>
-            </a>
-          </div>
-        </article>
+
 
       </div>
     </main>
@@ -219,12 +192,61 @@
         </div>
 
         <div class="methodology-item">
-          <span class="methodology-number">03</span>
+          <span class="methodology-number">Recibe</span>
           <h3 class="methodology-title">Constancia de Finalización</h3>
           <p class="methodology-desc">
             Al cumplir satisfactoriamente las horas prácticas y los criterios técnicos de evaluación, cada alumna recibe su Constancia de Finalización.
           </p>
         </div>
+      </div>
+    </section>
+
+    <!-- Galería de la Academia -->
+    <section class="academy-gallery-section" aria-label="Galería de la Academia">
+      <div class="section-header" style="margin-bottom: 1rem;">
+        <span class="section-tag">Instalaciones y Práctica Real</span>
+        <h2 class="section-title">Galería de la Academia</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <article class="gallery-card">
+          <div class="gallery-image-wrapper">
+            <span class="gallery-badge">Cabina Principal</span>
+            <img src="assets/images/academia.jpg" alt="Aula de capacitación práctica de Total Beauty Academia" class="gallery-image" loading="lazy">
+          </div>
+          <div class="gallery-caption">
+            <h3 class="gallery-caption-title">Cabina de Capacitación</h3>
+            <p class="gallery-caption-desc">
+              Espacio profesional equipado con herramientas de alta gama para la formación práctica en colorimetría, visagismo y técnicas modernas.
+            </p>
+          </div>
+        </article>
+
+        <article class="gallery-card">
+          <div class="gallery-image-wrapper">
+            <span class="gallery-badge">Práctica Clínica</span>
+            <img src="assets/images/salon.jpg" alt="Estaciones de trabajo y práctica en modelos reales" class="gallery-image" loading="lazy">
+          </div>
+          <div class="gallery-caption">
+            <h3 class="gallery-caption-title">Estaciones de Salón Real</h3>
+            <p class="gallery-caption-desc">
+              Entorno auténtico de salón donde las alumnas aplican el 90% de práctica directamente sobre modelos reales bajo supervisión.
+            </p>
+          </div>
+        </article>
+
+        <article class="gallery-card">
+          <div class="gallery-image-wrapper">
+            <span class="gallery-badge">Técnica Profesional</span>
+            <img src="assets/images/practica.png" alt="Herramientas y protocolos de Total Beauty Academia" class="gallery-image" loading="lazy">
+          </div>
+          <div class="gallery-caption">
+            <h3 class="gallery-caption-title">Protocolos &amp; Bioseguridad</h3>
+            <p class="gallery-caption-desc">
+              Enseñanza rigurosa en esterilización, formulación de químicos y diagnóstico personalizado previo a cualquier servicio.
+            </p>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -311,7 +333,7 @@
         </form>
 
         <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20olvidé%20mi%20contraseña%20de%20alumna%20y%20solicito%20apoyo%20con%20mi%20acceso." target="_blank" rel="noopener noreferrer" class="student-help-link">
-          Si olvidó su contraseña, contacte a <span>Total Beauty Academia al WhatsApp 5650560824</span>
+          Si olvidó su contraseña, contacte a <span>Total Beauty Academia</span>
         </a>
       </div>
 

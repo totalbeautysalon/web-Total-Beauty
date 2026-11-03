@@ -42,6 +42,10 @@
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html {
@@ -49,6 +53,10 @@ html {
   scroll-behavior: smooth;
   background-color: var(--bg-dark);
   -webkit-text-size-adjust: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -62,6 +70,21 @@ body {
   overflow-x: hidden;
   position: relative;
   -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Excepciones de Selección para Campos Editables y Formularios */
+input,
+textarea,
+select,
+[contenteditable="true"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
 }
 
 /* Fondos Ambientales */
@@ -2708,4 +2731,116 @@ body {
   gap: 0.65rem;
   padding-top: 0.85rem;
   border-top: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+/* ==========================================================================
+   SECCIÓN DE GALERÍA DE ACADEMIA (TOTAL BEAUTY)
+   ========================================================================== */
+.academy-gallery-section {
+  width: 100%;
+  margin-top: 4rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.gallery-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--surface-card);
+  border: 1px solid var(--gold-border);
+  transition: var(--transition-smooth);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-card:hover {
+  border-color: var(--gold-border-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.18);
+}
+
+.gallery-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background-color: #0d0d12;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.gallery-card:hover .gallery-image {
+  transform: scale(1.06);
+}
+
+.gallery-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(7, 7, 9, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--gold-primary);
+  color: var(--gold-primary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.gallery-caption {
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: linear-gradient(180deg, rgba(13, 13, 18, 0.95) 0%, rgba(7, 7, 9, 0.98) 100%);
+  border-top: 1px solid rgba(212, 175, 55, 0.12);
+  flex: 1;
+}
+
+.gallery-caption-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.gallery-caption-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+@media (max-width: 768px) {
+  .academy-gallery-section {
+    margin-top: 3rem;
+  }
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .gallery-image-wrapper {
+    height: 210px;
+  }
 }

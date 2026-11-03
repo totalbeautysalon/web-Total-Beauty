@@ -412,6 +412,7 @@ const TB_FIREBASE = (function () {
 
   return {
     config: CONFIG,
+    DEFAULT_CURSOS,
     getAnnouncement,
     saveAnnouncement,
     getAlumnas,

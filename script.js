@@ -389,56 +389,124 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
+  // PROTECCIÓN: DESHABILITAR COPIA Y SELECCIÓN DE TEXTO
+  // ==========================================
+  ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart'].forEach(eventType => {
+    document.addEventListener(eventType, (e) => {
+      const target = e.target;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)) {
+        return; // Permitir edición y selección únicamente dentro de campos de formulario
+      }
+      e.preventDefault();
+    });
+  });
+
+  // ==========================================
   // 4. CARGA DINÁMICA Y FILTRO DE CURSOS EN ACADEMIA.HTML
   // ==========================================
+  function slugifyCategory(str) {
+    if (!str) return 'capacitacion';
+    return String(str)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'capacitacion';
+  }
+
   async function loadAcademyCourses() {
     const grid = document.getElementById('coursesGrid');
+    const filterBar = document.getElementById('categoryFilterBar');
     if (!grid) return;
 
-    if (typeof TB_FIREBASE === 'undefined') {
-      attachCourseFilters();
+    let activeCursos = [];
+
+    if (typeof TB_FIREBASE !== 'undefined') {
+      try {
+        const cursosObj = await TB_FIREBASE.getCursos();
+        const cursos = Object.values(cursosObj || {});
+        activeCursos = cursos.filter(c => c.activo !== false);
+      } catch (e) {
+        console.error("Error cargando cursos en academia:", e);
+      }
+    }
+
+    // Respaldo en caso de modo local o conexión inicial
+    if (activeCursos.length === 0 && typeof TB_FIREBASE !== 'undefined' && TB_FIREBASE.DEFAULT_CURSOS) {
+      activeCursos = Object.values(TB_FIREBASE.DEFAULT_CURSOS).filter(c => c.activo !== false);
+    }
+
+    if (activeCursos.length === 0) {
+      if (filterBar) {
+        filterBar.innerHTML = '';
+        filterBar.style.display = 'none';
+      }
+      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #a6a6b0; font-size: 0.9rem;">Próximamente se publicarán nuevas fechas de capacitación.</div>';
       return;
     }
 
-    try {
-      const cursosObj = await TB_FIREBASE.getCursos();
-      const cursos = Object.values(cursosObj || {});
+    // Extraer categorías únicas disponibles en los cursos activos
+    const uniqueCategories = [];
+    const seenKeys = new Set();
 
-      if (cursos.length === 0) return;
+    activeCursos.forEach(c => {
+      const rawKey = c.categoriaKey || slugifyCategory(c.categoria || 'capacitacion');
+      const catKey = String(rawKey).trim().toLowerCase();
+      const catLabel = (c.categoria || c.categoriaKey || 'Capacitación').trim();
+      if (catKey && !seenKeys.has(catKey)) {
+        seenKeys.add(catKey);
+        uniqueCategories.push({ key: catKey, label: catLabel });
+      }
+    });
 
-      const activeCursos = cursos.filter(c => c.activo !== false);
-      if (activeCursos.length === 0) return;
-
-      grid.innerHTML = activeCursos.map(c => {
-        const waMsg = encodeURIComponent(c.whatsappMsg || `Hola Total Beauty Academia, solicito informes del ${c.titulo}.`);
-        return `
-          <article class="course-card" data-category="${escapeHtml(c.categoriaKey || 'colorimetria')}">
-            <div class="course-card-header">
-              <span class="course-mode-badge">${escapeHtml(c.modalidad || '90% Práctico')}</span>
-              <span class="course-duration">${escapeHtml(c.duracion || 'Presencial • Modelos Reales')}</span>
-            </div>
-            <div class="course-card-body">
-              <span class="course-category-tag">${escapeHtml(c.categoria || 'Capacitación')}</span>
-              <h3 class="course-title">${escapeHtml(c.titulo)}</h3>
-              <p class="course-desc">${escapeHtml(c.descripcion || '')}</p>
-              <ul class="course-topics-list">
-                ${c.tema1 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema1)}</span></li>` : ''}
-                ${c.tema2 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema2)}</span></li>` : ''}
-                ${c.tema3 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema3)}</span></li>` : ''}
-              </ul>
-              <a href="https://api.whatsapp.com/send?phone=525650560824&text=${waMsg}" target="_blank" rel="noopener noreferrer" class="btn-inquire">
-                <span>Solicitar Plan del Curso</span>
-              </a>
-            </div>
-          </article>
+    // Renderizar dinámicamente la barra de filtros según categorías existentes
+    if (filterBar) {
+      if (uniqueCategories.length <= 1) {
+        // Solo 1 categoría disponible: se muestra únicamente dicha opción activa
+        filterBar.style.display = 'flex';
+        filterBar.innerHTML = `
+          <button type="button" class="filter-btn active" data-filter="${escapeHtml(uniqueCategories[0].key)}">${escapeHtml(uniqueCategories[0].label)}</button>
         `;
-      }).join('');
-
-      attachCourseFilters();
-    } catch (e) {
-      console.error("Error cargando cursos en academia:", e);
-      attachCourseFilters();
+      } else {
+        // Múltiples categorías disponibles: opción 'Todos' y cada categoría activa
+        filterBar.style.display = 'flex';
+        filterBar.innerHTML = `
+          <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+          ${uniqueCategories.map(cat => `
+            <button type="button" class="filter-btn" data-filter="${escapeHtml(cat.key)}">${escapeHtml(cat.label)}</button>
+          `).join('')}
+        `;
+      }
     }
+
+    // Renderizar tarjetas de cursos activos
+    grid.innerHTML = activeCursos.map(c => {
+      const catKey = (c.categoriaKey || slugifyCategory(c.categoria || 'capacitacion')).trim().toLowerCase();
+      const waMsg = encodeURIComponent(c.whatsappMsg || `Hola Total Beauty Academia, solicito informes del ${c.titulo}.`);
+      return `
+        <article class="course-card" data-category="${escapeHtml(catKey)}">
+          <div class="course-card-header">
+            <span class="course-mode-badge">${escapeHtml(c.modalidad || '90% Práctico')}</span>
+            <span class="course-duration">${escapeHtml(c.duracion || 'Presencial • Modelos Reales')}</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">${escapeHtml(c.categoria || 'Capacitación')}</span>
+            <h3 class="course-title">${escapeHtml(c.titulo)}</h3>
+            <p class="course-desc">${escapeHtml(c.descripcion || '')}</p>
+            <ul class="course-topics-list">
+              ${c.tema1 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema1)}</span></li>` : ''}
+              ${c.tema2 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema2)}</span></li>` : ''}
+              ${c.tema3 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema3)}</span></li>` : ''}
+            </ul>
+            <a href="https://api.whatsapp.com/send?phone=525650560824&text=${waMsg}" target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan del Curso</span>
+            </a>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    attachCourseFilters();
   }
 
   function attachCourseFilters() {

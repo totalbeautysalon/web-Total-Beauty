@@ -32,6 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
+  // PROTECCIÓN: DESHABILITAR COPIA Y SELECCIÓN DE TEXTO
+  // ==========================================
+  ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart'].forEach(eventType => {
+    document.addEventListener(eventType, (e) => {
+      const target = e.target;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)) {
+        return; // Permitir edición y selección únicamente dentro de campos de formulario
+      }
+      e.preventDefault();
+    });
+  });
+
+  // ==========================================
   // 1. ESTADO DE CONEXIÓN A FIREBASE
   // ==========================================
   async function checkFirebaseStatus() {
