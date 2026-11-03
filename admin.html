@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Total Beauty - Panel de Administración</title>
+  
+  <meta name="description" content="Panel de administración y control oficial de Total Beauty Salón &amp; Academia. Configuración de anuncios en tiempo real y reseteo de claves de alumnas mediante Firebase.">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  
+  <!-- Tipografías de Alta Gama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- Contenedor Principal de Administración -->
+  <div class="admin-wrapper">
+    
+    <!-- ENCABEZADO SUPERIOR DEL PANEL -->
+    <header class="admin-header">
+      <div class="admin-header-content">
+        <a href="index.html" class="admin-brand-link" title="Ir al Portal Principal">
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="admin-brand-logo"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+        </a>
+
+        <div class="admin-header-titles">
+          <span class="admin-badge-role">Portal Administrativo Oficial</span>
+          <h1 class="admin-main-title">Panel de Control &bull; Total Beauty</h1>
+        </div>
+
+        <!-- Indicador de Conexión a Firebase -->
+        <div class="admin-connection-wrap">
+          <div id="firebaseStatusPill" class="admin-status-pill online">
+            <span class="status-dot"></span>
+            <span id="firebaseStatusText">Conectando a Firebase...</span>
+          </div>
+          
+          <button type="button" id="adminLogoutBtn" class="btn-admin-logout" onclick="logoutAdmin()" style="display: none;">
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- VISTA 1: BARRERA DE SEGURIDAD (ACCESO MEDIANTE PIN) -->
+    <main id="adminAuthSection" class="admin-auth-container">
+      <div class="admin-auth-card">
+        <div class="admin-auth-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gold-icon">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+
+        <h2 class="admin-auth-title">Acceso de Administrador</h2>
+        <p class="admin-auth-desc">
+          Ingrese el PIN administrativo para acceder a la gestión de anuncios en Firebase y al reseteo de claves de alumnas.
+        </p>
+
+        <form id="adminPinForm" onsubmit="handleAdminLogin(event)" class="admin-form">
+          <div class="student-form-group">
+            <label for="adminPinInput" class="student-form-label">PIN Administrativo</label>
+            <input 
+              type="password" 
+              id="adminPinInput" 
+              class="student-form-input" 
+              placeholder="Ingrese su clave PIN" 
+              required 
+              autocomplete="current-password"
+              maxlength="20"
+            >
+          </div>
+
+          <button type="submit" class="btn-student-submit">
+            <span>Ingresar al Panel de Control</span>
+          </button>
+        </form>
+
+        <div class="admin-auth-footer">
+          <div class="admin-contact-pill">
+            <span>Soporte de Acceso: WhatsApp 5650560824</span>
+          </div>
+          <div class="admin-nav-links">
+            <a href="index.html" class="admin-text-link">&larr; Volver a la Página Principal</a>
+            <span class="link-divider">&bull;</span>
+            <a href="academia.html" class="admin-text-link">Ir a la Academia</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- VISTA 2: DASHBOARD ADMINISTRATIVO COMPLETO -->
+    <main id="adminDashboardSection" class="admin-dashboard-container" style="display: none;">
+      
+      <!-- Barra de Accesos Rápidos -->
+      <nav class="admin-subnav" aria-label="Navegación Administrativa">
+        <div class="admin-subnav-links">
+          <a href="index.html" class="admin-subnav-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Ver Portal Principal</span>
+          </a>
+
+          <a href="academia.html" class="admin-subnav-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span>Ver Portal Academia</span>
+          </a>
+        </div>
+
+        <div class="admin-database-tag">
+          <span>Base de Datos: Firebase Realtime (totalbregis)</span>
+        </div>
+      </nav>
+
+      <!-- Métricas Resumen (KPIs) -->
+      <section class="admin-kpi-grid">
+        <div class="admin-kpi-card">
+          <span class="kpi-label">Total de Alumnas</span>
+          <span id="kpiTotalAlumnas" class="kpi-value">0</span>
+          <span class="kpi-sub">Registradas en el portal</span>
+        </div>
+
+        <div class="admin-kpi-card">
+          <span class="kpi-label">Claves por Defecto (TB2026)</span>
+          <span id="kpiDefaultPass" class="kpi-value warning">0</span>
+          <span class="kpi-sub">Pendientes de cambiar clave</span>
+        </div>
+
+        <div class="admin-kpi-card">
+          <span class="kpi-label">Cursos de Capacitación</span>
+          <span id="kpiTotalCursos" class="kpi-value success">1</span>
+          <span class="kpi-sub">Por defecto: 1 curso activo</span>
+        </div>
+
+        <div class="admin-kpi-card">
+          <span class="kpi-label">Anuncio Intersticial</span>
+          <span id="kpiAnnStatus" class="kpi-value">Activo</span>
+          <span class="kpi-sub">Temporizador de 5 segundos</span>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 1: CONFIGURACIÓN DEL ANUNCIO INTERSTICIAL -->
+      <section class="admin-panel-card">
+        <div class="admin-card-header">
+          <div>
+            <span class="admin-section-tag">Marketing y Difusión Oficial</span>
+            <h2 class="admin-card-title">Anuncio Intersticial al Entrar</h2>
+          </div>
+          <div class="admin-card-status">
+            <span id="announcementBadgeStatus" class="badge-status-active">Activo en la Página</span>
+          </div>
+        </div>
+
+        <p class="admin-card-desc">
+          Este anuncio aparece como una ventana modal en primer plano cuando los visitantes entran al portal principal o a la academia. Incluye un temporizador de 5 segundos obligatorios antes de permitir el cierre.
+        </p>
+
+        <form id="adminAnnouncementForm" onsubmit="handleSaveAnnouncement(event)" class="admin-form">
+          
+          <div class="admin-toggle-box">
+            <div class="toggle-text-wrap">
+              <span class="toggle-main-title">Mostrar Anuncio Intersticial al Entrar</span>
+              <span class="toggle-subtitle">Active o pause la exhibición del anuncio en index.html y academia.html</span>
+            </div>
+            <label class="switch-control">
+              <input type="checkbox" id="adminAnnToggle" onchange="updateAnnouncementStatusBadge()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="student-form-group">
+              <label for="adminAnnTitle" class="student-form-label">Título del Anuncio</label>
+              <input 
+                type="text" 
+                id="adminAnnTitle" 
+                class="student-form-input" 
+                placeholder="ej. Inscripciones Abiertas a Cursos Prácticos" 
+                required
+              >
+            </div>
+
+            <div class="student-form-group">
+              <label for="adminAnnImg" class="student-form-label">Ruta Local o URL de la Imagen</label>
+              <input 
+                type="text" 
+                id="adminAnnImg" 
+                class="student-form-input" 
+                placeholder="ej. assets/images/academia.jpg o URL web" 
+                oninput="updateImagePreview(this.value)"
+              >
+            </div>
+          </div>
+
+          <!-- Vista Previa de Imagen en el Panel -->
+          <div class="admin-img-preview-wrap">
+            <div class="admin-img-preview-box">
+              <img 
+                id="adminImgPreview" 
+                src="assets/images/academia.jpg" 
+                alt="Vista previa de imagen del anuncio"
+                onerror="this.onerror=null; this.src='assets/images/salon.jpg';"
+              >
+            </div>
+            <div class="admin-img-preview-info">
+              <span class="preview-info-label">Vista Previa de Imagen</span>
+              <p class="preview-info-desc">Asegúrese de que la imagen transmita la imagen minimalista y premium de Total Beauty.</p>
+              <div class="quick-img-suggestions">
+                <button type="button" class="btn-chip" onclick="setQuickImg('assets/images/academia.jpg')">Academia</button>
+                <button type="button" class="btn-chip" onclick="setQuickImg('assets/images/salon.jpg')">Salón</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="student-form-group">
+            <label for="adminAnnText" class="student-form-label">Descripción o Contenido del Anuncio</label>
+            <textarea 
+              id="adminAnnText" 
+              class="student-form-textarea" 
+              rows="3" 
+              placeholder="Detalles sobre el curso, metodología 90% práctica o promoción..."
+            ></textarea>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="student-form-group">
+              <label for="adminAnnLink" class="student-form-label">Enlace de Destino o WhatsApp</label>
+              <input 
+                type="text" 
+                id="adminAnnLink" 
+                class="student-form-input" 
+                placeholder="https://api.whatsapp.com/send?phone=525650560824..."
+              >
+            </div>
+
+            <div class="student-form-group">
+              <label for="adminAnnBtnText" class="student-form-label">Texto del Botón de Acción</label>
+              <input 
+                type="text" 
+                id="adminAnnBtnText" 
+                class="student-form-input" 
+                placeholder="ej. Solicitar Informes por WhatsApp"
+              >
+            </div>
+          </div>
+
+          <div class="admin-button-group">
+            <button type="submit" class="btn-student-submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              <span>Guardar en Firebase</span>
+            </button>
+
+            <button type="button" class="btn-student-secondary" onclick="previewInterstitialModal()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Previsualizar Intersticial (Probar 5 Segundos)</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- SECCIÓN 2: CONFIGURACIÓN DE ACADEMIA - CURSOS DE CAPACITACIÓN -->
+      <section class="admin-panel-card">
+        <div class="admin-card-header">
+          <div>
+            <span class="admin-section-tag">Configuración de Academia</span>
+            <h2 class="admin-card-title">Cursos de Capacitación</h2>
+          </div>
+          <button type="button" class="btn-action-small" onclick="toggleNewCourseForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span id="btnToggleCourseFormText">Agregar Nuevo Curso</span>
+          </button>
+        </div>
+
+        <p class="admin-card-desc">
+          Configure los cursos de capacitación disponibles en el portal de la Academia. Por defecto se ofrece 1 curso práctico (90% práctico y 10% teórico con constancia de finalización). Todos los cambios se guardan directamente en Firebase Realtime Database.
+        </p>
+
+        <!-- Formulario Colapsable para Crear / Editar Curso -->
+        <div id="courseCollapseForm" class="admin-collapse-box" style="display: none;">
+          <h3 id="courseFormTitle" class="admin-collapse-title">Registrar Nuevo Curso de Capacitación</h3>
+          <form id="adminCourseForm" onsubmit="handleSaveCourse(event)" class="admin-form">
+            <input type="hidden" id="courseEditId" value="">
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseTitleInput" class="student-form-label">Título del Curso</label>
+                <input 
+                  type="text" 
+                  id="courseTitleInput" 
+                  class="student-form-input" 
+                  placeholder="ej. Curso de Colorimetría Avanzada &amp; Balayage Profesional" 
+                  required
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseCategoryInput" class="student-form-label">Categoría / Especialidad</label>
+                <input 
+                  type="text" 
+                  id="courseCategoryInput" 
+                  class="student-form-input" 
+                  placeholder="ej. Colorimetría &amp; Estilismo" 
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseModalidadInput" class="student-form-label">Modalidad (Insignia)</label>
+                <input 
+                  type="text" 
+                  id="courseModalidadInput" 
+                  class="student-form-input" 
+                  placeholder="ej. 90% Práctico" 
+                  value="90% Práctico"
+                  required
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseDuracionInput" class="student-form-label">Duración / Formato</label>
+                <input 
+                  type="text" 
+                  id="courseDuracionInput" 
+                  class="student-form-input" 
+                  placeholder="ej. Presencial • Modelos Reales" 
+                  value="Presencial • Modelos Reales"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="student-form-group">
+              <label for="courseDescInput" class="student-form-label">Descripción del Curso</label>
+              <textarea 
+                id="courseDescInput" 
+                class="student-form-textarea" 
+                rows="3" 
+                placeholder="Resumen del programa, objetivos de aprendizaje en cabina y trabajo en modelos reales..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseTema1Input" class="student-form-label">Punto Práctico 1</label>
+                <input 
+                  type="text" 
+                  id="courseTema1Input" 
+                  class="student-form-input" 
+                  placeholder="Práctica continua en estaciones con modelos reales" 
+                  value="Práctica continua en estaciones con modelos reales"
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseTema2Input" class="student-form-label">Punto Teórico 2 (10% Teoría)</label>
+                <input 
+                  type="text" 
+                  id="courseTema2Input" 
+                  class="student-form-input" 
+                  placeholder="10% teoría sobre visagismo capilar y fondos de aclaración" 
+                  value="10% teoría sobre visagismo capilar y fondos de aclaración"
+                >
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseTema3Input" class="student-form-label">Acreditación 3 (Constancia)</label>
+                <input 
+                  type="text" 
+                  id="courseTema3Input" 
+                  class="student-form-input" 
+                  placeholder="Entrega de Constancia de Finalización oficial" 
+                  value="Entrega de Constancia de Finalización oficial"
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseFilterKeyInput" class="student-form-label">Filtro / Código de Categoría</label>
+                <select id="courseFilterKeyInput" class="student-form-input">
+                  <option value="colorimetria">Colorimetría</option>
+                  <option value="estilismo">Estilismo &amp; Cabello</option>
+                  <option value="maquillaje">Maquillaje</option>
+                  <option value="unas-mirada">Uñas &amp; Mirada</option>
+                  <option value="general">General</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="student-form-group">
+              <label for="courseWhatsappInput" class="student-form-label">Mensaje Predeterminado para WhatsApp</label>
+              <input 
+                type="text" 
+                id="courseWhatsappInput" 
+                class="student-form-input" 
+                placeholder="Hola Total Beauty Academia, solicito informes detallados sobre este curso de capacitación."
+              >
+            </div>
+
+            <div class="admin-button-group">
+              <button type="submit" class="btn-student-submit">
+                <span>Guardar Curso en Firebase</span>
+              </button>
+              <button type="button" class="btn-student-secondary" onclick="toggleNewCourseForm()">
+                <span>Cancelar</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Lista de Cursos Configurados -->
+        <div id="coursesListContainer" class="admin-courses-list">
+          <div class="table-loading-cell">Cargando cursos desde Firebase...</div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: GESTIÓN DE ALUMNAS Y RESETEO DE CONTRASEÑAS -->
+      <section class="admin-panel-card">
+        <div class="admin-card-header">
+          <div>
+            <span class="admin-section-tag">Control de Alumnado &bull; Metodología 90% Práctica</span>
+            <h2 class="admin-card-title">Matrículas y Reseteo de Contraseñas</h2>
+          </div>
+          <button type="button" class="btn-action-small" onclick="toggleNewStudentForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span id="btnToggleFormText">Registrar Nueva Alumna</span>
+          </button>
+        </div>
+
+        <p class="admin-card-desc">
+          Las alumnas acceden únicamente con su matrícula y su contraseña. La clave inicial por defecto es <strong>TB2026</strong>. Al detectarla, el portal les exige cambiarla. Si la olvidan, restablezca su clave aquí para que vuelva a ser TB2026.
+        </p>
+
+        <!-- Formulario Colapsable para Nueva Alumna -->
+        <div id="newStudentCollapseForm" class="admin-collapse-box" style="display: none;">
+          <h3 class="admin-collapse-title">Registrar Nueva Alumna</h3>
+          <form onsubmit="handleCreateStudent(event)" class="admin-form">
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="newStudentMatricula" class="student-form-label">Matrícula</label>
+                <input 
+                  type="text" 
+                  id="newStudentMatricula" 
+                  class="student-form-input" 
+                  placeholder="ej. TB-04 o TB-2026-004" 
+                  required
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="newStudentNombre" class="student-form-label">Nombre Completo</label>
+                <input 
+                  type="text" 
+                  id="newStudentNombre" 
+                  class="student-form-input" 
+                  placeholder="ej. Sofía Martínez" 
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="newStudentCurso" class="student-form-label">Curso Práctico Inscrito</label>
+                <select id="newStudentCurso" class="student-form-input" required>
+                  <option value="Colorimetría y Balayage">Colorimetría y Balayage</option>
+                  <option value="Estilismo y Corte Profesional">Estilismo y Corte Profesional</option>
+                  <option value="Maquillaje Profesional y Social">Maquillaje Profesional y Social</option>
+                  <option value="Uñas Esculturales y Diseños">Uñas Esculturales y Diseños</option>
+                  <option value="Diseño de Mirada, Pestañas y Cejas">Diseño de Mirada, Pestañas y Cejas</option>
+                  <option value="Peinado Profesional y Novias">Peinado Profesional y Novias</option>
+                </select>
+              </div>
+
+              <div class="student-form-group">
+                <label for="newStudentTelefono" class="student-form-label">Teléfono / WhatsApp</label>
+                <input 
+                  type="tel" 
+                  id="newStudentTelefono" 
+                  class="student-form-input" 
+                  placeholder="5650560824"
+                >
+              </div>
+            </div>
+
+            <div class="admin-button-group">
+              <button type="submit" class="btn-student-submit">
+                <span>Guardar Alumna en Firebase</span>
+              </button>
+              <button type="button" class="btn-student-secondary" onclick="toggleNewStudentForm()">
+                <span>Cancelar</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Buscador Rápido de Alumnas -->
+        <div class="admin-search-bar-wrap">
+          <div class="search-input-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="studentSearchInput" 
+              placeholder="Buscar por matrícula, nombre o curso..." 
+              oninput="filterStudentsTable(this.value)"
+              class="admin-search-input"
+            >
+          </div>
+          <button type="button" class="btn-reload-table" onclick="loadStudentsData(true)" title="Recargar desde Firebase">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>Actualizar</span>
+          </button>
+        </div>
+
+        <!-- Tabla Responsiva de Alumnas -->
+        <div class="admin-table-container">
+          <table class="admin-table" id="studentsTable">
+            <thead>
+              <tr>
+                <th>Matrícula</th>
+                <th>Nombre</th>
+                <th>Curso Inscrito</th>
+                <th>Estado de Contraseña</th>
+                <th>Último Cambio</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody">
+              <tr>
+                <td colspan="6" class="table-loading-cell">Cargando alumnas desde Firebase...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA DEL PANEL -->
+    <footer class="admin-footer">
+      <div class="admin-footer-content">
+        <p class="admin-footer-copy">
+          &copy; Total Beauty Salón &amp; Academia. Sistema de Gestión Administrativa Conectado a Firebase.
+        </p>
+        <div class="admin-footer-links">
+          <a href="index.html" class="admin-footer-link">Portal Principal</a>
+          <span class="link-divider">&bull;</span>
+          <a href="academia.html" class="admin-footer-link">Portal Academia</a>
+          <span class="link-divider">&bull;</span>
+          <a href="https://api.whatsapp.com/send?phone=525650560824" target="_blank" rel="noopener noreferrer" class="admin-footer-link">Soporte WhatsApp</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ANUNCIO INTERSTICIAL MODAL (PARA PREVISUALIZACIÓN DIRECTA EN ADMIN) -->
+  <div id="interstitialOverlay" class="interstitial-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="interstitialTitle">
+    <div class="interstitial-card">
+      <div class="interstitial-timer-wrap">
+        <span class="interstitial-tag">Vista Previa Oficial (5s)</span>
+        <div id="interstitialTimerWrap">
+          <span id="interstitialCountdownText" class="interstitial-countdown">Cerrar en 5s</span>
+          <button type="button" id="interstitialCloseBtn" class="interstitial-close-btn" onclick="closeInterstitialPreview()" aria-label="Cerrar anuncio" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Cerrar</span>
+          </button>
+        </div>
+      </div>
+
+      <h2 id="interstitialTitle" class="interstitial-title">Inscripciones Abiertas a Cursos Prácticos</h2>
+
+      <div class="interstitial-image-wrap">
+        <img 
+          id="interstitialImg" 
+          src="assets/images/academia.jpg" 
+          alt="Anuncio Total Beauty" 
+          class="interstitial-img"
+          onerror="this.onerror=null; this.src='assets/images/salon.jpg';"
+        >
+        <div class="interstitial-img-overlay"></div>
+      </div>
+
+      <p id="interstitialText" class="interstitial-text">
+        Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.
+      </p>
+
+      <a id="interstitialBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-action btn-salon interstitial-action-btn">
+        <span id="interstitialBtnText">Solicitar Informes por WhatsApp</span>
+        <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="firebase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

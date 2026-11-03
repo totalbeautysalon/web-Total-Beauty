@@ -1,1 +1,243 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Total Beauty | Salón &amp; Academia</title>
+  <meta name="description" content="Total Beauty Salón &amp; Academia. Servicios de belleza y cursos profesionales con 90% práctica y 10% teoría.">
+  <meta name="theme-color" content="#070709">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Fuentes Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Anuncio Intersticial al Entrar (Cierre tras 5 Segundos) -->
+  <div id="interstitialOverlay" class="interstitial-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="interstitialTitle">
+    <div class="interstitial-card">
+      
+      <!-- Barra Superior: Temporizador de 5 Segundos y Botón Cerrar -->
+      <div class="interstitial-timer-wrap">
+        <span class="interstitial-tag">Aviso Oficial</span>
+        <div id="interstitialTimerWrap">
+          <span id="interstitialCountdownText" class="interstitial-countdown">Cerrar en 5s</span>
+          <button type="button" id="interstitialCloseBtn" class="interstitial-close-btn" onclick="closeInterstitial()" aria-label="Cerrar anuncio" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Cerrar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Título del Anuncio -->
+      <h2 id="interstitialTitle" class="interstitial-title">Inscripciones Abiertas a Cursos Prácticos</h2>
+
+      <!-- Imagen del Anuncio -->
+      <div class="interstitial-image-wrap">
+        <img 
+          id="interstitialImg" 
+          src="assets/images/academia.jpg" 
+          alt="Anuncio Total Beauty" 
+          class="interstitial-img"
+          onerror="this.onerror=null; this.src='assets/images/salon.jpg';"
+        >
+        <div class="interstitial-img-overlay"></div>
+      </div>
+
+      <!-- Texto y Botón de Acción -->
+      <p id="interstitialText" class="interstitial-text">
+        Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.
+      </p>
+
+      <a id="interstitialBtn" href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos." target="_blank" rel="noopener noreferrer" class="btn-action btn-salon interstitial-action-btn">
+        <span id="interstitialBtnText">Solicitar Informes por WhatsApp</span>
+        <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Contenedor Principal del Sitio -->
+  <div class="site-wrapper">
+    
+    <!-- Encabezado y Marca: Solo el Logotipo Centrado y Estilizado -->
+    <header class="brand-header animate-fade-in">
+      <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+        <img 
+          src="assets/images/logo.png" 
+          alt="Total Beauty Salón &amp; Academia" 
+          class="brand-logo-img"
+          onerror="this.onerror=null; this.src='assets/images/logoheader.png';"
+        >
+        <p class="brand-tagline">Salón &amp; Academia</p>
+      </a>
+    </header>
+
+    <!-- Sección de Bienvenida -->
+    <section class="welcome-section animate-fade-in delay-1" aria-label="Mensaje de Bienvenida">
+
+      <p class="welcome-description">
+        Te damos la bienvenida a nuestro espacio. Selecciona la opción a la que deseas ingresar:
+      </p>
+    </section>
+
+    <!-- Menú de Opciones: Salón y Academia -->
+    <main class="menu-container animate-fade-in delay-2" role="main">
+      
+      <!-- Opción 1: SALÓN -->
+      <div class="option-card" onclick="openModal('salon')" role="button" tabindex="0" aria-label="Ingresar a Total Beauty Salón">
+        <div class="option-image-wrap">
+          <img 
+            src="assets/images/salon.jpg" 
+            alt="Servicios de Salón Total Beauty" 
+            class="option-image"
+            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80';"
+            loading="lazy"
+          >
+          <div class="image-overlay"></div>
+          <span class="option-category-badge">Salón</span>
+        </div>
+
+        <div class="option-content">
+          <span class="option-subtitle">Servicios &amp; Atención</span>
+          <h2 class="option-title">
+            <span>Salón de Belleza</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
+              <path d="M6 3v12"></path>
+              <path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+              <path d="M6 21a2 2 0 0 1-2-2v-2h4v2a2 2 0 0 1-2 2z"></path>
+            </svg>
+          </h2>
+
+          <p class="option-description">
+            Realza tu belleza natural con nuestros servicios especializados de pestañas, cejas, depilación facial, uñas, cabello y tratamientos capilares. ¡Disfruta de una atención 100% personalizada y consiéntete como te mereces!
+          </p>
+
+
+          <div class="btn-action btn-salon">
+            <span>Explorar Salón</span>
+            <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opción 2: ACADEMIA (Navega a academia.html) -->
+      <a href="academia.html" class="option-card" aria-label="Ingresar a Total Beauty Academia">
+        <div class="option-image-wrap">
+          <img 
+            src="assets/images/academia.jpg" 
+            alt="Cursos Profesionales Total Beauty Academia" 
+            class="option-image"
+            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80';"
+            loading="lazy"
+          >
+          <div class="image-overlay"></div>
+          <span class="option-category-badge">Academia</span>
+        </div>
+
+        <div class="option-content">
+          <span class="option-subtitle">Cursos especializados</span>
+          <h2 class="option-title">
+            <span>Academia</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </h2>
+
+          <p class="option-description">
+            Cursos profesionales con metodología 90% práctica y 10% teórica en modelos reales. Obtén tu constancia de finalización y adquiere la experiencia que necesitas para emprender tu propio negocio.
+          </p>
+
+          <div class="btn-action btn-academia">
+            <span>Ingresar a la Academia</span>
+            <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+    </main>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="brand-footer animate-fade-in delay-3">
+      <div class="footer-social-links">
+        <a href="https://www.instagram.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram</span>
+        </a>
+
+        <a href="https://www.facebook.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+          <span>Facebook</span>
+        </a>
+      </div>
+
+      <p class="footer-copyright">
+        &copy; Total Beauty Salón &amp; Academia. Todos los derechos reservados.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Ventana Modal de Interacción para Salón -->
+  <div id="optionsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <button type="button" id="modalCloseBtn" class="modal-close-btn" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div id="modalTag" class="modal-tag">Total Beauty Salón</div>
+      <h3 id="modalTitle" class="modal-title">Servicios de Salón</h3>
+      <p id="modalDesc" class="modal-description">Seleccione una opción para comunicarse con nuestro equipo:</p>
+
+      <div id="modalLinksContainer" class="modal-links-list">
+        <!-- Generado dinámicamente mediante script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts de Firebase e Interacción -->
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

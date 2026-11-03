@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Cursos Profesionales | Total Beauty Academia</title>
+  <meta name="description" content="Total Beauty Academia. Cursos profesionales en estilismo, colorimetría, maquillaje y estética integral. Metodología 90% práctica y 10% teórica con constancia de finalización.">
+  <meta name="theme-color" content="#070709">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Fuentes Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Anuncio Intersticial al Entrar (Cierre tras 5 Segundos) -->
+  <div id="interstitialOverlay" class="interstitial-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="interstitialTitle">
+    <div class="interstitial-card">
+      
+      <!-- Barra Superior: Temporizador de 5 Segundos y Botón Cerrar -->
+      <div class="interstitial-timer-wrap">
+        <span class="interstitial-tag">Aviso Oficial</span>
+        <div id="interstitialTimerWrap">
+          <span id="interstitialCountdownText" class="interstitial-countdown">Cerrar en 5s</span>
+          <button type="button" id="interstitialCloseBtn" class="interstitial-close-btn" onclick="closeInterstitial()" aria-label="Cerrar anuncio" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Cerrar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Título del Anuncio -->
+      <h2 id="interstitialTitle" class="interstitial-title">Inscripciones Abiertas a Cursos Prácticos</h2>
+
+      <!-- Imagen del Anuncio -->
+      <div class="interstitial-image-wrap">
+        <img 
+          id="interstitialImg" 
+          src="assets/images/academia.jpg" 
+          alt="Anuncio Total Beauty" 
+          class="interstitial-img"
+          onerror="this.onerror=null; this.src='assets/images/salon.jpg';"
+        >
+        <div class="interstitial-img-overlay"></div>
+      </div>
+
+      <!-- Texto y Botón de Acción -->
+      <p id="interstitialText" class="interstitial-text">
+        Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.
+      </p>
+
+      <a id="interstitialBtn" href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos." target="_blank" rel="noopener noreferrer" class="btn-action btn-salon interstitial-action-btn">
+        <span id="interstitialBtnText">Solicitar Informes por WhatsApp</span>
+        <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Contenedor Principal del Sitio -->
+  <div class="site-wrapper">
+    
+    <!-- Barra Superior de Navegación -->
+    <nav class="academia-nav animate-fade-in" aria-label="Navegación de Academia">
+      <a href="index.html" class="btn-back" aria-label="Volver al menú principal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Menú Principal</span>
+      </a>
+
+      <!-- Grupo de la Derecha: Logo y Acceso a Alumnas -->
+      <div class="nav-right-group">
+        <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="brand-logo-img"
+            style="max-height: 44px;"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+        </a>
+
+        <!-- Opción Soy Alumna / Ingresar en Academia -->
+        <button type="button" class="btn-student-access" onclick="openStudentModal()" aria-label="Acceso para Alumnas: Ingresar">
+          <svg class="student-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="student-label">Soy Alumna</span>
+          <span class="student-divider" aria-hidden="true">|</span>
+          <span class="student-cta">Ingresar</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero de Academia -->
+    <header class="academia-hero animate-fade-in delay-1">
+      <div class="academia-hero-badge">
+        <span class="gold-dot"></span>
+        <span>Formación en Cursos</span>
+      </div>
+
+      <h1 class="academia-hero-title">
+        Total Beauty <span>Academia</span>
+      </h1>
+
+      <p class="academia-hero-subtitle">
+        Cursos profesionales diseñados bajo una metodología 90% práctica y 10% teórica con modelos reales, otorgando constancia de finalización al concluir cada programa.
+      </p>
+    </header>
+
+    <!-- Indicadores Clave: 90% Práctico, 10% Teórico, Constancia -->
+    <section class="academia-metrics-grid animate-fade-in delay-2" aria-label="Beneficios de los Cursos">
+      <div class="metric-card">
+        <div class="metric-value">90% / 10%</div>
+        <div class="metric-label">Práctico / Teórico</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Constancia</div>
+        <div class="metric-label">De Finalización</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Cursos</div>
+        <div class="metric-label">Especializados</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Grupos</div>
+        <div class="metric-label">Cupo Reducido</div>
+      </div>
+    </section>
+
+    <!-- Sección de Cursos -->
+    <main role="main">
+      <div class="section-header">
+        <span class="section-tag">Oferta Educativa</span>
+        <h2 class="section-title">Cursos de Capacitación</h2>
+      </div>
+
+      <!-- Barra de Filtros por Categoría con Desplazamiento Táctil en Móviles -->
+      <div class="category-filter-bar" role="tablist" aria-label="Filtro de cursos">
+        <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+        <button type="button" class="filter-btn" data-filter="estilismo">Estilismo &amp; Cabello</button>
+        <button type="button" class="filter-btn" data-filter="colorimetria">Colorimetría</button>
+        <button type="button" class="filter-btn" data-filter="maquillaje">Maquillaje</button>
+        <button type="button" class="filter-btn" data-filter="unas-mirada">Uñas &amp; Mirada</button>
+      </div>
+
+      <!-- Cuadrícula Dinámica de Cursos (Configurados en Panel Admin y Firebase) -->
+      <div class="courses-grid" id="coursesGrid">
+        
+        <!-- Curso por Defecto Inicial (1 solo curso activo) -->
+        <article class="course-card" data-category="colorimetria">
+          <div class="course-card-header">
+            <span class="course-mode-badge">90% Práctico</span>
+            <span class="course-duration">Presencial • Modelos Reales</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Colorimetría &amp; Estilismo</span>
+            <h3 class="course-title">Curso de Colorimetría Avanzada &amp; Balayage Profesional</h3>
+            <p class="course-desc">
+              Capacitación intensiva y personalizada en formulación de tintes, técnicas de difuminado balayage, neutralización de reflejos y trabajo directo sobre modelos reales en cabina.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Práctica continua en estaciones con modelos reales</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>10% teoría sobre visagismo capilar y fondos de aclaración</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Entrega de Constancia de Finalización oficial</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20y%20temario%20del%20Curso%20de%20Colorimetr%C3%ADa%20Avanzada%20y%20Balayage." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan del Curso</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <!-- Metodología de Formación -->
+    <section class="methodology-section" aria-label="Metodología de Estudio">
+      <div class="section-header" style="margin-bottom: 1rem;">
+        <span class="section-tag">Metodología Total Beauty</span>
+        <h2 class="section-title">El Estándar de Nuestros Cursos</h2>
+      </div>
+
+      <div class="methodology-grid">
+        <div class="methodology-item">
+          <span class="methodology-number">90%</span>
+          <h3 class="methodology-title">Práctica Clínica en Modelos Reales</h3>
+          <p class="methodology-desc">
+            El 90% del tiempo de formación se dedica a la práctica directa en modelos reales con seguimiento docente individual.
+          </p>
+        </div>
+
+        <div class="methodology-item">
+          <span class="methodology-number">10%</span>
+          <h3 class="methodology-title">Teoría Técnica y Protocolos</h3>
+          <p class="methodology-desc">
+            El 10% restante cubre los fundamentos teóricos indispensables de bioseguridad, visagismo, anatomía y química cosmética.
+          </p>
+        </div>
+
+        <div class="methodology-item">
+          <span class="methodology-number">03</span>
+          <h3 class="methodology-title">Constancia de Finalización</h3>
+          <p class="methodology-desc">
+            Al cumplir satisfactoriamente las horas prácticas y los criterios técnicos de evaluación, cada alumna recibe su Constancia de Finalización.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Banner de Inscripciones / Contacto WhatsApp -->
+    <section class="enrollment-banner" aria-label="Inscripciones Abiertas">
+      <h2 class="enrollment-title">Inscripciones Abiertas a Cursos</h2>
+      <p class="enrollment-desc">
+        Cupo limitado por grupo para garantizar la atención en cada estación de trabajo. Para fechas de inicio, costos y requisitos, comuníquese con nosotros por WhatsApp al 5650560824.
+      </p>
+
+      <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <span>Solicitar Informes al 5650560824</span>
+      </a>
+    </section>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="brand-footer animate-fade-in delay-3">
+      <div class="footer-social-links">
+        <a href="https://www.instagram.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram</span>
+        </a>
+
+        <a href="https://www.facebook.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+          <span>Facebook</span>
+        </a>
+      </div>
+
+      <p class="footer-copyright">
+        &copy; Total Beauty Salón &amp; Academia. Todos los derechos reservados.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Ventana Modal de Acceso para Alumnas (Portal Académico) -->
+  <div id="studentModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="studentModalAcadTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close-btn" onclick="closeStudentModal()" aria-label="Cerrar ventana de alumnas">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Portal Académico</div>
+
+      <!-- VISTA 1: INGRESO DE ALUMNAS -->
+      <div id="studentViewLogin" class="student-portal-view active">
+        <h3 id="studentModalAcadTitle" class="modal-title">Acceso de Alumnas</h3>
+        <p class="modal-description">Ingrese exclusivamente con su matrícula y contraseña asignada:</p>
+
+        <form id="studentLoginForm" onsubmit="handleStudentLogin(event)">
+          <div class="student-form-group">
+            <label for="studentMatricula" class="student-form-label">Matrícula</label>
+            <input type="text" id="studentMatricula" class="student-form-input" placeholder="ej. TB-01 o su matrícula" required autocomplete="username">
+          </div>
+
+          <div class="student-form-group">
+            <label for="studentPassword" class="student-form-label">Contraseña</label>
+            <input type="password" id="studentPassword" class="student-form-input" placeholder="Clave de acceso (defecto: TB2026)" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn-student-submit">
+            <span>Ingresar al Portal</span>
+          </button>
+        </form>
+
+        <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20olvidé%20mi%20contraseña%20de%20alumna%20y%20solicito%20apoyo%20con%20mi%20acceso." target="_blank" rel="noopener noreferrer" class="student-help-link">
+          Si olvidó su contraseña, contacte a <span>Total Beauty Academia al WhatsApp 5650560824</span>
+        </a>
+      </div>
+
+      <!-- VISTA 2: DETECCIÓN DE CLAVE POR DEFECTO -->
+      <div id="studentViewChangePass" class="student-portal-view">
+        <h3 class="modal-title">Actualización Requerida</h3>
+        <div class="modal-alert-box alert-warning">
+          Se ha detectado la contraseña por defecto (TB2026) para la matrícula <strong id="changePassNoticeMatricula"></strong>. Por seguridad de su cuenta, debe definir una contraseña nueva para continuar.
+        </div>
+
+        <form id="studentChangePassForm" onsubmit="handlePasswordChange(event)">
+          <div class="student-form-group">
+            <label for="newStudentPass" class="student-form-label">Nueva Contraseña</label>
+            <input type="password" id="newStudentPass" class="student-form-input" placeholder="Mínimo 5 caracteres (distinta a TB2026)" required autocomplete="new-password">
+          </div>
+
+          <div class="student-form-group">
+            <label for="confirmStudentPass" class="student-form-label">Confirmar Nueva Contraseña</label>
+            <input type="password" id="confirmStudentPass" class="student-form-input" placeholder="Repita la nueva contraseña" required autocomplete="new-password">
+          </div>
+
+          <button type="submit" class="btn-student-submit">
+            <span>Guardar Contraseña e Ingresar</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- VISTA 3: DASHBOARD DE ALUMNA AUTENTICADA -->
+      <div id="studentViewDashboard" class="student-portal-view">
+        <h3 class="modal-title">Bienvenida al Aula</h3>
+        <p class="modal-description">Sesión académica activa:</p>
+
+        <div class="student-profile-card">
+          <div class="student-profile-row">
+            <span class="profile-label">Matrícula:</span>
+            <span class="profile-value" id="dashMatricula">TB-01</span>
+          </div>
+          <div class="student-profile-row">
+            <span class="profile-label">Estado:</span>
+            <span class="profile-value">Alumna Activa</span>
+          </div>
+          <div class="student-profile-row">
+            <span class="profile-label">Metodología:</span>
+            <span class="profile-value">90% Práctico &bull; 10% Teórico</span>
+          </div>
+          <div class="student-profile-row">
+            <span class="profile-label">Acreditación:</span>
+            <span class="profile-value">Constancia de Finalización</span>
+          </div>
+        </div>
+
+        <div class="modal-alert-box">
+          Sus prácticas se realizan en modelos reales en estaciones asignadas. Al concluir satisfactoriamente las horas prácticas de su curso, se emitirá su Constancia de Finalización oficial.
+        </div>
+
+        <button type="button" class="btn-student-submit" onclick="logoutStudent()">
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts de Firebase e Interacción -->
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
