@@ -688,9 +688,9 @@ select,
    ========================================================================== */
 .menu-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: 1.75rem;
-  max-width: 760px;
+  max-width: 1040px;
   margin: 0 auto 3rem;
   width: 100%;
 }

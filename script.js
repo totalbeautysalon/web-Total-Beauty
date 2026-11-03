@@ -533,6 +533,33 @@ document.addEventListener('DOMContentLoaded', () => {
           detail: "Respuesta directa (5650560824)"
         }
       ]
+    },
+    redes: {
+      tag: "Total Beauty Oficial",
+      title: "Redes Sociales & Enlaces",
+      description: "Seleccione el canal oficial al que desea dirigirse:",
+      options: [
+        {
+          label: "Instagram Oficial",
+          action: () => window.open("https://www.instagram.com/totalbeautysalonacademia/", "_blank", "noopener,noreferrer"),
+          detail: "@totalbeautysalonacademia"
+        },
+        {
+          label: "Página de Facebook",
+          action: () => window.open("https://www.facebook.com/totalbeautysalonacademia/", "_blank", "noopener,noreferrer"),
+          detail: "Total Beauty Salón & Academia"
+        },
+        {
+          label: "Atención Inmediata por WhatsApp",
+          action: () => openWhatsApp("Hola Total Beauty, deseo ponerme en contacto con ustedes."),
+          detail: "Chat directo (5650560824)"
+        },
+        {
+          label: "Cursos de Capacitación",
+          action: () => window.location.href = "academia.html",
+          detail: "Oferta educativa y constancias oficiales"
+        }
+      ]
     }
   };
 
