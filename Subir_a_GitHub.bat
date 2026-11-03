@@ -17,8 +17,8 @@ where git >nul 2>nul
 if errorlevel 1 goto :GIT_NOT_FOUND
 
 REM Actualizacion automatica del catalogo de fotos para la galeria de academia
-if exist "fotosacademia" (
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "$f = 'fotosacademia'; $imgs = @(Get-ChildItem $f | Where-Object { $_.Extension -match '\.(jpe?g|png|webp|gif)$' -and $_.Name -ne 'manifest.json' } | Select-Object -ExpandProperty Name); $json = if ($imgs.Count -eq 0) { '[]' } elseif ($imgs.Count -eq 1) { '[^\"' + $imgs[0] + '^\"^]' } else { $imgs | ConvertTo-Json }; $json | Set-Content (Join-Path $f 'manifest.json') -Encoding UTF8" >nul 2>nul
+if exist "update_gallery.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0update_gallery.ps1" >nul 2>nul
 )
 
 echo Verificando archivos modificados o nuevos...
