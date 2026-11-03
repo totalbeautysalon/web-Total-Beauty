@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let interstitialCanClose = false;
   let videoTimerInterval = null;
   let videoCanClose = false;
+  let videoSecondsLeft = 10;
   let currentActiveStudent = null;
   let pendingChangeMatricula = null;
   let currentGalleryPhotos = [];
@@ -84,12 +85,32 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Cierre automático al finalizar la reproducción completa del video
-    videoEl.onended = () => {
-      window.closeAcademyVideoModal(true);
-    };
+    // Escuchar eventos del video para la cuenta regresiva de 10 segundos
+    // Solo contar cuando el video está en reproducción real
+    videoEl.addEventListener('play', () => {
+      resumeVideoCountdown();
+    });
 
-    // Permitir cierre al hacer clic en el fondo oscuro tras transcurrir 5 segundos
+    videoEl.addEventListener('playing', () => {
+      resumeVideoCountdown();
+    });
+
+    // Pausar la cuenta regresiva si el usuario pausa el video o si entra en búfer
+    videoEl.addEventListener('pause', () => {
+      pauseVideoCountdown();
+    });
+
+    videoEl.addEventListener('waiting', () => {
+      pauseVideoCountdown();
+    });
+
+    // Cierre automático al finalizar la reproducción completa del video
+    videoEl.addEventListener('ended', () => {
+      pauseVideoCountdown();
+      window.closeAcademyVideoModal(true);
+    });
+
+    // Permitir cierre al hacer clic en el fondo oscuro tras transcurrir 10 segundos de reproducción
     videoModal.addEventListener('click', (e) => {
       if (e.target === videoModal && videoCanClose) {
         window.closeAcademyVideoModal();
@@ -106,6 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoModal = document.getElementById('academyVideoModal');
     const videoEl = document.getElementById('academyPresentationVideo');
     const promptOverlay = document.getElementById('videoAudioPromptOverlay');
+    const countdownEl = document.getElementById('videoCountdownText');
+    const closeBtn = document.getElementById('videoCloseBtn');
     if (!videoModal || !videoEl) return;
 
     // Registrar marca de tiempo de visualización para el límite de 1 hora
@@ -116,6 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
     videoModal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
+    // Reiniciar valores de cuenta regresiva a 10 segundos en pausa inicial
+    videoSecondsLeft = 10;
+    videoCanClose = false;
+    pauseVideoCountdown();
+
+    if (countdownEl) {
+      countdownEl.style.display = 'inline-flex';
+      countdownEl.textContent = `Cerrar en ${videoSecondsLeft}s`;
+    }
+    if (closeBtn) {
+      closeBtn.style.display = 'none';
+    }
+
     // Iniciar siempre sin silencio para que reproduzca audio si el navegador lo permite
     videoEl.muted = false;
     videoEl.currentTime = 0;
@@ -125,20 +161,19 @@ document.addEventListener('DOMContentLoaded', () => {
       promptOverlay.style.display = 'none';
     }
 
-    // Iniciar temporizador de 5 segundos
-    startVideoCountdown();
-
+    // Intentar reproducción automática con sonido; si falla, pausar y mostrar aviso táctil
     const playPromise = videoEl.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
-        // Reproducción con audio automática exitosa sin requerir toque
+        // Reproducción con audio automática exitosa: 'playing' iniciará la cuenta regresiva
         if (promptOverlay) {
           promptOverlay.style.display = 'none';
         }
       }).catch(() => {
-        // El navegador bloqueó sonido automático por política de interacción previa:
-        // Pausar y mostrar el aviso elegante para tocar y reproducir con audio
+        // El navegador exige interacción previa del usuario para reproducir audio:
+        // Asegurar que el video quede en pausa (sin conteo regresivo) y mostrar el botón táctil
         videoEl.pause();
+        pauseVideoCountdown();
         if (promptOverlay) {
           promptOverlay.style.display = 'flex';
         }
@@ -156,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (videoEl) {
       videoEl.muted = false;
-      videoEl.currentTime = 0;
       const playPromise = videoEl.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
@@ -166,20 +200,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     }
-
-    // Reiniciar la cuenta regresiva de 5 segundos al comenzar la reproducción con audio
-    startVideoCountdown();
+    // Al iniciar la reproducción, los eventos 'play' y 'playing' activan resumeVideoCountdown()
   };
 
-  function startVideoCountdown() {
+  function resumeVideoCountdown() {
+    if (videoCanClose) return;
+
+    const videoEl = document.getElementById('academyPresentationVideo');
+    if (!videoEl || videoEl.paused || videoEl.ended) return;
+
     const countdownEl = document.getElementById('videoCountdownText');
     const closeBtn = document.getElementById('videoCloseBtn');
-    let secondsLeft = 5;
-    videoCanClose = false;
 
     if (countdownEl) {
       countdownEl.style.display = 'inline-flex';
-      countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+      countdownEl.textContent = `Cerrar en ${videoSecondsLeft}s`;
     }
     if (closeBtn) {
       closeBtn.style.display = 'none';
@@ -188,11 +223,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (videoTimerInterval) clearInterval(videoTimerInterval);
 
     videoTimerInterval = setInterval(() => {
-      secondsLeft--;
-      if (secondsLeft > 0) {
-        if (countdownEl) countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+      const currentVideo = document.getElementById('academyPresentationVideo');
+      // Si el video fue pausado o terminó, suspender el intervalo de inmediato
+      if (!currentVideo || currentVideo.paused || currentVideo.ended) {
+        clearInterval(videoTimerInterval);
+        videoTimerInterval = null;
+        return;
+      }
+
+      videoSecondsLeft--;
+      if (videoSecondsLeft > 0) {
+        if (countdownEl) countdownEl.textContent = `Cerrar en ${videoSecondsLeft}s`;
       } else {
         clearInterval(videoTimerInterval);
+        videoTimerInterval = null;
         videoCanClose = true;
         if (countdownEl) countdownEl.style.display = 'none';
         if (closeBtn) {
@@ -201,6 +245,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     }, 1000);
+  }
+
+  function pauseVideoCountdown() {
+    if (videoTimerInterval) {
+      clearInterval(videoTimerInterval);
+      videoTimerInterval = null;
+    }
   }
 
   window.closeAcademyVideoModal = function (force = false) {
@@ -215,12 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
       videoEl.pause();
     }
 
+    pauseVideoCountdown();
+
     if (promptOverlay) {
       promptOverlay.style.display = 'none';
-    }
-
-    if (videoTimerInterval) {
-      clearInterval(videoTimerInterval);
     }
 
     if (videoModal) {
