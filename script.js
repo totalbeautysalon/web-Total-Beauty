@@ -274,9 +274,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const textEl = document.getElementById('interstitialText');
     const btnEl = document.getElementById('interstitialBtn');
     const btnTextEl = document.getElementById('interstitialBtnText');
+    const imgWrap = imgEl ? imgEl.closest('.interstitial-image-wrap') : null;
 
     if (titleEl) titleEl.textContent = data.title || "Aviso Oficial";
-    if (imgEl && data.image) imgEl.src = data.image;
+    if (imgEl && data.image) {
+      imgEl.src = data.image;
+      if (imgWrap) imgWrap.style.display = 'flex';
+    } else if (imgWrap && !data.image) {
+      imgWrap.style.display = 'none';
+    }
+
     if (textEl) textEl.textContent = data.text || "";
 
     if (btnEl) {
@@ -676,41 +683,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const seenKeys = new Set();
 
     activeCursos.forEach(c => {
-      const rawKey = c.categoriaKey || slugifyCategory(c.categoria || 'capacitacion');
-      const catKey = String(rawKey).trim().toLowerCase();
-      const catLabel = (c.categoria || c.categoriaKey || 'Capacitación').trim();
-      if (catKey && !seenKeys.has(catKey)) {
-        seenKeys.add(catKey);
-        uniqueCategories.push({ key: catKey, label: catLabel });
+      const rawCat = (c.categoria || '').trim();
+      const rawKey = (c.categoriaKey || '').trim();
+      const slugCat = slugifyCategory(rawCat);
+      const slugKey = slugifyCategory(rawKey);
+
+      const effectiveKey = slugKey || slugCat || 'capacitacion';
+      const catLabel = rawCat || rawKey || 'Capacitación';
+
+      if (effectiveKey && !seenKeys.has(effectiveKey)) {
+        seenKeys.add(effectiveKey);
+        uniqueCategories.push({
+          key: effectiveKey,
+          label: catLabel,
+          slug: slugCat
+        });
       }
     });
 
-    // Renderizar dinámicamente la barra de filtros según categorías existentes
+    // Renderizar barra de filtros: SIEMPRE 'Todos' primero y después cada categoría disponible
     if (filterBar) {
-      if (uniqueCategories.length <= 1) {
-        // Solo 1 categoría disponible: se muestra únicamente dicha opción activa
-        filterBar.style.display = 'flex';
-        filterBar.innerHTML = `
-          <button type="button" class="filter-btn active" data-filter="${escapeHtml(uniqueCategories[0].key)}">${escapeHtml(uniqueCategories[0].label)}</button>
-        `;
-      } else {
-        // Múltiples categorías disponibles: opción 'Todos' y cada categoría activa
-        filterBar.style.display = 'flex';
-        filterBar.innerHTML = `
-          <button type="button" class="filter-btn active" data-filter="all">Todos</button>
-          ${uniqueCategories.map(cat => `
-            <button type="button" class="filter-btn" data-filter="${escapeHtml(cat.key)}">${escapeHtml(cat.label)}</button>
-          `).join('')}
-        `;
-      }
+      filterBar.style.display = 'flex';
+      filterBar.innerHTML = `
+        <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+        ${uniqueCategories.map(cat => `
+          <button type="button" class="filter-btn" data-filter="${escapeHtml(cat.key)}">${escapeHtml(cat.label)}</button>
+        `).join('')}
+      `;
     }
 
     // Renderizar tarjetas de cursos activos
     grid.innerHTML = activeCursos.map(c => {
-      const catKey = (c.categoriaKey || slugifyCategory(c.categoria || 'capacitacion')).trim().toLowerCase();
+      const rawCat = (c.categoria || '').trim();
+      const rawKey = (c.categoriaKey || '').trim();
+      const catKey = slugifyCategory(rawKey) || slugifyCategory(rawCat) || 'capacitacion';
+      const catSlug = slugifyCategory(rawCat);
       const waMsg = encodeURIComponent(c.whatsappMsg || `Hola Total Beauty Academia, solicito informes del ${c.titulo}.`);
       return `
-        <article class="course-card" data-category="${escapeHtml(catKey)}">
+        <article class="course-card" data-category="${escapeHtml(catKey)}" data-category-slug="${escapeHtml(catSlug)}">
           <div class="course-card-header">
             <span class="course-mode-badge">${escapeHtml(c.modalidad || '90% Práctico')}</span>
             <span class="course-duration">${escapeHtml(c.duracion || 'Presencial • Modelos Reales')}</span>
@@ -748,10 +758,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const filterValue = btn.getAttribute('data-filter');
 
           courseCards.forEach(card => {
-            const cardCategory = card.getAttribute('data-category');
-            if (filterValue === 'all' || cardCategory === filterValue) {
+            const cardKey = card.getAttribute('data-category');
+            const cardSlug = card.getAttribute('data-category-slug');
+            const match = (filterValue === 'all') || (cardKey === filterValue) || (cardSlug === filterValue);
+
+            if (match) {
               card.style.display = 'flex';
-              card.style.animation = 'fadeIn 0.5s ease forwards';
+              card.style.animation = 'fadeIn 0.35s ease forwards';
             } else {
               card.style.display = 'none';
             }
