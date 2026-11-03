@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   
   <title>Total Beauty | Salón &amp; Academia</title>
@@ -21,6 +21,25 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Barra de Anuncios Configurable desde Panel Admin -->
+  <aside id="announcementBar" class="announcement-bar" style="display: none;" role="region" aria-label="Anuncio Oficial">
+    <div class="announcement-container">
+      <div class="announcement-content">
+        <span class="announcement-bullet" aria-hidden="true"></span>
+        <span id="announcementText" class="announcement-text"></span>
+        <a id="announcementLink" href="#" target="_blank" rel="noopener noreferrer" class="announcement-btn" style="display: none;">
+          <span id="announcementBtnText">Ver Detalles</span>
+        </a>
+      </div>
+      <button type="button" class="announcement-close" onclick="closeAnnouncementBar()" aria-label="Cerrar anuncio">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
   <!-- Fondos Ambientales -->
   <div class="ambient-glow" aria-hidden="true"></div>
   <div class="ambient-grid" aria-hidden="true"></div>
@@ -28,36 +47,18 @@
   <!-- Contenedor Principal del Sitio -->
   <div class="site-wrapper">
     
-    <!-- Encabezado y Marca con Opción de Alumna al Lado del Logo -->
+    <!-- Encabezado y Marca: Solo el Logotipo Centrado y Estilizado -->
     <header class="brand-header animate-fade-in">
-      <div class="header-content-row">
-        
-        <!-- Logo de Total Beauty -->
-        <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
-          <img 
-            src="assets/images/logoheader.png" 
-            alt="Total Beauty Salon &amp; Academia" 
-            class="brand-logo-img"
-            onerror="this.onerror=null; this.src='assets/images/logo.png';"
-          >
-          <div class="brand-text-block">
-            <h1 class="brand-title">TOTAL <span>BEAUTY</span></h1>
-            <p class="brand-tagline">Salón &amp; Academia</p>
-          </div>
-        </a>
-
-        <!-- Opción al lado del Logo: Soy Alumna / Ingresar -->
-        <button type="button" class="btn-student-access" onclick="openStudentModal()" aria-label="Acceso para Alumnas: Ingresar">
-          <svg class="student-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span class="student-label">Soy Alumna</span>
-          <span class="student-divider" aria-hidden="true">|</span>
-          <span class="student-cta">Ingresar</span>
-        </button>
-
-      </div>
+      <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+        <img 
+          src="assets/images/logoheader.png" 
+          alt="Total Beauty Salon &amp; Academia" 
+          class="brand-logo-img"
+          onerror="this.onerror=null; this.src='assets/images/logo.png';"
+        >
+        <h1 class="brand-title">TOTAL <span>BEAUTY</span></h1>
+        <p class="brand-tagline">Salón &amp; Academia</p>
+      </a>
     </header>
 
     <!-- Sección de Bienvenida -->
@@ -72,7 +73,7 @@
       </p>
     </section>
 
-    <!-- Menú de Opciones: Salón y Academia (Compacto) -->
+    <!-- Menú de Opciones: Salón y Academia -->
     <main class="menu-container animate-fade-in delay-2" role="main">
       
       <!-- Opción 1: SALÓN -->
@@ -214,6 +215,10 @@
       <p class="footer-copyright">
         &copy; Total Beauty Salon &amp; Academia. Todos los derechos reservados.
       </p>
+
+      <div>
+        <a href="javascript:void(0)" onclick="openAdminPanel()" class="admin-footer-link">Panel de Administración</a>
+      </div>
     </footer>
 
   </div>
@@ -238,129 +243,82 @@
     </div>
   </div>
 
-  <!-- Ventana Modal de Acceso para Alumnas (Portal Académico) -->
-  <div id="studentModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="studentModalMainTitle">
+  <!-- Ventana Modal del Panel de Administración -->
+  <div id="adminModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
     <div class="modal-box">
-      <button type="button" class="modal-close-btn" onclick="closeStudentModal()" aria-label="Cerrar ventana de alumnas">
+      <button type="button" class="modal-close-btn" onclick="closeAdminModal()" aria-label="Cerrar panel de administración">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
 
-      <div class="modal-tag">Portal Académico</div>
+      <div class="modal-tag">Administración</div>
 
-      <!-- VISTA 1: INGRESO DE ALUMNAS (SOLO MATRÍCULA Y CONTRASEÑA) -->
-      <div id="studentViewLogin" class="student-portal-view active">
-        <h3 id="studentModalMainTitle" class="modal-title">Acceso de Alumnas</h3>
-        <p class="modal-description">Ingrese exclusivamente con su matrícula y contraseña asignada:</p>
+      <!-- VISTA 1: AUTENTICACIÓN CON PIN ADMINISTRATIVO -->
+      <div id="adminAuthView">
+        <h3 id="adminModalTitle" class="modal-title">Acceso de Administrador</h3>
+        <p class="modal-description">Ingrese el PIN administrativo para configurar anuncios o resetear contraseñas:</p>
 
-        <form id="studentLoginForm" onsubmit="handleStudentLogin(event)">
+        <form id="adminAuthForm" onsubmit="handleAdminAuthSubmit(event)">
           <div class="student-form-group">
-            <label for="studentMatricula" class="student-form-label">Matrícula</label>
-            <input type="text" id="studentMatricula" class="student-form-input" placeholder="ej. TB-01 o su matrícula" required autocomplete="username">
-          </div>
-
-          <div class="student-form-group">
-            <label for="studentPassword" class="student-form-label">Contraseña</label>
-            <input type="password" id="studentPassword" class="student-form-input" placeholder="Clave de acceso (defecto: TB2026)" required autocomplete="current-password">
+            <label for="adminLoginPin" class="student-form-label">PIN Administrativo</label>
+            <input type="password" id="adminLoginPin" class="student-form-input" placeholder="PIN de Administrador" required autocomplete="current-password">
           </div>
 
           <button type="submit" class="btn-student-submit">
-            <span>Ingresar al Portal</span>
-          </button>
-        </form>
-
-        <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20olvidé%20mi%20contraseña%20de%20alumna%20y%20solicito%20apoyo%20con%20mi%20acceso." target="_blank" rel="noopener noreferrer" class="student-help-link">
-          Si olvidó su contraseña, contacte a <span>Total Beauty Academia al WhatsApp 5650560824</span>
-        </a>
-
-        <div style="text-align: center;">
-          <a href="javascript:void(0)" onclick="showAdminView()" class="admin-trigger-link">Acceso Administrador (Reset de Claves)</a>
-        </div>
-      </div>
-
-      <!-- VISTA 2: DETECCIÓN DE CLAVE POR DEFECTO (CAMBIO OBLIGATORIO) -->
-      <div id="studentViewChangePass" class="student-portal-view">
-        <h3 class="modal-title">Actualización Requerida</h3>
-        <div class="modal-alert-box alert-warning">
-          Se ha detectado la contraseña por defecto (TB2026) para la matrícula <strong id="changePassNoticeMatricula"></strong>. Por seguridad de su cuenta, debe definir una contraseña nueva para continuar.
-        </div>
-
-        <form id="studentChangePassForm" onsubmit="handlePasswordChange(event)">
-          <div class="student-form-group">
-            <label for="newStudentPass" class="student-form-label">Nueva Contraseña</label>
-            <input type="password" id="newStudentPass" class="student-form-input" placeholder="Mínimo 5 caracteres (distinta a TB2026)" required autocomplete="new-password">
-          </div>
-
-          <div class="student-form-group">
-            <label for="confirmStudentPass" class="student-form-label">Confirmar Nueva Contraseña</label>
-            <input type="password" id="confirmStudentPass" class="student-form-input" placeholder="Repita la nueva contraseña" required autocomplete="new-password">
-          </div>
-
-          <button type="submit" class="btn-student-submit">
-            <span>Guardar Contraseña e Ingresar</span>
+            <span>Ingresar al Panel</span>
           </button>
         </form>
       </div>
 
-      <!-- VISTA 3: DASHBOARD DE ALUMNA AUTENTICADA -->
-      <div id="studentViewDashboard" class="student-portal-view">
-        <h3 class="modal-title">Bienvenida al Aula</h3>
-        <p class="modal-description">Sesión académica activa:</p>
+      <!-- VISTA 2: DASHBOARD DE ADMINISTRACIÓN (ANUNCIOS Y ALUMNAS) -->
+      <div id="adminDashboardView" style="display: none;">
+        <h3 class="modal-title">Panel de Control</h3>
+        <p class="modal-description" style="margin-bottom: 1rem;">Gestión de anuncios de la página y reseteo de claves:</p>
 
-        <div class="student-profile-card">
-          <div class="student-profile-row">
-            <span class="profile-label">Matrícula:</span>
-            <span class="profile-value" id="dashMatricula">TB-01</span>
-          </div>
-          <div class="student-profile-row">
-            <span class="profile-label">Estado:</span>
-            <span class="profile-value">Alumna Activa</span>
-          </div>
-          <div class="student-profile-row">
-            <span class="profile-label">Metodología:</span>
-            <span class="profile-value">90% Práctico &bull; 10% Teórico</span>
-          </div>
-          <div class="student-profile-row">
-            <span class="profile-label">Acreditación:</span>
-            <span class="profile-value">Constancia de Finalización</span>
-          </div>
-        </div>
-
-        <div class="modal-alert-box">
-          Sus prácticas se realizan en modelos reales en estaciones asignadas. Al concluir satisfactoriamente las horas prácticas de su curso, se emitirá su Constancia de Finalización oficial.
-        </div>
-
-        <button type="button" class="btn-student-submit" onclick="logoutStudent()">
-          <span>Cerrar Sesión</span>
-        </button>
-      </div>
-
-      <!-- VISTA 4: PANEL DE ADMINISTRADOR (RESET DE CONTRASEÑA A TB2026) -->
-      <div id="studentViewAdmin" class="student-portal-view">
-        <h3 class="modal-title">Administración</h3>
-        <p class="modal-description">Solo el administrador puede restablecer una contraseña a la clave por defecto (TB2026):</p>
-
-        <form id="adminResetForm" onsubmit="handleAdminReset(event)">
-          <div class="student-form-group">
-            <label for="adminPinInput" class="student-form-label">PIN de Administrador</label>
-            <input type="password" id="adminPinInput" class="student-form-input" placeholder="Clave administrativa" required>
+        <!-- SECCIÓN DE ANUNCIOS -->
+        <form id="adminAnnouncementForm" onsubmit="handleSaveAnnouncement(event)" style="margin-bottom: 1.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(212, 175, 55, 0.15);">
+          <div class="admin-toggle-row">
+            <label for="adminAnnToggle" class="toggle-switch-label">Mostrar Anuncio en la Página</label>
+            <label class="switch-control">
+              <input type="checkbox" id="adminAnnToggle">
+              <span class="switch-slider"></span>
+            </label>
           </div>
 
           <div class="student-form-group">
-            <label for="adminResetMatricula" class="student-form-label">Matrícula de Alumna a Resetear</label>
-            <input type="text" id="adminResetMatricula" class="student-form-input" placeholder="ej. TB-01" required>
+            <label for="adminAnnText" class="student-form-label">Texto del Anuncio</label>
+            <textarea id="adminAnnText" class="student-form-textarea" placeholder="Escriba el mensaje del anuncio oficial..."></textarea>
+          </div>
+
+          <div class="student-form-group">
+            <label for="adminAnnLink" class="student-form-label">Enlace o WhatsApp de Destino (Opcional)</label>
+            <input type="text" id="adminAnnLink" class="student-form-input" placeholder="https://api.whatsapp.com/send?phone=525650560824...">
+          </div>
+
+          <div class="student-form-group">
+            <label for="adminAnnBtnText" class="student-form-label">Texto del Botón (Opcional)</label>
+            <input type="text" id="adminAnnBtnText" class="student-form-input" placeholder="ej. Ver Detalles / Solicitar Informes">
           </div>
 
           <button type="submit" class="btn-student-submit">
+            <span>Guardar Anuncio</span>
+          </button>
+        </form>
+
+        <!-- SECCIÓN DE RESET DE ALUMNAS -->
+        <form id="adminStudentResetForm" onsubmit="handleAdminDirectReset(event)">
+          <div class="student-form-group">
+            <label for="adminResetTargetMatricula" class="student-form-label">Restablecer Contraseña de Alumna a TB2026</label>
+            <input type="text" id="adminResetTargetMatricula" class="student-form-input" placeholder="Matrícula de la alumna (ej. TB-01)" required>
+          </div>
+
+          <button type="submit" class="btn-student-secondary" style="border-color: rgba(212, 175, 55, 0.45); color: #f5e296;">
             <span>Restablecer a Clave por Defecto (TB2026)</span>
           </button>
-
-          <button type="button" class="btn-student-secondary" onclick="backToLoginView()">
-            <span>Volver al Acceso de Alumnas</span>
-          </button>
         </form>
+
       </div>
 
     </div>

@@ -2,13 +2,13 @@
    TOTAL BEAUTY SALON & ACADEMIA
    Estilo: Minimalista & Premium Luxury Dark
    Paleta: Fondo Negro Profundo (#070709) con Acentos Dorados (#D4AF37)
-   Cero Emojis - Tipografía de Alta Gama y Vectores Minimalistas
+   Cero Emojis - Tipografía de Alta Gama, Vectores Minimalistas y Móvil Ultra Optimizado
    ========================================================================== */
 
 /* Variables de Color y Tipografía */
 :root {
   --bg-dark: #070709;
-  --bg-card: rgba(18, 18, 22, 0.72);
+  --bg-card: rgba(18, 18, 22, 0.75);
   --bg-card-hover: rgba(26, 26, 32, 0.95);
   --surface-alt: #101014;
   --surface-card: #0d0d12;
@@ -41,12 +41,14 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   font-size: 16px;
   scroll-behavior: smooth;
   background-color: var(--bg-dark);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -68,8 +70,8 @@ body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 900px;
-  height: 450px;
+  width: min(900px, 100vw);
+  height: 420px;
   background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.08) 0%, rgba(7, 7, 9, 0) 70%);
   pointer-events: none;
   z-index: 0;
@@ -78,31 +80,121 @@ body {
 .ambient-grid {
   position: fixed;
   inset: 0;
-  background-image: 
-    radial-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-image: radial-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+  background-size: 36px 36px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Contenedor Principal */
+/* ==========================================================================
+   BARRA DE ANUNCIOS (CONFIGURABLE EN PANEL ADMIN)
+   ========================================================================== */
+.announcement-bar {
+  background: #0c0c11;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.08);
+  position: relative;
+  z-index: 99;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.announcement-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.announcement-content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+  color: #f7e6a7;
+  letter-spacing: 0.02em;
+}
+
+.announcement-bullet {
+  width: 6px;
+  height: 6px;
+  background: var(--gold-primary);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.announcement-text {
+  color: #f4f4f8;
+  font-weight: 400;
+}
+
+.announcement-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid var(--gold-primary);
+  color: #ffffff;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.announcement-btn:hover {
+  background: var(--gold-primary);
+  color: #070709;
+}
+
+.announcement-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.announcement-close:hover {
+  color: #ffffff;
+  background: rgba(212, 175, 55, 0.1);
+}
+
+/* ==========================================================================
+   ESTRUCTURA PRINCIPAL Y ENCABEZADOS
+   ========================================================================== */
 .site-wrapper {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 1.75rem 1.25rem 2rem;
+  padding: 2.25rem 1.25rem 2rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Header & Marca */
+/* Header de la Página Principal: Logo Elegante y Centrado */
 .brand-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1.25rem;
+  text-align: center;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.5rem;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .brand-header::after {
@@ -111,54 +203,40 @@ body {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 70px;
+  width: 80px;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
 }
 
-/* Fila de Encabezado: Logo y Opción de Alumna al Lado */
-.header-content-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  max-width: 860px;
-  margin: 0 auto;
-}
-
 .brand-logo-container {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
   text-decoration: none;
   color: inherit;
-  text-align: left;
-}
-
-.brand-logo-img {
-  max-height: 60px;
-  width: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.25));
   transition: var(--transition-smooth);
 }
 
-.brand-logo-img:hover {
-  transform: scale(1.02);
-  filter: drop-shadow(0 4px 16px rgba(212, 175, 55, 0.4));
+.brand-logo-img {
+  max-height: 75px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 12px rgba(212, 175, 55, 0.28));
+  transition: var(--transition-smooth);
 }
 
-.brand-text-block {
-  display: flex;
-  flex-direction: column;
+.brand-logo-container:hover .brand-logo-img {
+  transform: scale(1.03);
+  filter: drop-shadow(0 4px 18px rgba(212, 175, 55, 0.45));
 }
 
 .brand-title {
   font-family: var(--font-serif);
-  font-size: 1.65rem;
-  letter-spacing: 0.2em;
+  font-size: 1.85rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #ffffff;
+  margin-top: 0.65rem;
   font-weight: 500;
   line-height: 1.1;
 }
@@ -170,21 +248,21 @@ body {
 }
 
 .brand-tagline {
-  font-size: 0.72rem;
-  letter-spacing: 0.28em;
+  font-size: 0.74rem;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
   font-weight: 400;
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
-/* Botón: Soy Alumna / Ingresar (Ubicado al lado del Logo) */
+/* Botón Soy Alumna en Barra de Academia */
 .btn-student-access {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.45rem 1.05rem;
+  gap: 0.5rem;
+  padding: 0.42rem 0.95rem;
   background: rgba(18, 18, 22, 0.85);
   border: 1px solid var(--gold-border);
   border-radius: 999px;
@@ -234,8 +312,8 @@ body {
 /* Sección de Bienvenida */
 .welcome-section {
   text-align: center;
-  max-width: 680px;
-  margin: 0 auto 2.25rem;
+  max-width: 650px;
+  margin: 0 auto 2.5rem;
   padding: 0 1rem;
 }
 
@@ -263,34 +341,35 @@ body {
 }
 
 .welcome-description {
-  font-size: 0.92rem;
+  font-size: 0.93rem;
   color: var(--text-muted);
   line-height: 1.6;
   font-weight: 300;
   letter-spacing: 0.01em;
 }
 
-/* Menú Principal - Cuadrícula de 2 Opciones (Compacta) */
+/* ==========================================================================
+   MENÚ PRINCIPAL - TARJETAS COMPACTAS Y RESPONSIVAS
+   ========================================================================== */
 .menu-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  max-width: 780px;
-  margin: 0 auto 2.75rem;
+  gap: 1.75rem;
+  max-width: 760px;
+  margin: 0 auto 3rem;
   width: 100%;
 }
 
-/* Tarjeta de Opción */
 .option-card {
   position: relative;
   background: var(--bg-card);
   border: 1px solid var(--gold-border);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: var(--transition-smooth);
-  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 8px 25px -10px rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   text-decoration: none;
@@ -305,7 +384,6 @@ body {
   box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.85), 0 0 22px var(--gold-glow);
 }
 
-/* Contenedor de Imagen de la Opción */
 .option-image-wrap {
   position: relative;
   width: 100%;
@@ -328,7 +406,6 @@ body {
   filter: brightness(1) contrast(1.08);
 }
 
-/* Gradiente de Superposición */
 .image-overlay {
   position: absolute;
   inset: 0;
@@ -341,7 +418,6 @@ body {
   pointer-events: none;
 }
 
-/* Badge Flotante sobre la Imagen */
 .option-category-badge {
   position: absolute;
   top: 0.85rem;
@@ -359,9 +435,8 @@ body {
   z-index: 2;
 }
 
-/* Contenido de la Tarjeta */
 .option-content {
-  padding: 1.25rem 1.4rem 1.4rem;
+  padding: 1.35rem 1.4rem 1.4rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -394,11 +469,10 @@ body {
   font-size: 0.82rem;
   color: var(--text-muted);
   line-height: 1.55;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
   font-weight: 300;
 }
 
-/* Lista de Aspectos Destacados */
 .option-highlights {
   list-style: none;
   margin-bottom: 1.25rem;
@@ -427,7 +501,7 @@ body {
   opacity: 0.75;
 }
 
-/* Botón de Acción */
+/* Botones de Acción */
 .btn-action {
   margin-top: auto;
   display: inline-flex;
@@ -435,8 +509,8 @@ body {
   justify-content: center;
   gap: 0.65rem;
   width: 100%;
-  padding: 0.75rem 1.25rem;
-  border-radius: 5px;
+  padding: 0.8rem 1.25rem;
+  border-radius: 6px;
   font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 500;
@@ -511,37 +585,35 @@ body {
 }
 
 /* ==========================================================================
-   ESTILOS DE LA PÁGINA ESPECIAL: ACADEMIA (academia.html)
+   PÁGINA ESPECIAL: ACADEMIA (academia.html)
    ========================================================================== */
-
-/* Barra Superior de Navegación Academia */
 .academia-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0 1.75rem;
+  padding: 0.75rem 0 1.75rem;
   border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-  margin-bottom: 2.5rem;
-  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+  gap: 1rem;
 }
 
 .nav-right-group {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .btn-back {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.45rem 0.95rem;
+  gap: 0.5rem;
+  padding: 0.42rem 0.85rem;
   border-radius: 4px;
   border: 1px solid var(--gold-border);
   color: var(--gold-light);
   text-decoration: none;
-  font-size: 0.74rem;
-  letter-spacing: 0.15em;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: var(--transition-smooth);
 }
@@ -558,19 +630,18 @@ body {
   height: 14px;
 }
 
-/* Hero de Academia */
 .academia-hero {
   text-align: center;
-  max-width: 780px;
-  margin: 0 auto 3rem;
-  padding: 0 1rem;
+  max-width: 760px;
+  margin: 0 auto 2.75rem;
+  padding: 0 0.5rem;
 }
 
 .academia-hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.35rem 1rem;
+  padding: 0.32rem 0.95rem;
   border-radius: 999px;
   border: 1px solid var(--gold-border);
   background: rgba(212, 175, 55, 0.05);
@@ -578,16 +649,17 @@ body {
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .academia-hero-title {
   font-family: var(--font-serif);
-  font-size: 2.35rem;
+  font-size: 2.25rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   color: #ffffff;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
 }
 
 .academia-hero-title span {
@@ -597,27 +669,28 @@ body {
 }
 
 .academia-hero-subtitle {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
-  line-height: 1.65;
+  line-height: 1.6;
   font-weight: 300;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
-/* Indicadores Clave de Academia: 90% Práctico, 10% Teórico */
+/* Métricas Clave de la Academia */
 .academia-metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 0.85rem;
   max-width: 860px;
-  margin: 0 auto 3.5rem;
+  margin: 0 auto 3rem;
+  width: 100%;
 }
 
 .metric-card {
   background: rgba(18, 18, 22, 0.6);
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 8px;
-  padding: 1.1rem 0.85rem;
+  padding: 1rem 0.65rem;
   text-align: center;
   transition: var(--transition-smooth);
 }
@@ -632,27 +705,27 @@ body {
   font-family: var(--font-serif);
   font-size: 1.25rem;
   color: var(--gold-light);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
   font-weight: 600;
   letter-spacing: 0.05em;
 }
 
 .metric-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-/* Sección de Cursos */
+/* Sección de Cursos y Filtros */
 .section-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .section-tag {
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold-light);
   margin-bottom: 0.35rem;
@@ -666,7 +739,6 @@ body {
   color: #ffffff;
 }
 
-/* Filtros de Categorías */
 .category-filter-bar {
   display: flex;
   justify-content: center;
@@ -679,13 +751,14 @@ body {
   background: transparent;
   border: 1px solid rgba(212, 175, 55, 0.25);
   color: var(--text-muted);
-  padding: 0.45rem 1.1rem;
+  padding: 0.45rem 1rem;
   border-radius: 999px;
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
   cursor: pointer;
   transition: var(--transition-smooth);
+  white-space: nowrap;
 }
 
 .filter-btn:hover,
@@ -699,14 +772,15 @@ body {
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-  gap: 1.75rem;
-  margin-bottom: 4rem;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+  width: 100%;
 }
 
 .course-card {
   background: var(--bg-card);
   border: 1px solid var(--gold-border);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -721,7 +795,7 @@ body {
 }
 
 .course-card-header {
-  padding: 1.25rem 1.4rem 0.75rem;
+  padding: 1.15rem 1.25rem 0.65rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -731,10 +805,10 @@ body {
 .course-mode-badge {
   background: rgba(212, 175, 55, 0.12);
   border: 1px solid rgba(212, 175, 55, 0.3);
-  padding: 0.25rem 0.65rem;
+  padding: 0.22rem 0.6rem;
   border-radius: 4px;
   font-size: 0.64rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--gold-light);
   font-weight: 500;
@@ -747,51 +821,51 @@ body {
 }
 
 .course-card-body {
-  padding: 1.25rem 1.4rem 1.5rem;
+  padding: 1.15rem 1.25rem 1.35rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .course-category-tag {
-  font-size: 0.66rem;
-  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
 }
 
 .course-title {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #ffffff;
-  margin-bottom: 0.65rem;
-  letter-spacing: 0.03em;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.02em;
   font-weight: 500;
 }
 
 .course-desc {
-  font-size: 0.83rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   line-height: 1.55;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.15rem;
   font-weight: 300;
 }
 
 .course-topics-list {
   list-style: none;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.35rem;
   padding-top: 0.75rem;
   border-top: 1px solid rgba(212, 175, 55, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
 .course-topic-item {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
   font-size: 0.76rem;
   color: #c4c4cc;
 }
@@ -812,12 +886,12 @@ body {
   gap: 0.6rem;
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid var(--gold-border-hover);
   background: transparent;
   color: var(--gold-light);
   font-size: 0.74rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
   transition: var(--transition-smooth);
@@ -832,57 +906,57 @@ body {
   box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
 }
 
-/* Metodología: 90% Práctica, 10% Teoría, Constancia de Finalización */
+/* Metodología */
 .methodology-section {
   background: rgba(13, 13, 18, 0.6);
   border: 1px solid var(--gold-border);
   border-radius: 12px;
-  padding: 2.5rem 2rem;
-  margin-bottom: 4rem;
+  padding: 2.25rem 1.75rem;
+  margin-bottom: 3.5rem;
 }
 
 .methodology-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.75rem;
   margin-top: 1.5rem;
 }
 
 .methodology-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .methodology-number {
   font-family: var(--font-serif);
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   color: var(--gold-primary);
   font-weight: 600;
 }
 
 .methodology-title {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: #ffffff;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .methodology-desc {
-  font-size: 0.82rem;
+  font-size: 0.81rem;
   color: var(--text-muted);
   line-height: 1.55;
   font-weight: 300;
 }
 
-/* Banner de Inscripciones / Contacto WhatsApp */
+/* Banner de Inscripciones */
 .enrollment-banner {
   text-align: center;
   background: linear-gradient(180deg, rgba(20, 20, 26, 0.8) 0%, rgba(13, 13, 18, 0.95) 100%);
   border: 1px solid var(--gold-border);
   border-radius: 12px;
-  padding: 2.75rem 1.5rem;
-  margin-bottom: 3.5rem;
+  padding: 2.5rem 1.25rem;
+  margin-bottom: 3rem;
   position: relative;
   overflow: hidden;
 }
@@ -893,24 +967,24 @@ body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 250px;
+  width: 200px;
   height: 2px;
   background: var(--gold-gradient);
 }
 
 .enrollment-title {
   font-family: var(--font-serif);
-  font-size: 1.75rem;
+  font-size: 1.65rem;
   color: #ffffff;
-  margin-bottom: 0.75rem;
-  letter-spacing: 0.05em;
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.04em;
 }
 
 .enrollment-desc {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
-  max-width: 600px;
-  margin: 0 auto 1.75rem;
+  max-width: 580px;
+  margin: 0 auto 1.5rem;
   line-height: 1.6;
   font-weight: 300;
 }
@@ -918,15 +992,16 @@ body {
 .btn-whatsapp-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.85rem 2rem;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.75rem;
   border-radius: 6px;
   background: linear-gradient(135deg, #c5a059 0%, #ecd48d 50%, #b38838 100%);
   color: #070709;
   border: 1px solid #d4af37;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   box-shadow: 0 4px 18px rgba(212, 175, 55, 0.3);
@@ -940,15 +1015,13 @@ body {
 }
 
 .btn-whatsapp-cta svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
 }
 
 /* ==========================================================================
-   MODALES Y PORTAL DE ALUMNAS
+   MODALES, FORMULARIOS Y PANEL ADMIN
    ========================================================================== */
-
-/* Modal Base */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -959,7 +1032,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
@@ -973,10 +1046,12 @@ body {
 .modal-box {
   background: #0d0d12;
   border: 1px solid var(--gold-border);
-  border-radius: 12px;
+  border-radius: 14px;
   max-width: 480px;
   width: 100%;
-  padding: 2.25rem 2rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem 1.75rem;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 35px rgba(212, 175, 55, 0.15);
   transform: translateY(20px) scale(0.98);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -989,13 +1064,13 @@ body {
 
 .modal-close-btn {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 1.15rem;
+  right: 1.15rem;
   background: transparent;
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1020,17 +1095,17 @@ body {
 
 .modal-title {
   font-family: var(--font-serif);
-  font-size: 1.55rem;
+  font-size: 1.5rem;
   color: #ffffff;
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.6rem;
   letter-spacing: 0.04em;
 }
 
 .modal-description {
-  font-size: 0.86rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   line-height: 1.55;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.4rem;
   font-weight: 300;
 }
 
@@ -1063,7 +1138,6 @@ body {
   transform: translateX(3px);
 }
 
-/* Vistas Interactivas del Portal de Alumnas */
 .student-portal-view {
   display: none;
 }
@@ -1073,7 +1147,7 @@ body {
   animation: fadeIn 0.4s ease forwards;
 }
 
-/* Campos de Formulario: Modal de Alumnas */
+/* Campos de Formulario */
 .student-form-group {
   margin-bottom: 1.15rem;
   text-align: left;
@@ -1088,7 +1162,8 @@ body {
   margin-bottom: 0.35rem;
 }
 
-.student-form-input {
+.student-form-input,
+.student-form-textarea {
   width: 100%;
   padding: 0.75rem 0.95rem;
   background: #121218;
@@ -1096,15 +1171,84 @@ body {
   border-radius: 6px;
   color: #f8f8f8;
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 16px; /* Evita zoom automático en Safari iOS */
   transition: var(--transition-smooth);
   outline: none;
 }
 
-.student-form-input:focus {
+.student-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.student-form-input:focus,
+.student-form-textarea:focus {
   border-color: var(--gold-primary);
   box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
   background: #171720;
+}
+
+/* Switch Toggle para Anuncios */
+.admin-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.toggle-switch-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.switch-control {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.switch-control input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #23232b;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.switch-slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--gold-light);
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.switch-control input:checked + .switch-slider {
+  background-color: rgba(212, 175, 55, 0.35);
+  border-color: var(--gold-primary);
+}
+
+.switch-control input:checked + .switch-slider::before {
+  transform: translateX(22px);
+  background-color: #ffffff;
 }
 
 .btn-student-submit {
@@ -1153,7 +1297,6 @@ body {
   background: rgba(212, 175, 55, 0.08);
 }
 
-/* Mensajes de Alerta y Notificación en el Modal */
 .modal-alert-box {
   background: rgba(212, 175, 55, 0.08);
   border: 1px solid rgba(212, 175, 55, 0.3);
@@ -1171,12 +1314,11 @@ body {
   color: #fff6db;
 }
 
-/* Tarjeta de Información de Alumna Autenticada */
 .student-profile-card {
   background: #14141c;
   border: 1px solid var(--gold-border);
   border-radius: 8px;
-  padding: 1.25rem;
+  padding: 1.15rem;
   margin-bottom: 1.25rem;
   text-align: left;
 }
@@ -1204,7 +1346,6 @@ body {
   font-weight: 500;
 }
 
-/* Enlaces de Ayuda y Administrador */
 .student-help-link {
   display: block;
   margin-top: 1.25rem;
@@ -1226,26 +1367,7 @@ body {
   color: #ffffff;
 }
 
-.admin-trigger-link {
-  display: inline-block;
-  margin-top: 1.25rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: var(--transition-smooth);
-  border-bottom: 1px dotted rgba(212, 175, 55, 0.3);
-  padding-bottom: 2px;
-  cursor: pointer;
-}
-
-.admin-trigger-link:hover {
-  color: var(--gold-light);
-  border-bottom-color: var(--gold-primary);
-}
-
-/* Footer Minimalista */
+/* Footer y Enlace de Administración */
 .brand-footer {
   margin-top: auto;
   padding-top: 2rem;
@@ -1258,8 +1380,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 1.25rem;
+  gap: 1.25rem;
+  margin-bottom: 1.1rem;
 }
 
 .social-link {
@@ -1290,13 +1412,30 @@ body {
   font-size: 0.74rem;
   color: var(--text-dim);
   letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.admin-footer-link {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555562;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+.admin-footer-link:hover {
+  color: var(--gold-primary);
 }
 
 /* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -1320,16 +1459,19 @@ body {
   animation-delay: 0.36s;
 }
 
-/* Responsividad */
+/* ==========================================================================
+   OPTIMIZACIÓN RESPONSIVA Y MÓVIL SUPER DETALLADA
+   ========================================================================== */
 @media (max-width: 820px) {
   .menu-container {
     grid-template-columns: 1fr;
-    max-width: 420px;
+    max-width: 440px;
     gap: 1.5rem;
   }
 
   .academia-metrics-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 
   .methodology-grid {
@@ -1339,50 +1481,181 @@ body {
 }
 
 @media (max-width: 640px) {
-  .header-content-row {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.95rem;
+  .site-wrapper {
+    padding: 1.5rem 0.95rem 1.75rem;
   }
 
-  .brand-logo-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.4rem;
+  .announcement-container {
+    padding: 0.5rem 0.85rem;
+    align-items: flex-start;
+  }
+
+  .announcement-content {
+    font-size: 0.76rem;
+    gap: 0.45rem;
+  }
+
+  .brand-header {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .brand-logo-img {
+    max-height: 65px;
   }
 
   .brand-title {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
+    letter-spacing: 0.2em;
   }
 
+  .brand-tagline {
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+  }
+
+  .welcome-section {
+    margin-bottom: 2rem;
+    padding: 0 0.25rem;
+  }
+
+  .welcome-description {
+    font-size: 0.88rem;
+  }
+
+  .option-image-wrap {
+    height: 155px;
+  }
+
+  .option-content {
+    padding: 1.15rem 1.25rem 1.25rem;
+  }
+
+  .option-title {
+    font-size: 1.25rem;
+  }
+
+  .option-description {
+    font-size: 0.8rem;
+    margin-bottom: 0.95rem;
+  }
+
+  .option-highlights {
+    gap: 0.4rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .highlight-item {
+    font-size: 0.76rem;
+  }
+
+  .btn-action {
+    padding: 0.82rem 1rem;
+    font-size: 0.74rem;
+  }
+
+  /* Academia Navbar en Teléfonos */
   .academia-nav {
-    flex-direction: column;
-    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
   }
 
-  .nav-right-group {
-    flex-direction: column;
-    gap: 0.85rem;
-    align-items: center;
+  .btn-back {
+    font-size: 0.68rem;
+    padding: 0.35rem 0.65rem;
   }
-}
 
-@media (max-width: 520px) {
-  .site-wrapper {
-    padding: 1.5rem 1rem 1.5rem;
+  .btn-student-access {
+    font-size: 0.68rem;
+    padding: 0.35rem 0.75rem;
   }
 
   .academia-hero-title {
     font-size: 1.85rem;
   }
 
+  .academia-hero-subtitle {
+    font-size: 0.86rem;
+  }
+
+  /* Barra de Filtros con Desplazamiento Horizontal Táctil en Móviles */
+  .category-filter-bar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.65rem;
+    margin-bottom: 2rem;
+    gap: 0.4rem;
+    scrollbar-width: none;
+  }
+
+  .category-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.85rem;
+  }
+
   .courses-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .course-card-header {
+    padding: 1rem 1.15rem 0.55rem;
+  }
+
+  .course-card-body {
+    padding: 1rem 1.15rem 1.25rem;
+  }
+
+  .course-title {
+    font-size: 1.15rem;
+  }
+
+  .methodology-section {
+    padding: 1.75rem 1.15rem;
+  }
+
+  .enrollment-banner {
+    padding: 2rem 1rem;
+  }
+
+  .enrollment-title {
+    font-size: 1.45rem;
+  }
+
+  .btn-whatsapp-cta {
+    width: 100%;
+    padding: 0.82rem 1.25rem;
+    font-size: 0.74rem;
+  }
+
+  .modal-box {
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-title {
+    font-size: 1.4rem;
+  }
+
+  .brand-tagline {
+    font-size: 0.62rem;
+  }
+
+  .academia-metrics-grid {
     grid-template-columns: 1fr;
   }
 
-  .option-image-wrap {
-    height: 145px;
+  .btn-back span {
+    display: inline;
   }
 }
