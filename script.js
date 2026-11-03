@@ -1,12 +1,13 @@
 /**
- * TOTAL BEAUTY SALON & ACADEMIA
- * Script de Navegacion, Anuncio Intersticial (5s), Acceso de Alumnas e Integracion Firebase
- * Cero Emojis - Estetica Minimalista y de Lujo
+ * TOTAL BEAUTY SALÓN & ACADEMIA
+ * Script de Navegación, Anuncio Intersticial (5s), Acceso de Alumnas e Integración Firebase
+ * Cero Emojis - Estética Minimalista y de Lujo
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  // Configuración general
   const config = {
     salonUrl: "",
     defaultPassword: "TB2026",
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentActiveStudent = null;
   let pendingChangeMatricula = null;
 
+  // Inicialización
   init();
 
   async function init() {
@@ -39,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       data = {
         enabled: true,
-        title: "Inscripciones Abiertas a Cursos Practicos",
+        title: "Inscripciones Abiertas a Cursos Prácticos",
         image: "assets/images/academia.jpg",
-        text: "Inicia tu formacion profesional con metodologia 90% practica en modelos reales.",
+        text: "Inicia tu formación profesional con metodología 90% práctica en modelos reales.",
         link: `https://api.whatsapp.com/send?phone=${config.whatsappPhone}`,
         btnText: "Solicitar Informes por WhatsApp"
       };
@@ -51,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderInterstitialContent(data);
 
+    // Muestra el anuncio tras 500ms al entrar a la página
     setTimeout(() => {
       openInterstitialModal();
     }, 500);
@@ -175,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = (passInput ? passInput.value : '').trim();
 
     if (!matricula || !password) {
-      alertNotice("Por favor ingrese su matricula y contrasena.");
+      alertNotice("Por favor ingrese su matrícula y contraseña.");
       return;
     }
 
@@ -185,18 +188,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!student) {
-      alertNotice("Matricula no encontrada en el sistema academico. Solicite su alta al WhatsApp 5650560824.");
+      alertNotice("Matrícula no encontrada en el sistema académico. Solicite su alta al WhatsApp 5650560824.");
       return;
     }
 
     if (student.password !== password) {
-      alertNotice("Contrasena incorrecta. Si la olvido, contacte a Total Beauty al WhatsApp 5650560824.");
+      alertNotice("Contraseña incorrecta. Si la olvidó, contacte a Total Beauty al WhatsApp 5650560824.");
       return;
     }
 
     pendingChangeMatricula = matricula;
 
-    // Si la contrasena es la clave inicial TB2026, exige cambiarla
+    // Si la contraseña es la clave inicial TB2026, exige cambiarla obligatoriamente
     if (password === config.defaultPassword || student.isDefault === true) {
       const noticeMatEl = document.getElementById('changePassNoticeMatricula');
       if (noticeMatEl) noticeMatEl.textContent = matricula;
@@ -205,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetMatEl) targetMatEl.value = matricula;
 
       showStudentView('change');
-      alertNotice("Seguridad: Clave inicial detectada. Por favor elija una contrasena personal.");
+      alertNotice("Seguridad: Clave inicial detectada. Por favor elija una contraseña personal.");
       const newPassInput = document.getElementById('newStudentPass');
       if (newPassInput) newPassInput.focus();
       return;
@@ -215,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentActiveStudent = student;
     renderStudentDashboard(student);
     showStudentView('dashboard');
-    alertNotice(`Bienvenida, ${student.nombre || student.matricula}. Acceso academico activo.`);
+    alertNotice(`Bienvenida, ${student.nombre || student.matricula}. Acceso académico activo.`);
   };
 
   window.handlePasswordChange = window.handleStudentChangePassword = async function (e) {
@@ -228,28 +231,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmPass = (confirmPassInput ? confirmPassInput.value : '').trim();
 
     if (!matricula) {
-      alertNotice("Error de sesion. Ingrese nuevamente.");
+      alertNotice("Error de sesión. Ingrese nuevamente.");
       showStudentView('login');
       return;
     }
 
     if (!newPass || !confirmPass) {
-      alertNotice("Por favor complete los campos de contrasena.");
+      alertNotice("Por favor complete los campos de contraseña.");
       return;
     }
 
     if (newPass !== confirmPass) {
-      alertNotice("Las contrasenas no coinciden. Verifique nuevamente.");
+      alertNotice("Las contraseñas no coinciden. Verifique nuevamente.");
       return;
     }
 
     if (newPass === config.defaultPassword) {
-      alertNotice("La nueva contrasena no puede ser la clave por defecto TB2026. Elija una clave personal.");
+      alertNotice("La nueva contraseña no puede ser la clave por defecto TB2026. Elija una clave personal.");
       return;
     }
 
     if (newPass.length < 5) {
-      alertNotice("Por seguridad, su nueva contrasena debe tener al menos 5 caracteres.");
+      alertNotice("Por seguridad, su nueva contraseña debe tener al menos 5 caracteres.");
       return;
     }
 
@@ -258,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentActiveStudent = await TB_FIREBASE.getAlumna(matricula);
     }
 
-    alertNotice("Contrasena actualizada correctamente en Firebase. Bienvenida al aula.");
+    alertNotice("Contraseña actualizada correctamente en Firebase. Bienvenida al aula.");
     renderStudentDashboard(currentActiveStudent || { matricula });
     showStudentView('dashboard');
   };
@@ -275,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passInput = document.getElementById('studentPassword') || document.getElementById('studentLoginPassword');
     if (passInput) passInput.value = '';
     window.closeStudentModal();
-    alertNotice("Sesion academica finalizada.");
+    alertNotice("Sesión académica finalizada.");
   };
 
   if (studentModal) {
@@ -287,27 +290,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 3. MODAL DE SERVICIOS EN INDEX.HTML (SALON)
+  // 3. MODAL DE SERVICIOS EN INDEX.HTML (SALÓN)
   // ==========================================
   const modalData = {
     salon: {
-      tag: "Total Beauty Salon",
-      title: "Servicios de Salon",
-      description: "Seleccione una opcion para comunicarse con recepcion o agendar su cita:",
+      tag: "Total Beauty Salón",
+      title: "Servicios de Salón",
+      description: "Seleccione una opción para comunicarse con recepción o agendar su cita:",
       options: [
         {
           label: "Reservar Cita Personalizada",
           action: () => openBookingModal(),
-          detail: "Atencion prioritaria"
+          detail: "Atención prioritaria"
         },
         {
-          label: "Catalogo de Servicios y Precios",
-          action: () => alertNotice("Catalogo de servicios disponible en recepcion y via digital."),
-          detail: "Corte, colorimetria, spa"
+          label: "Catálogo de Servicios y Precios",
+          action: () => alertNotice("Catálogo de servicios disponible en recepción y vía digital."),
+          detail: "Corte, colorimetría, spa"
         },
         {
-          label: "Contactar Recepcion por WhatsApp",
-          action: () => openWhatsApp("Hola, deseo solicitar informes y agendar una cita en Total Beauty Salon."),
+          label: "Contactar Recepción por WhatsApp",
+          action: () => openWhatsApp("Hola, deseo solicitar informes y agendar una cita en Total Beauty Salón."),
           detail: "Respuesta directa (5650560824)"
         }
       ]
@@ -376,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Cierre global con tecla Escape (si el temporizador de 5s ya concluyo)
+  // Cierre global con tecla Escape (si el temporizador de 5s ya concluyó)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (interstitialCanClose) window.closeInterstitial();
@@ -515,6 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openBookingModal() {
     window.closeModal();
-    openWhatsApp("Hola, solicito agendar una cita para servicios en Total Beauty Salon.");
+    openWhatsApp("Hola, solicito agendar una cita para servicios en Total Beauty Salón.");
   }
 });

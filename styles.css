@@ -1735,7 +1735,7 @@ body {
 
 
 /* ==========================================================================
-   PORTAL DE ADMINISTRACION DEDICADO (ADMIN.HTML)
+   PORTAL DE ADMINISTRACIÓN DEDICADO (ADMIN.HTML)
    ========================================================================== */
 .admin-body {
   background-color: var(--bg-dark);
@@ -2554,7 +2554,7 @@ body {
 }
 
 /* ==========================================================================
-   OPTIMIZACION RESPONSIVA PARA ADMIN.HTML
+   OPTIMIZACIÓN RESPONSIVA PARA ADMIN.HTML
    ========================================================================== */
 @media (max-width: 960px) {
   .admin-kpi-grid {
@@ -2619,7 +2619,7 @@ body {
 
 
 /* ==========================================================================
-   CONFIGURACION DE CURSOS DE ACADEMIA EN ADMIN.HTML
+   CONFIGURACIÓN DE CURSOS DE ACADEMIA EN ADMIN.HTML
    ========================================================================== */
 .admin-courses-list {
   display: grid;

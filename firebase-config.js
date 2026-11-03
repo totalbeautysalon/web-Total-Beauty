@@ -1,6 +1,6 @@
 /**
- * TOTAL BEAUTY SALON & ACADEMIA
- * Modulo de Configuracion y Servicios Firebase Realtime Database
+ * TOTAL BEAUTY SALÓN & ACADEMIA
+ * Módulo de Configuración y Servicios Firebase Realtime Database
  * Proyecto: totalbregis (https://totalbregis-default-rtdb.firebaseio.com)
  * Cero Emojis - Arquitectura Segura con Respaldo Offline
  */
@@ -42,16 +42,16 @@ const TB_FIREBASE = (function () {
       tema1: "Práctica continua en estaciones con modelos reales",
       tema2: "10% teoría sobre visagismo capilar y fondos de aclaración",
       tema3: "Entrega de Constancia de Finalización oficial",
-      whatsappMsg: "Hola Total Beauty Academia, solicito informes sobre el Curso de Colorimetría Avanzada y Balayage.",
+      whatsappMsg: "Hola Total Beauty Academia, solicito informes detallados sobre el Curso de Colorimetría Avanzada y Balayage.",
       activo: true
     }
   };
 
   const DEFAULT_ANNOUNCEMENT = {
     enabled: true,
-    title: "Inscripciones Abiertas a Cursos Practicos",
+    title: "Inscripciones Abiertas a Cursos Prácticos",
     image: "assets/images/academia.jpg",
-    text: "Inicia tu formacion profesional con metodologia 90% practica en modelos reales. Cupo limitado para atencion personalizada en cabina.",
+    text: "Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.",
     link: "https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos.",
     btnText: "Solicitar Informes por WhatsApp"
   };
@@ -60,14 +60,14 @@ const TB_FIREBASE = (function () {
     "TB-01": {
       matricula: "TB-01",
       nombre: "Valeria Soto",
-      curso: "Colorimetria y Balayage",
+      curso: "Colorimetría y Balayage",
       password: "TB2026",
       isDefault: true,
       telefono: "5650560824"
     },
     "TB-02": {
       matricula: "TB-02",
-      nombre: "Mariana Gomez",
+      nombre: "Mariana Gómez",
       curso: "Estilismo y Corte Profesional",
       password: "TB2026",
       isDefault: true,
@@ -75,7 +75,7 @@ const TB_FIREBASE = (function () {
     },
     "TB-03": {
       matricula: "TB-03",
-      nombre: "Camila Hernandez",
+      nombre: "Camila Hernández",
       curso: "Maquillaje Profesional y Social",
       password: "TB2026",
       isDefault: true,
@@ -89,7 +89,7 @@ const TB_FIREBASE = (function () {
   }
 
   // ==========================================
-  // GESTION DE ANUNCIO INTERSTICIAL
+  // GESTIÓN DE ANUNCIO INTERSTICIAL
   // ==========================================
   async function getAnnouncement() {
     try {
@@ -105,14 +105,14 @@ const TB_FIREBASE = (function () {
         }
       }
     } catch (err) {
-      console.warn("Conexion a Firebase no disponible para anuncio. Usando cache local.", err);
+      console.warn("Conexión a Firebase no disponible para anuncio. Usando caché local.", err);
     }
 
     try {
       const cached = localStorage.getItem(LOCAL_CACHE.announcement);
       if (cached) return JSON.parse(cached);
     } catch (e) {
-      console.error("Error al leer cache local de anuncio:", e);
+      console.error("Error al leer caché local de anuncio:", e);
     }
 
     localStorage.setItem(LOCAL_CACHE.announcement, JSON.stringify(DEFAULT_ANNOUNCEMENT));
@@ -130,7 +130,7 @@ const TB_FIREBASE = (function () {
     try {
       const res = await fetch(getUrl(PATHS.announcement), {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify(payload)
       });
       return res.ok;
@@ -141,7 +141,7 @@ const TB_FIREBASE = (function () {
   }
 
   // ==========================================
-  // GESTION DE ALUMNAS Y MATRICULAS
+  // GESTIÓN DE ALUMNAS Y MATRÍCULAS
   // ==========================================
   async function getAlumnas() {
     try {
@@ -157,14 +157,14 @@ const TB_FIREBASE = (function () {
         }
       }
     } catch (err) {
-      console.warn("Conexion a Firebase no disponible para alumnas. Usando cache local.", err);
+      console.warn("Conexión a Firebase no disponible para alumnas. Usando caché local.", err);
     }
 
     try {
       const cached = localStorage.getItem(LOCAL_CACHE.alumnas);
       if (cached) return JSON.parse(cached);
     } catch (e) {
-      console.error("Error al leer cache local de alumnas:", e);
+      console.error("Error al leer caché local de alumnas:", e);
     }
 
     localStorage.setItem(LOCAL_CACHE.alumnas, JSON.stringify(DEFAULT_ALUMNAS));
@@ -199,26 +199,25 @@ const TB_FIREBASE = (function () {
     const payload = {
       matricula: cleanMatricula,
       nombre: alumnaData.nombre || "Alumna Registrada",
-      curso: alumnaData.curso || "Cursos Practicos Total Beauty",
+      curso: alumnaData.curso || "Cursos Prácticos Total Beauty",
       password: alumnaData.password || "TB2026",
       isDefault: typeof alumnaData.isDefault === 'boolean' ? alumnaData.isDefault : true,
       telefono: alumnaData.telefono || "5650560824",
       updatedAt: Date.now()
     };
 
-    // Actualiza cache local
     try {
       const current = await getAlumnas();
       current[cleanMatricula] = payload;
       localStorage.setItem(LOCAL_CACHE.alumnas, JSON.stringify(current));
     } catch (e) {
-      console.error("Error actualizando cache local de alumna:", e);
+      console.error("Error actualizando caché local de alumna:", e);
     }
 
     try {
       const res = await fetch(getUrl(`${PATHS.alumnas}/${encodeURIComponent(cleanMatricula)}`), {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify(payload)
       });
       return res.ok;
@@ -267,7 +266,7 @@ const TB_FIREBASE = (function () {
         localStorage.setItem(LOCAL_CACHE.alumnas, JSON.stringify(current));
       }
     } catch (e) {
-      console.error("Error eliminando en cache local:", e);
+      console.error("Error eliminando en caché local:", e);
     }
 
     try {
@@ -282,7 +281,7 @@ const TB_FIREBASE = (function () {
   }
 
   // ==========================================
-  // GESTION DE CURSOS DE CAPACITACION
+  // GESTIÓN DE CURSOS DE CAPACITACIÓN
   // ==========================================
   async function getCursos() {
     try {
@@ -298,14 +297,14 @@ const TB_FIREBASE = (function () {
         }
       }
     } catch (err) {
-      console.warn("Conexion a Firebase no disponible para cursos. Usando cache local.", err);
+      console.warn("Conexión a Firebase no disponible para cursos. Usando caché local.", err);
     }
 
     try {
       const cached = localStorage.getItem(LOCAL_CACHE.cursos);
       if (cached) return JSON.parse(cached);
     } catch (e) {
-      console.error("Error al leer cache local de cursos:", e);
+      console.error("Error al leer caché local de cursos:", e);
     }
 
     localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(DEFAULT_CURSOS));
@@ -343,12 +342,12 @@ const TB_FIREBASE = (function () {
       categoria: cursoData.categoria || "Especialidad Práctica",
       categoriaKey: cursoData.categoriaKey || "general",
       modalidad: cursoData.modalidad || "90% Práctico",
-      duracion: cursoData.duracion || "Presencial",
+      duracion: cursoData.duracion || "Presencial • Modelos Reales",
       descripcion: cursoData.descripcion || "",
       tema1: cursoData.tema1 || "Práctica guiada continua en modelos reales",
-      tema2: cursoData.tema2 || "10% teoría sobre fundamentos y visagismo",
+      tema2: cursoData.tema2 || "10% teoría sobre visagismo capilar y fundamentos",
       tema3: cursoData.tema3 || "Entrega de Constancia de Finalización oficial",
-      whatsappMsg: cursoData.whatsappMsg || "Hola Total Beauty Academia, solicito informes sobre este curso.",
+      whatsappMsg: cursoData.whatsappMsg || "Hola Total Beauty Academia, solicito informes detallados sobre este curso.",
       activo: typeof cursoData.activo === 'boolean' ? cursoData.activo : true,
       updatedAt: Date.now()
     };
@@ -358,13 +357,13 @@ const TB_FIREBASE = (function () {
       current[cleanId] = payload;
       localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(current));
     } catch (e) {
-      console.error("Error actualizando cache local de curso:", e);
+      console.error("Error actualizando caché local de curso:", e);
     }
 
     try {
       const res = await fetch(getUrl(`${PATHS.cursos}/${encodeURIComponent(cleanId)}`), {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify(payload)
       });
       return res.ok;
@@ -385,7 +384,7 @@ const TB_FIREBASE = (function () {
         localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(current));
       }
     } catch (e) {
-      console.error("Error eliminando curso en cache local:", e);
+      console.error("Error eliminando curso en caché local:", e);
     }
 
     try {

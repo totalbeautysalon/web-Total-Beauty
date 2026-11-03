@@ -1,6 +1,6 @@
-# Total Beauty Salon & Academia - Portal Web
+# Total Beauty Salón & Academia - Portal Web
 
-Página web de bienvenida y menú diseñada para Total Beauty Salon & Academia, optimizada para su publicación en **GitHub Pages** y visualización impecable en teléfonos móviles y computadoras.
+Página web de bienvenida y menú diseñada para Total Beauty Salón & Academia, optimizada para su publicación en **GitHub Pages** y visualización impecable en teléfonos móviles y computadoras.
 
 ---
 
@@ -51,7 +51,7 @@ Página web de bienvenida y menú diseñada para Total Beauty Salon & Academia, 
 
 ```bash
 git add .
-git commit -m "Optimizacion movil, encabezado con logo centrado y sistema de anuncios"
+git commit -m "Optimización móvil, encabezado con logo centrado y sistema de anuncios"
 git remote add origin https://github.com/TU-USUARIO/TU-REPOSITORIO.git
 git push -u origin main
 ```

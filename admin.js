@@ -1,8 +1,8 @@
 /**
- * TOTAL BEAUTY SALON & ACADEMIA
- * Script de Gestion Administrativa en Firebase Realtime Database
- * Control de Anuncio Intersticial y Administracion de Alumnas
- * Cero Emojis - Estetica Minimalista y de Lujo
+ * TOTAL BEAUTY SALÓN & ACADEMIA
+ * Script de Gestión Administrativa en Firebase Realtime Database
+ * Control de Anuncio Intersticial, Cursos de Capacitación y Alumnas
+ * Cero Emojis - Estética Minimalista y de Lujo
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const SESSION_KEY = "tb_admin_auth_token";
 
   let cachedStudents = {};
+  let cachedCourses = {};
   let interstitialTimerInterval = null;
   let interstitialCanClose = false;
 
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const firebaseStatusPill = document.getElementById('firebaseStatusPill');
   const firebaseStatusText = document.getElementById('firebaseStatusText');
 
-  // Inicializacion
+  // Inicialización
   init();
 
   async function init() {
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 1. ESTADO DE CONEXION A FIREBASE
+  // 1. ESTADO DE CONEXIÓN A FIREBASE
   // ==========================================
   async function checkFirebaseStatus() {
     if (!firebaseStatusPill || !firebaseStatusText) return;
@@ -39,10 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const isConnected = await TB_FIREBASE.checkConnection();
       if (isConnected) {
         firebaseStatusPill.className = 'admin-status-pill online';
-        firebaseStatusText.textContent = 'En linea con Firebase (totalbregis)';
+        firebaseStatusText.textContent = 'En línea con Firebase (totalbregis)';
       } else {
         firebaseStatusPill.className = 'admin-status-pill offline';
-        firebaseStatusText.textContent = 'Modo Local (Sin conexion Firebase)';
+        firebaseStatusText.textContent = 'Modo Local (Sin conexión Firebase)';
       }
     } catch (e) {
       firebaseStatusPill.className = 'admin-status-pill offline';
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 2. AUTENTICACION Y SESION DE ADMINISTRADOR
+  // 2. AUTENTICACIÓN Y SESIÓN DE ADMINISTRADOR
   // ==========================================
   function checkExistingSession() {
     const session = sessionStorage.getItem(SESSION_KEY);
@@ -88,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast("Acceso administrativo concedido");
       showDashboard();
     } else {
-      showToast("PIN incorrecto. Verifique con recepcion al WhatsApp 5650560824.");
+      showToast("PIN incorrecto. Verifique con recepción al WhatsApp 5650560824.");
       if (pinInput) {
         pinInput.value = '';
         pinInput.focus();
@@ -98,12 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.logoutAdmin = function () {
     sessionStorage.removeItem(SESSION_KEY);
-    showToast("Sesion administrativa finalizada");
+    showToast("Sesión administrativa finalizada");
     showAuthGate();
   };
 
   // ==========================================
-  // 3. GESTION DEL ANUNCIO INTERSTICIAL
+  // 3. GESTIÓN DEL ANUNCIO INTERSTICIAL
   // ==========================================
   async function loadAnnouncementData() {
     try {
@@ -141,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (badge) {
       if (isEnabled) {
         badge.className = 'badge-status-active';
-        badge.textContent = 'Activo en la Pagina';
+        badge.textContent = 'Activo en la Página';
       } else {
         badge.className = 'badge-status-inactive';
         badge.textContent = 'Pausado / Oculto';
@@ -197,9 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Previsualizacion con temporizador real de 5s
+  // Previsualización con temporizador real de 5s
   window.previewInterstitialModal = function () {
-    const toggle = document.getElementById('adminAnnToggle');
     const title = document.getElementById('adminAnnTitle');
     const img = document.getElementById('adminAnnImg');
     const text = document.getElementById('adminAnnText');
@@ -278,8 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // 4. CONFIGURACIÓN DE ACADEMIA: CURSOS DE CAPACITACIÓN
   // ==========================================
-  let cachedCourses = {};
-
   async function loadCoursesData() {
     const container = document.getElementById('coursesListContainer');
     if (!container) return;
@@ -467,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.handleDeleteCourse = async function (id) {
     if (!id) return;
-    const confirmed = window.confirm('Desea eliminar este curso de capacitación de la oferta académica?');
+    const confirmed = window.confirm('¿Desea eliminar este curso de capacitación de la oferta académica?');
     if (!confirmed) return;
 
     const ok = await TB_FIREBASE.deleteCurso(id);
@@ -480,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================
-  // 5. GESTION DE ALUMNAS Y RESETEO DE CLAVES
+  // 5. GESTIÓN DE ALUMNAS Y RESETEO DE CLAVES
   // ==========================================
   window.loadStudentsData = async function (showToastNotice = false) {
     const tbody = document.getElementById('studentsTableBody');
@@ -509,11 +507,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const list = Object.values(studentsObj || {});
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="table-loading-cell">No hay alumnas registradas aun. Use el boton "Registrar Nueva Alumna".</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="table-loading-cell">No hay alumnas registradas aún. Use el botón "Registrar Nueva Alumna".</td></tr>';
       return;
     }
 
-    // Ordenar por matricula
+    // Ordenar por matrícula
     list.sort((a, b) => (a.matricula || '').localeCompare(b.matricula || ''));
 
     tbody.innerHTML = list.map(student => {
@@ -530,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <tr data-matricula="${student.matricula}">
           <td class="cell-matricula"><strong>${escapeHtml(student.matricula)}</strong></td>
           <td class="cell-nombre">${escapeHtml(student.nombre || "Alumna")}</td>
-          <td class="cell-curso"><span class="table-curso-tag">${escapeHtml(student.curso || "Cursos Practicos")}</span></td>
+          <td class="cell-curso"><span class="table-curso-tag">${escapeHtml(student.curso || "Cursos Prácticos")}</span></td>
           <td class="cell-estado">${statusBadge}</td>
           <td class="cell-fecha">${formattedDate}</td>
           <td class="cell-acciones">
@@ -661,15 +659,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const cleanMatricula = (matricula || '').trim().toUpperCase();
     if (!cleanMatricula) return;
 
-    const confirmed = window.confirm(`Desea restablecer la contrasena de la matricula ${cleanMatricula} a la clave por defecto TB2026?`);
+    const confirmed = window.confirm(`¿Desea restablecer la contraseña de la matrícula ${cleanMatricula} a la clave por defecto TB2026?`);
     if (!confirmed) return;
 
     const ok = await TB_FIREBASE.resetAlumnaPassword(cleanMatricula);
     if (ok) {
-      showToast(`Contrasena de ${cleanMatricula} restablecida a TB2026 en Firebase`);
+      showToast(`Contraseña de ${cleanMatricula} restablecida a TB2026 en Firebase`);
       loadStudentsData();
     } else {
-      showToast("No se pudo restablecer la contrasena en Firebase");
+      showToast("No se pudo restablecer la contraseña en Firebase");
     }
   };
 
@@ -677,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cleanMatricula = (matricula || '').trim().toUpperCase();
     if (!cleanMatricula) return;
 
-    const confirmed = window.confirm(`Esta seguro de eliminar el registro de la matricula ${cleanMatricula}?`);
+    const confirmed = window.confirm(`¿Está seguro de eliminar el registro de la matrícula ${cleanMatricula}?`);
     if (!confirmed) return;
 
     const ok = await TB_FIREBASE.deleteAlumna(cleanMatricula);
@@ -690,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================
-  // 5. UTILIDADES (TOAST Y ESCAPE HTML)
+  // 6. UTILIDADES (TOAST Y ESCAPE HTML)
   // ==========================================
   function showToast(msg) {
     const existing = document.getElementById('tbAdminToast');
@@ -732,7 +730,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g, '&#039;');
   }
 
-  // Tecla Escape para cerrar previsualizacion si el temporizador concluyo
+  // Tecla Escape para cerrar previsualización si el temporizador concluyó
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (interstitialCanClose) window.closeInterstitialPreview();
