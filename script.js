@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let interstitialTimerInterval = null;
   let interstitialCanClose = false;
+  let videoTimerInterval = null;
+  let videoCanClose = false;
   let currentActiveStudent = null;
   let pendingChangeMatricula = null;
   let currentGalleryPhotos = [];
@@ -26,10 +28,117 @@ document.addEventListener('DOMContentLoaded', () => {
   init();
 
   async function init() {
+    await initAcademyVideoModal();
     await initInterstitial();
     await loadAcademyCourses();
     await initAcademyGallery();
   }
+
+  // ==========================================
+  // 1. ANUNCIO DE VIDEO EXCLUSIVO DE ACADEMIA (PRESENTACIÓN.MP4)
+  // ==========================================
+  async function initAcademyVideoModal() {
+    const videoModal = document.getElementById('academyVideoModal');
+    const videoEl = document.getElementById('academyPresentationVideo');
+    if (!videoModal || !videoEl) return;
+
+    // Cierre automático al finalizar la reproducción completa del video
+    videoEl.onended = () => {
+      window.closeAcademyVideoModal(true);
+    };
+
+    // Permitir cierre al hacer clic en el fondo oscuro tras transcurrir 5 segundos
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal && videoCanClose) {
+        window.closeAcademyVideoModal();
+      }
+    });
+
+    // Muestra el video como anuncio al ingresar a la academia tras 400ms
+    setTimeout(() => {
+      openAcademyVideoModal();
+    }, 400);
+  }
+
+  function openAcademyVideoModal() {
+    const videoModal = document.getElementById('academyVideoModal');
+    const videoEl = document.getElementById('academyPresentationVideo');
+    if (!videoModal) return;
+
+    videoModal.style.display = 'flex';
+    void videoModal.offsetWidth;
+    videoModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    startVideoCountdown();
+
+    if (videoEl) {
+      // Iniciar reproducción; si las políticas del navegador bloquean el sonido automático, continuar silenciado
+      const playPromise = videoEl.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          videoEl.muted = true;
+          videoEl.play().catch(() => {});
+        });
+      }
+    }
+  }
+
+  function startVideoCountdown() {
+    const countdownEl = document.getElementById('videoCountdownText');
+    const closeBtn = document.getElementById('videoCloseBtn');
+    let secondsLeft = 5;
+    videoCanClose = false;
+
+    if (countdownEl) {
+      countdownEl.style.display = 'inline-flex';
+      countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+    }
+    if (closeBtn) {
+      closeBtn.style.display = 'none';
+    }
+
+    if (videoTimerInterval) clearInterval(videoTimerInterval);
+
+    videoTimerInterval = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft > 0) {
+        if (countdownEl) countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+      } else {
+        clearInterval(videoTimerInterval);
+        videoCanClose = true;
+        if (countdownEl) countdownEl.style.display = 'none';
+        if (closeBtn) {
+          closeBtn.style.display = 'inline-flex';
+          closeBtn.style.animation = 'fadeIn 0.35s ease forwards';
+        }
+      }
+    }, 1000);
+  }
+
+  window.closeAcademyVideoModal = function (force = false) {
+    if (!videoCanClose && !force) return;
+
+    const videoModal = document.getElementById('academyVideoModal');
+    const videoEl = document.getElementById('academyPresentationVideo');
+
+    // Pausar inmediatamente el video para que el audio no continúe sonando
+    if (videoEl) {
+      videoEl.pause();
+    }
+
+    if (videoTimerInterval) {
+      clearInterval(videoTimerInterval);
+    }
+
+    if (videoModal) {
+      videoModal.classList.remove('active');
+      setTimeout(() => {
+        videoModal.style.display = 'none';
+      }, 350);
+      document.body.style.overflow = '';
+    }
+  };
 
   // ==========================================
   // 1. SISTEMA DE ANUNCIO INTERSTICIAL (AL ENTRAR)
@@ -392,6 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.closePhotoLightbox();
         return;
       }
+      if (videoCanClose) window.closeAcademyVideoModal();
       if (interstitialCanClose) window.closeInterstitial();
       if (modalOverlay && modalOverlay.classList.contains('active')) window.closeModal();
       if (studentModal && studentModal.classList.contains('active')) window.closeStudentModal();
