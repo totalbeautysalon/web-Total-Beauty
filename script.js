@@ -607,6 +607,11 @@ document.addEventListener('DOMContentLoaded', () => {
           label: "Cursos de Capacitación",
           action: () => window.location.href = "academia.html",
           detail: "Oferta educativa y constancias oficiales"
+        },
+        {
+          label: "Dejar una Reseña en Google",
+          action: () => window.open("https://www.google.com/maps/place/Total+Beauty+Sal%C3%B3n+y+Academia/@20.2455887,-99.0889869,17z/data=!4m7!3m6!1s0x85d17b8178093381:0x7e906913c1515de!8m2!3d20.2455887!4d-99.0889869!9m1!1b1", "_blank", "noopener,noreferrer"),
+          detail: "Califica tu experiencia en Google Maps"
         }
       ]
     }
