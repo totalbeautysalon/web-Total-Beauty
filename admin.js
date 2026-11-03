@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) logoutBtn.style.display = 'inline-flex';
 
     loadAnnouncementData();
+    loadCoursesData();
     loadStudentsData();
   }
 
@@ -275,7 +276,211 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================
-  // 4. GESTION DE ALUMNAS Y RESETEO DE CLAVES
+  // 4. CONFIGURACIÓN DE ACADEMIA: CURSOS DE CAPACITACIÓN
+  // ==========================================
+  let cachedCourses = {};
+
+  async function loadCoursesData() {
+    const container = document.getElementById('coursesListContainer');
+    if (!container) return;
+
+    try {
+      cachedCourses = await TB_FIREBASE.getCursos();
+      renderCoursesList(cachedCourses);
+      updateKpis();
+    } catch (e) {
+      console.error("Error al cargar cursos:", e);
+      if (container) {
+        container.innerHTML = '<div class="table-loading-cell">Error al conectar con cursos en Firebase.</div>';
+      }
+    }
+  }
+
+  function renderCoursesList(coursesObj) {
+    const container = document.getElementById('coursesListContainer');
+    if (!container) return;
+
+    const list = Object.values(coursesObj || {});
+    if (list.length === 0) {
+      container.innerHTML = '<div class="table-loading-cell">No hay cursos configurados aún. Utilice el botón "Agregar Nuevo Curso".</div>';
+      return;
+    }
+
+    container.innerHTML = list.map(curso => {
+      return `
+        <div class="admin-course-card" data-id="${escapeHtml(curso.id)}">
+          <div class="admin-course-card-top">
+            <span class="course-mode-badge">${escapeHtml(curso.modalidad || '90% Práctico')}</span>
+            <span class="admin-course-format">${escapeHtml(curso.duracion || 'Presencial • Modelos Reales')}</span>
+          </div>
+
+          <div class="admin-course-card-main">
+            <span class="course-category-tag">${escapeHtml(curso.categoria || 'Capacitación')}</span>
+            <h3 class="admin-course-item-title">${escapeHtml(curso.titulo)}</h3>
+            <p class="admin-course-item-desc">${escapeHtml(curso.descripcion || '')}</p>
+
+            <ul class="admin-course-item-topics">
+              ${curso.tema1 ? `<li><span class="dot"></span><span>${escapeHtml(curso.tema1)}</span></li>` : ''}
+              ${curso.tema2 ? `<li><span class="dot"></span><span>${escapeHtml(curso.tema2)}</span></li>` : ''}
+              ${curso.tema3 ? `<li><span class="dot"></span><span>${escapeHtml(curso.tema3)}</span></li>` : ''}
+            </ul>
+          </div>
+
+          <div class="admin-course-card-actions">
+            <button type="button" class="btn-action-small" onclick="editCourse('${escapeHtml(curso.id)}')">
+              <span>Editar</span>
+            </button>
+            <button type="button" class="btn-table-delete" onclick="handleDeleteCourse('${escapeHtml(curso.id)}')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.toggleNewCourseForm = function (isEdit = false) {
+    const box = document.getElementById('courseCollapseForm');
+    const btnText = document.getElementById('btnToggleCourseFormText');
+    const formTitle = document.getElementById('courseFormTitle');
+    const editIdInput = document.getElementById('courseEditId');
+
+    if (!box) return;
+
+    if (!isEdit) {
+      if (box.style.display === 'none' || !box.style.display) {
+        box.style.display = 'block';
+        if (btnText) btnText.textContent = 'Ocultar Formulario';
+        if (formTitle) formTitle.textContent = 'Registrar Nuevo Curso de Capacitación';
+        if (editIdInput) editIdInput.value = '';
+        document.getElementById('adminCourseForm').reset();
+        document.getElementById('courseModalidadInput').value = '90% Práctico';
+        document.getElementById('courseDuracionInput').value = 'Presencial • Modelos Reales';
+        document.getElementById('courseTema1Input').value = 'Práctica continua en estaciones con modelos reales';
+        document.getElementById('courseTema2Input').value = '10% teoría sobre visagismo capilar y fondos de aclaración';
+        document.getElementById('courseTema3Input').value = 'Entrega de Constancia de Finalización oficial';
+      } else {
+        box.style.display = 'none';
+        if (btnText) btnText.textContent = 'Agregar Nuevo Curso';
+      }
+    } else {
+      box.style.display = 'block';
+      if (btnText) btnText.textContent = 'Ocultar Formulario';
+      if (formTitle) formTitle.textContent = 'Editar Curso de Capacitación';
+    }
+  };
+
+  window.editCourse = function (id) {
+    const curso = cachedCourses[id];
+    if (!curso) return;
+
+    const editIdInput = document.getElementById('courseEditId');
+    const titleInput = document.getElementById('courseTitleInput');
+    const catInput = document.getElementById('courseCategoryInput');
+    const modInput = document.getElementById('courseModalidadInput');
+    const durInput = document.getElementById('courseDuracionInput');
+    const descInput = document.getElementById('courseDescInput');
+    const tema1Input = document.getElementById('courseTema1Input');
+    const tema2Input = document.getElementById('courseTema2Input');
+    const tema3Input = document.getElementById('courseTema3Input');
+    const filterInput = document.getElementById('courseFilterKeyInput');
+    const waInput = document.getElementById('courseWhatsappInput');
+
+    if (editIdInput) editIdInput.value = curso.id;
+    if (titleInput) titleInput.value = curso.titulo || '';
+    if (catInput) catInput.value = curso.categoria || '';
+    if (modInput) modInput.value = curso.modalidad || '90% Práctico';
+    if (durInput) durInput.value = curso.duracion || 'Presencial • Modelos Reales';
+    if (descInput) descInput.value = curso.descripcion || '';
+    if (tema1Input) tema1Input.value = curso.tema1 || '';
+    if (tema2Input) tema2Input.value = curso.tema2 || '';
+    if (tema3Input) tema3Input.value = curso.tema3 || '';
+    if (filterInput) filterInput.value = curso.categoriaKey || 'colorimetria';
+    if (waInput) waInput.value = curso.whatsappMsg || '';
+
+    window.toggleNewCourseForm(true);
+    if (titleInput) titleInput.focus();
+  };
+
+  window.handleSaveCourse = async function (e) {
+    e.preventDefault();
+
+    const editIdInput = document.getElementById('courseEditId');
+    const titleInput = document.getElementById('courseTitleInput');
+    const catInput = document.getElementById('courseCategoryInput');
+    const modInput = document.getElementById('courseModalidadInput');
+    const durInput = document.getElementById('courseDuracionInput');
+    const descInput = document.getElementById('courseDescInput');
+    const tema1Input = document.getElementById('courseTema1Input');
+    const tema2Input = document.getElementById('courseTema2Input');
+    const tema3Input = document.getElementById('courseTema3Input');
+    const filterInput = document.getElementById('courseFilterKeyInput');
+    const waInput = document.getElementById('courseWhatsappInput');
+
+    const id = (editIdInput && editIdInput.value)
+      ? editIdInput.value.trim()
+      : 'curso-' + Date.now();
+
+    const titulo = (titleInput ? titleInput.value : '').trim();
+    const categoria = (catInput ? catInput.value : '').trim();
+    const modalidad = (modInput ? modInput.value : '').trim() || '90% Práctico';
+    const duracion = (durInput ? durInput.value : '').trim() || 'Presencial • Modelos Reales';
+    const descripcion = (descInput ? descInput.value : '').trim();
+    const tema1 = (tema1Input ? tema1Input.value : '').trim();
+    const tema2 = (tema2Input ? tema2Input.value : '').trim();
+    const tema3 = (tema3Input ? tema3Input.value : '').trim();
+    const categoriaKey = (filterInput ? filterInput.value : 'colorimetria');
+    const whatsappMsg = (waInput ? waInput.value : '').trim() || `Hola Total Beauty Academia, solicito informes detallados del ${titulo}.`;
+
+    if (!titulo || !descripcion) {
+      showToast('Por favor complete los campos obligatorios del curso');
+      return;
+    }
+
+    const payload = {
+      id,
+      titulo,
+      categoria,
+      modalidad,
+      duracion,
+      descripcion,
+      tema1,
+      tema2,
+      tema3,
+      categoriaKey,
+      whatsappMsg,
+      activo: true
+    };
+
+    const ok = await TB_FIREBASE.saveCurso(id, payload);
+    if (ok) {
+      showToast('Curso guardado exitosamente en Firebase');
+      window.toggleNewCourseForm();
+      loadCoursesData();
+    } else {
+      showToast('Error al guardar el curso en Firebase');
+    }
+  };
+
+  window.handleDeleteCourse = async function (id) {
+    if (!id) return;
+    const confirmed = window.confirm('Desea eliminar este curso de capacitación de la oferta académica?');
+    if (!confirmed) return;
+
+    const ok = await TB_FIREBASE.deleteCurso(id);
+    if (ok) {
+      showToast('Curso eliminado de Firebase');
+      loadCoursesData();
+    } else {
+      showToast('Error al eliminar curso en Firebase');
+    }
+  };
+
+  // ==========================================
+  // 5. GESTION DE ALUMNAS Y RESETEO DE CLAVES
   // ==========================================
   window.loadStudentsData = async function (showToastNotice = false) {
     const tbody = document.getElementById('studentsTableBody');
@@ -374,10 +579,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const kpiTotal = document.getElementById('kpiTotalAlumnas');
     const kpiDefault = document.getElementById('kpiDefaultPass');
     const kpiCustom = document.getElementById('kpiCustomPass');
+    const kpiCursos = document.getElementById('kpiTotalCursos');
 
     if (kpiTotal) kpiTotal.textContent = total;
     if (kpiDefault) kpiDefault.textContent = defaultCount;
     if (kpiCustom) kpiCustom.textContent = customCount;
+    if (kpiCursos) kpiCursos.textContent = Object.keys(cachedCourses || {}).length;
   }
 
   window.filterStudentsTable = function (keyword) {

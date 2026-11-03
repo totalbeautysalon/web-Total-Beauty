@@ -20,12 +20,31 @@ const TB_FIREBASE = (function () {
 
   const PATHS = {
     announcement: "portal_web/anuncio",
-    alumnas: "portal_web/alumnas"
+    alumnas: "portal_web/alumnas",
+    cursos: "portal_web/cursos"
   };
 
   const LOCAL_CACHE = {
     announcement: "totalbeauty_announcement_data",
-    alumnas: "totalbeauty_alumnas_db"
+    alumnas: "totalbeauty_alumnas_db",
+    cursos: "totalbeauty_cursos_db"
+  };
+
+  const DEFAULT_CURSOS = {
+    "curso-01": {
+      id: "curso-01",
+      titulo: "Curso de Colorimetría Avanzada & Balayage Profesional",
+      categoria: "Colorimetría & Estilismo",
+      categoriaKey: "colorimetria",
+      modalidad: "90% Práctico",
+      duracion: "Presencial • Modelos Reales",
+      descripcion: "Capacitación intensiva y personalizada en formulación de tintes, técnicas de difuminado balayage, neutralización de reflejos y trabajo directo sobre modelos reales en cabina.",
+      tema1: "Práctica continua en estaciones con modelos reales",
+      tema2: "10% teoría sobre visagismo capilar y fondos de aclaración",
+      tema3: "Entrega de Constancia de Finalización oficial",
+      whatsappMsg: "Hola Total Beauty Academia, solicito informes sobre el Curso de Colorimetría Avanzada y Balayage.",
+      activo: true
+    }
   };
 
   const DEFAULT_ANNOUNCEMENT = {
@@ -262,6 +281,124 @@ const TB_FIREBASE = (function () {
     }
   }
 
+  // ==========================================
+  // GESTION DE CURSOS DE CAPACITACION
+  // ==========================================
+  async function getCursos() {
+    try {
+      const res = await fetch(getUrl(PATHS.cursos), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+          localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch (err) {
+      console.warn("Conexion a Firebase no disponible para cursos. Usando cache local.", err);
+    }
+
+    try {
+      const cached = localStorage.getItem(LOCAL_CACHE.cursos);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.error("Error al leer cache local de cursos:", e);
+    }
+
+    localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(DEFAULT_CURSOS));
+    return DEFAULT_CURSOS;
+  }
+
+  async function getCurso(id) {
+    const cleanId = (id || '').trim();
+    if (!cleanId) return null;
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.cursos}/${encodeURIComponent(cleanId)}`), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data) return data;
+      }
+    } catch (err) {
+      console.warn("Error consultando curso en Firebase:", err);
+    }
+
+    const cursos = await getCursos();
+    return cursos[cleanId] || null;
+  }
+
+  async function saveCurso(id, cursoData) {
+    const cleanId = (id || '').trim();
+    if (!cleanId) return false;
+
+    const payload = {
+      id: cleanId,
+      titulo: cursoData.titulo || "Curso de Capacitación",
+      categoria: cursoData.categoria || "Especialidad Práctica",
+      categoriaKey: cursoData.categoriaKey || "general",
+      modalidad: cursoData.modalidad || "90% Práctico",
+      duracion: cursoData.duracion || "Presencial",
+      descripcion: cursoData.descripcion || "",
+      tema1: cursoData.tema1 || "Práctica guiada continua en modelos reales",
+      tema2: cursoData.tema2 || "10% teoría sobre fundamentos y visagismo",
+      tema3: cursoData.tema3 || "Entrega de Constancia de Finalización oficial",
+      whatsappMsg: cursoData.whatsappMsg || "Hola Total Beauty Academia, solicito informes sobre este curso.",
+      activo: typeof cursoData.activo === 'boolean' ? cursoData.activo : true,
+      updatedAt: Date.now()
+    };
+
+    try {
+      const current = await getCursos();
+      current[cleanId] = payload;
+      localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(current));
+    } catch (e) {
+      console.error("Error actualizando cache local de curso:", e);
+    }
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.cursos}/${encodeURIComponent(cleanId)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return res.ok;
+    } catch (err) {
+      console.error("Error guardando curso en Firebase:", err);
+      return false;
+    }
+  }
+
+  async function deleteCurso(id) {
+    const cleanId = (id || '').trim();
+    if (!cleanId) return false;
+
+    try {
+      const current = await getCursos();
+      if (current[cleanId]) {
+        delete current[cleanId];
+        localStorage.setItem(LOCAL_CACHE.cursos, JSON.stringify(current));
+      }
+    } catch (e) {
+      console.error("Error eliminando curso en cache local:", e);
+    }
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.cursos}/${encodeURIComponent(cleanId)}`), {
+        method: 'DELETE'
+      });
+      return res.ok;
+    } catch (err) {
+      console.error("Error eliminando curso en Firebase:", err);
+      return false;
+    }
+  }
+
   async function checkConnection() {
     try {
       const res = await fetch(getUrl('portal_web'), {
@@ -284,6 +421,10 @@ const TB_FIREBASE = (function () {
     resetAlumnaPassword,
     updateAlumnaPassword,
     deleteAlumna,
+    getCursos,
+    getCurso,
+    saveCurso,
+    deleteCurso,
     checkConnection
   };
 })();

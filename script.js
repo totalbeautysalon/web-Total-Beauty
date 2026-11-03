@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function init() {
     await initInterstitial();
+    await loadAcademyCourses();
   }
 
   // ==========================================
@@ -385,30 +386,92 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // 4. FILTRO DE CURSOS EN ACADEMIA.HTML
+  // 4. CARGA DINÁMICA Y FILTRO DE CURSOS EN ACADEMIA.HTML
   // ==========================================
-  const filterButtons = document.querySelectorAll('.category-filter-bar .filter-btn');
-  const courseCards = document.querySelectorAll('#coursesGrid .course-card');
+  async function loadAcademyCourses() {
+    const grid = document.getElementById('coursesGrid');
+    if (!grid) return;
 
-  if (filterButtons.length > 0 && courseCards.length > 0) {
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    if (typeof TB_FIREBASE === 'undefined') {
+      attachCourseFilters();
+      return;
+    }
 
-        const filterValue = btn.getAttribute('data-filter');
+    try {
+      const cursosObj = await TB_FIREBASE.getCursos();
+      const cursos = Object.values(cursosObj || {});
 
-        courseCards.forEach(card => {
-          const cardCategory = card.getAttribute('data-category');
-          if (filterValue === 'all' || cardCategory === filterValue) {
-            card.style.display = 'flex';
-            card.style.animation = 'fadeIn 0.5s ease forwards';
-          } else {
-            card.style.display = 'none';
-          }
-        });
+      if (cursos.length === 0) return;
+
+      const activeCursos = cursos.filter(c => c.activo !== false);
+      if (activeCursos.length === 0) return;
+
+      grid.innerHTML = activeCursos.map(c => {
+        const waMsg = encodeURIComponent(c.whatsappMsg || `Hola Total Beauty Academia, solicito informes del ${c.titulo}.`);
+        return `
+          <article class="course-card" data-category="${escapeHtml(c.categoriaKey || 'colorimetria')}">
+            <div class="course-card-header">
+              <span class="course-mode-badge">${escapeHtml(c.modalidad || '90% Práctico')}</span>
+              <span class="course-duration">${escapeHtml(c.duracion || 'Presencial • Modelos Reales')}</span>
+            </div>
+            <div class="course-card-body">
+              <span class="course-category-tag">${escapeHtml(c.categoria || 'Capacitación')}</span>
+              <h3 class="course-title">${escapeHtml(c.titulo)}</h3>
+              <p class="course-desc">${escapeHtml(c.descripcion || '')}</p>
+              <ul class="course-topics-list">
+                ${c.tema1 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema1)}</span></li>` : ''}
+                ${c.tema2 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema2)}</span></li>` : ''}
+                ${c.tema3 ? `<li class="course-topic-item"><span class="dot"></span><span>${escapeHtml(c.tema3)}</span></li>` : ''}
+              </ul>
+              <a href="https://api.whatsapp.com/send?phone=525650560824&text=${waMsg}" target="_blank" rel="noopener noreferrer" class="btn-inquire">
+                <span>Solicitar Plan del Curso</span>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      attachCourseFilters();
+    } catch (e) {
+      console.error("Error cargando cursos en academia:", e);
+      attachCourseFilters();
+    }
+  }
+
+  function attachCourseFilters() {
+    const filterButtons = document.querySelectorAll('.category-filter-bar .filter-btn');
+    const courseCards = document.querySelectorAll('#coursesGrid .course-card');
+
+    if (filterButtons.length > 0 && courseCards.length > 0) {
+      filterButtons.forEach(btn => {
+        btn.onclick = () => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filterValue = btn.getAttribute('data-filter');
+
+          courseCards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (filterValue === 'all' || cardCategory === filterValue) {
+              card.style.display = 'flex';
+              card.style.animation = 'fadeIn 0.5s ease forwards';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        };
       });
-    });
+    }
+  }
+
+  function escapeHtml(text) {
+    if (!text) return "";
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   // ==========================================

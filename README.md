@@ -12,7 +12,7 @@ Página web de bienvenida y menú diseñada para Total Beauty Salon & Academia, 
   - Anuncio intersticial modal al entrar sincronizado con Firebase y con temporizador de 5 segundos antes de habilitar el botón de cierre.
   - Enlace discreto en el pie de página hacia el portal administrativo independiente.
 - **Página de Academia (academia.html):**
-  - Oferta completa de cursos prácticos (90% práctico y 10% teórico) con entrega de constancia de finalización.
+  - Oferta dinámica de cursos prácticos (90% práctico y 10% teórico) con entrega de constancia de finalización, cargada en tiempo real desde Firebase. Por defecto se ofrece 1 curso práctico activo.
   - Botón de acceso exclusivo para alumnas en la barra superior (**Soy Alumna / Ingresar**).
   - Autenticación y actualización de contraseñas conectadas a Firebase Realtime Database.
   - Filtro por especialidades con desplazamiento táctil horizontal en móviles.
@@ -20,6 +20,7 @@ Página web de bienvenida y menú diseñada para Total Beauty Salon & Academia, 
   - Página dedicada y segura con barrera de acceso mediante PIN administrativo: `ADMIN2026` (o `04012021`).
   - Sincronización en la nube con Firebase Realtime Database (`totalbregis`).
   - **Módulo de Anuncios Intersticiales:** Activar o pausar anuncio al entrar, editar título, imagen, descripción, enlace o WhatsApp de destino y botón de acción, con previsualización en vivo (5 segundos).
+  - **Configuración de Academia (Cursos de Capacitación):** Gestión completa de cursos prácticos (crear, editar, eliminar y activar) guardados en Firebase. Configurado por defecto con 1 solo curso de capacitación.
   - **Módulo de Alumnas y Contraseñas:** Métricas en tiempo real (KPIs), registro de nuevas alumnas, buscador en vivo y reseteo directo de contraseñas a la clave inicial (`TB2026`) con un solo clic.
 - **Módulo Firebase (firebase-config.js):**
   - Conexión centralizada con Firebase Realtime Database y respaldo inteligente en caché local para navegación sin interrupciones.

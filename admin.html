@@ -147,9 +147,9 @@
         </div>
 
         <div class="admin-kpi-card">
-          <span class="kpi-label">Claves Personalizadas</span>
-          <span id="kpiCustomPass" class="kpi-value success">0</span>
-          <span class="kpi-sub">Alumnas con clave propia</span>
+          <span class="kpi-label">Cursos de Capacitación</span>
+          <span id="kpiTotalCursos" class="kpi-value success">1</span>
+          <span class="kpi-sub">Por defecto: 1 curso activo</span>
         </div>
 
         <div class="admin-kpi-card">
@@ -284,7 +284,169 @@
         </form>
       </section>
 
-      <!-- SECCIÓN 2: GESTIÓN DE ALUMNAS Y RESETEO DE CONTRASEÑAS -->
+      <!-- SECCIÓN 2: CONFIGURACIÓN DE ACADEMIA - CURSOS DE CAPACITACIÓN -->
+      <section class="admin-panel-card">
+        <div class="admin-card-header">
+          <div>
+            <span class="admin-section-tag">Configuración de Academia</span>
+            <h2 class="admin-card-title">Cursos de Capacitación</h2>
+          </div>
+          <button type="button" class="btn-action-small" onclick="toggleNewCourseForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span id="btnToggleCourseFormText">Agregar Nuevo Curso</span>
+          </button>
+        </div>
+
+        <p class="admin-card-desc">
+          Configure los cursos de capacitación disponibles en el portal de la Academia. Por defecto se ofrece 1 curso práctico (90% práctico y 10% teórico con constancia de finalización). Todos los cambios se guardan directamente en Firebase Realtime Database.
+        </p>
+
+        <!-- Formulario Colapsable para Crear / Editar Curso -->
+        <div id="courseCollapseForm" class="admin-collapse-box" style="display: none;">
+          <h3 id="courseFormTitle" class="admin-collapse-title">Registrar Nuevo Curso de Capacitación</h3>
+          <form id="adminCourseForm" onsubmit="handleSaveCourse(event)" class="admin-form">
+            <input type="hidden" id="courseEditId" value="">
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseTitleInput" class="student-form-label">Título del Curso</label>
+                <input 
+                  type="text" 
+                  id="courseTitleInput" 
+                  class="student-form-input" 
+                  placeholder="ej. Curso de Colorimetría Avanzada &amp; Balayage Profesional" 
+                  required
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseCategoryInput" class="student-form-label">Categoría / Especialidad</label>
+                <input 
+                  type="text" 
+                  id="courseCategoryInput" 
+                  class="student-form-input" 
+                  placeholder="ej. Colorimetría &amp; Estilismo" 
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseModalidadInput" class="student-form-label">Modalidad (Insignia)</label>
+                <input 
+                  type="text" 
+                  id="courseModalidadInput" 
+                  class="student-form-input" 
+                  placeholder="ej. 90% Práctico" 
+                  value="90% Práctico"
+                  required
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseDuracionInput" class="student-form-label">Duración / Formato</label>
+                <input 
+                  type="text" 
+                  id="courseDuracionInput" 
+                  class="student-form-input" 
+                  placeholder="ej. Presencial • Modelos Reales" 
+                  value="Presencial • Modelos Reales"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="student-form-group">
+              <label for="courseDescInput" class="student-form-label">Descripción del Curso</label>
+              <textarea 
+                id="courseDescInput" 
+                class="student-form-textarea" 
+                rows="3" 
+                placeholder="Resumen del programa, objetivos de aprendizaje en cabina y trabajo en modelos reales..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseTema1Input" class="student-form-label">Punto Práctico 1</label>
+                <input 
+                  type="text" 
+                  id="courseTema1Input" 
+                  class="student-form-input" 
+                  placeholder="Práctica continua en estaciones con modelos reales" 
+                  value="Práctica continua en estaciones con modelos reales"
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseTema2Input" class="student-form-label">Punto Teórico 2 (10% Teoría)</label>
+                <input 
+                  type="text" 
+                  id="courseTema2Input" 
+                  class="student-form-input" 
+                  placeholder="10% teoría sobre visagismo capilar y fondos de aclaración" 
+                  value="10% teoría sobre visagismo capilar y fondos de aclaración"
+                >
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="student-form-group">
+                <label for="courseTema3Input" class="student-form-label">Acreditación 3 (Constancia)</label>
+                <input 
+                  type="text" 
+                  id="courseTema3Input" 
+                  class="student-form-input" 
+                  placeholder="Entrega de Constancia de Finalización oficial" 
+                  value="Entrega de Constancia de Finalización oficial"
+                >
+              </div>
+
+              <div class="student-form-group">
+                <label for="courseFilterKeyInput" class="student-form-label">Filtro / Código de Categoría</label>
+                <select id="courseFilterKeyInput" class="student-form-input">
+                  <option value="colorimetria">Colorimetría</option>
+                  <option value="estilismo">Estilismo &amp; Cabello</option>
+                  <option value="maquillaje">Maquillaje</option>
+                  <option value="unas-mirada">Uñas &amp; Mirada</option>
+                  <option value="general">General</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="student-form-group">
+              <label for="courseWhatsappInput" class="student-form-label">Mensaje Predeterminado para WhatsApp</label>
+              <input 
+                type="text" 
+                id="courseWhatsappInput" 
+                class="student-form-input" 
+                placeholder="Hola Total Beauty Academia, solicito informes detallados sobre este curso de capacitación."
+              >
+            </div>
+
+            <div class="admin-button-group">
+              <button type="submit" class="btn-student-submit">
+                <span>Guardar Curso en Firebase</span>
+              </button>
+              <button type="button" class="btn-student-secondary" onclick="toggleNewCourseForm()">
+                <span>Cancelar</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Lista de Cursos Configurados -->
+        <div id="coursesListContainer" class="admin-courses-list">
+          <div class="table-loading-cell">Cargando cursos desde Firebase...</div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: GESTIÓN DE ALUMNAS Y RESETEO DE CONTRASEÑAS -->
       <section class="admin-panel-card">
         <div class="admin-card-header">
           <div>
