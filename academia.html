@@ -390,7 +390,7 @@
       </p>
 
       <div>
-        <a href="javascript:void(0)" onclick="openAdminPanel()" class="admin-footer-link">Panel de Administración</a>
+        <a href="admin.html" class="admin-footer-link">Panel de Administración</a>
       </div>
     </footer>
 
@@ -494,99 +494,8 @@
     </div>
   </div>
 
-  <!-- Ventana Modal del Panel de Administración -->
-  <div id="adminModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="adminModalAcadTitle">
-    <div class="modal-box">
-      <button type="button" class="modal-close-btn" onclick="closeAdminModal()" aria-label="Cerrar panel de administración">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-
-      <div class="modal-tag">Administración</div>
-
-      <div id="adminAuthView">
-        <h3 id="adminModalAcadTitle" class="modal-title">Acceso de Administrador</h3>
-        <p class="modal-description">Ingrese el PIN administrativo para configurar anuncios o resetear contraseñas:</p>
-
-        <form id="adminAuthForm" onsubmit="handleAdminAuthSubmit(event)">
-          <div class="student-form-group">
-            <label for="adminLoginPin" class="student-form-label">PIN Administrativo</label>
-            <input type="password" id="adminLoginPin" class="student-form-input" placeholder="PIN de Administrador" required autocomplete="current-password">
-          </div>
-
-          <button type="submit" class="btn-student-submit">
-            <span>Ingresar al Panel</span>
-          </button>
-        </form>
-      </div>
-
-      <div id="adminDashboardView" style="display: none;">
-        <h3 class="modal-title">Panel de Control</h3>
-        <p class="modal-description" style="margin-bottom: 1rem;">Gestión del anuncio intersticial al entrar y reseteo de claves:</p>
-
-        <form id="adminAnnouncementForm" onsubmit="handleSaveAnnouncement(event)" style="margin-bottom: 1.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(212, 175, 55, 0.15);">
-          
-          <div class="admin-toggle-row">
-            <label for="adminAnnToggle" class="toggle-switch-label">Mostrar Intersticial al Entrar</label>
-            <label class="switch-control">
-              <input type="checkbox" id="adminAnnToggle">
-              <span class="switch-slider"></span>
-            </label>
-          </div>
-
-          <div class="student-form-group">
-            <label for="adminAnnTitle" class="student-form-label">Título del Anuncio</label>
-            <input type="text" id="adminAnnTitle" class="student-form-input" placeholder="ej. Inscripciones Abiertas a Cursos Prácticos" required>
-          </div>
-
-          <div class="student-form-group">
-            <label for="adminAnnImg" class="student-form-label">URL o Ruta de la Imagen</label>
-            <input type="text" id="adminAnnImg" class="student-form-input" placeholder="ej. assets/images/academia.jpg o URL web">
-          </div>
-
-          <div class="student-form-group">
-            <label for="adminAnnText" class="student-form-label">Texto o Descripción del Anuncio</label>
-            <textarea id="adminAnnText" class="student-form-textarea" placeholder="Escriba los detalles de la promoción o aviso..."></textarea>
-          </div>
-
-          <div class="student-form-group">
-            <label for="adminAnnLink" class="student-form-label">Enlace o WhatsApp de Destino</label>
-            <input type="text" id="adminAnnLink" class="student-form-input" placeholder="https://api.whatsapp.com/send?phone=525650560824...">
-          </div>
-
-          <div class="student-form-group">
-            <label for="adminAnnBtnText" class="student-form-label">Texto del Botón</label>
-            <input type="text" id="adminAnnBtnText" class="student-form-input" placeholder="ej. Solicitar Informes por WhatsApp">
-          </div>
-
-          <button type="submit" class="btn-student-submit">
-            <span>Guardar Anuncio Intersticial</span>
-          </button>
-
-          <button type="button" class="btn-student-secondary" onclick="previewInterstitialNow()">
-            <span>Previsualizar Intersticial (Probar Ahora)</span>
-          </button>
-        </form>
-
-        <form id="adminStudentResetForm" onsubmit="handleAdminDirectReset(event)">
-          <div class="student-form-group">
-            <label for="adminResetTargetMatricula" class="student-form-label">Restablecer Contraseña de Alumna a TB2026</label>
-            <input type="text" id="adminResetTargetMatricula" class="student-form-input" placeholder="Matrícula de la alumna (ej. TB-01)" required>
-          </div>
-
-          <button type="submit" class="btn-student-secondary" style="border-color: rgba(212, 175, 55, 0.45); color: #f5e296;">
-            <span>Restablecer a Clave por Defecto (TB2026)</span>
-          </button>
-        </form>
-
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Script de Interacción -->
+  <!-- Scripts de Firebase e Interacción -->
+  <script src="firebase-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

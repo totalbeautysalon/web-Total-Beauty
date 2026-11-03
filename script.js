@@ -1,68 +1,55 @@
 /**
  * TOTAL BEAUTY SALON & ACADEMIA
- * Script de Navegación, Anuncio Intersticial (5s), Panel de Administración y Alumnas
- * Cero Emojis - Estética Minimalista y de Lujo
+ * Script de Navegacion, Anuncio Intersticial (5s), Acceso de Alumnas e Integracion Firebase
+ * Cero Emojis - Estetica Minimalista y de Lujo
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Configuración de la Academia y Administrador
+  'use strict';
+
   const config = {
     salonUrl: "",
-    adminPin: "ADMIN2026",
-    adminPinAlt: "04012021",
     defaultPassword: "TB2026",
     whatsappPhone: "525650560824",
     whatsappDisplay: "5650560824"
   };
 
-  const STORAGE_KEY_STUDENTS = "totalbeauty_alumnas_db";
-  const STORAGE_KEY_ANNOUNCEMENT = "totalbeauty_announcement_data";
-
-  let isAdminUnlocked = false;
   let interstitialTimerInterval = null;
   let interstitialCanClose = false;
+  let currentActiveStudent = null;
+  let pendingChangeMatricula = null;
+
+  init();
+
+  async function init() {
+    await initInterstitial();
+  }
 
   // ==========================================
   // 1. SISTEMA DE ANUNCIO INTERSTICIAL (AL ENTRAR)
   // ==========================================
-  function getAnnouncementData() {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY_ANNOUNCEMENT);
-      if (data) return JSON.parse(data);
-    } catch (e) {
-      console.error("Error al leer datos de anuncios:", e);
-    }
-    // Configuración inicial por defecto del intersticial
-    const initialData = {
-      enabled: true,
-      title: "Inscripciones Abiertas a Cursos Prácticos",
-      image: "assets/images/academia.jpg",
-      text: "Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.",
-      link: `https://api.whatsapp.com/send?phone=${config.whatsappPhone}&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos.`,
-      btnText: "Solicitar Informes por WhatsApp"
-    };
-    localStorage.setItem(STORAGE_KEY_ANNOUNCEMENT, JSON.stringify(initialData));
-    return initialData;
-  }
-
-  function saveAnnouncementData(data) {
-    try {
-      localStorage.setItem(STORAGE_KEY_ANNOUNCEMENT, JSON.stringify(data));
-    } catch (e) {
-      console.error("Error al guardar datos de anuncios:", e);
-    }
-  }
-
-  function initInterstitial() {
-    const data = getAnnouncementData();
-    if (!data.enabled) return;
-
+  async function initInterstitial() {
     const overlay = document.getElementById('interstitialOverlay');
     if (!overlay) return;
 
+    let data;
+    if (typeof TB_FIREBASE !== 'undefined') {
+      data = await TB_FIREBASE.getAnnouncement();
+    } else {
+      data = {
+        enabled: true,
+        title: "Inscripciones Abiertas a Cursos Practicos",
+        image: "assets/images/academia.jpg",
+        text: "Inicia tu formacion profesional con metodologia 90% practica en modelos reales.",
+        link: `https://api.whatsapp.com/send?phone=${config.whatsappPhone}`,
+        btnText: "Solicitar Informes por WhatsApp"
+      };
+    }
+
+    if (!data || !data.enabled) return;
+
     renderInterstitialContent(data);
 
-    // Muestra el anuncio tras 500ms al entrar a la página
     setTimeout(() => {
       openInterstitialModal();
     }, 500);
@@ -127,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
   }
 
-  window.closeInterstitial = function() {
-    if (!interstitialCanClose) return; // Solo permite cerrar una vez transcurridos los 5 segundos
+  window.closeInterstitial = function () {
+    if (!interstitialCanClose) return;
 
     const overlay = document.getElementById('interstitialOverlay');
     if (overlay) {
@@ -141,328 +128,153 @@ document.addEventListener('DOMContentLoaded', () => {
     if (interstitialTimerInterval) clearInterval(interstitialTimerInterval);
   };
 
-  window.previewInterstitialNow = function() {
-    const data = getAnnouncementData();
-    renderInterstitialContent(data);
-    window.closeAdminModal();
-    setTimeout(() => {
-      openInterstitialModal();
-    }, 300);
-  };
-
-  // Inicializar al cargar la página
-  initInterstitial();
-
   // ==========================================
-  // 2. PANEL DE ADMINISTRACIÓN
+  // 2. PORTAL DE ALUMNAS EN ACADEMIA.HTML (FIREBASE)
   // ==========================================
-  const adminModal = document.getElementById('adminModal');
-  const adminAuthView = document.getElementById('adminAuthView');
-  const adminDashboardView = document.getElementById('adminDashboardView');
+  const studentModal = document.getElementById('studentModal') || document.getElementById('studentPortalModal');
 
-  window.openAdminPanel = function() {
-    if (!adminModal) return;
+  window.openStudentPortal = window.openStudentModal = function () {
+    if (!studentModal) return;
 
-    adminModal.classList.add('active');
+    studentModal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    if (isAdminUnlocked) {
-      loadAdminDashboard();
+    if (currentActiveStudent) {
+      showStudentView('dashboard');
     } else {
-      if (adminAuthView) adminAuthView.style.display = 'block';
-      if (adminDashboardView) adminDashboardView.style.display = 'none';
-      const pinInput = document.getElementById('adminLoginPin');
-      if (pinInput) {
-        pinInput.value = '';
-        pinInput.focus();
-      }
-    }
-  };
-
-  window.closeAdminModal = function() {
-    if (adminModal) {
-      adminModal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  };
-
-  window.handleAdminAuthSubmit = function(e) {
-    e.preventDefault();
-    const pinInput = document.getElementById('adminLoginPin');
-    const enteredPin = pinInput ? pinInput.value.trim() : '';
-
-    if (enteredPin === config.adminPin || enteredPin === config.adminPinAlt) {
-      isAdminUnlocked = true;
-      loadAdminDashboard();
-      alertNotice("Acceso administrativo concedido.");
-    } else {
-      alertNotice("PIN de Administrador incorrecto.");
-      if (pinInput) pinInput.select();
-    }
-  };
-
-  function loadAdminDashboard() {
-    if (adminAuthView) adminAuthView.style.display = 'none';
-    if (adminDashboardView) adminDashboardView.style.display = 'block';
-
-    const annData = getAnnouncementData();
-    const toggle = document.getElementById('adminAnnToggle');
-    const titleInput = document.getElementById('adminAnnTitle');
-    const imgInput = document.getElementById('adminAnnImg');
-    const textInput = document.getElementById('adminAnnText');
-    const linkInput = document.getElementById('adminAnnLink');
-    const btnTextInput = document.getElementById('adminAnnBtnText');
-
-    if (toggle) toggle.checked = annData.enabled;
-    if (titleInput) titleInput.value = annData.title || '';
-    if (imgInput) imgInput.value = annData.image || '';
-    if (textInput) textInput.value = annData.text || '';
-    if (linkInput) linkInput.value = annData.link || '';
-    if (btnTextInput) btnTextInput.value = annData.btnText || '';
-
-    const resetMatInput = document.getElementById('adminResetTargetMatricula');
-    if (resetMatInput) resetMatInput.value = '';
-  }
-
-  window.handleSaveAnnouncement = function(e) {
-    e.preventDefault();
-    const toggle = document.getElementById('adminAnnToggle');
-    const titleInput = document.getElementById('adminAnnTitle');
-    const imgInput = document.getElementById('adminAnnImg');
-    const textInput = document.getElementById('adminAnnText');
-    const linkInput = document.getElementById('adminAnnLink');
-    const btnTextInput = document.getElementById('adminAnnBtnText');
-
-    const updated = {
-      enabled: toggle ? toggle.checked : false,
-      title: titleInput ? titleInput.value.trim() : 'Aviso Oficial',
-      image: imgInput ? imgInput.value.trim() : 'assets/images/academia.jpg',
-      text: textInput ? textInput.value.trim() : '',
-      link: linkInput ? linkInput.value.trim() : '',
-      btnText: btnTextInput ? btnTextInput.value.trim() : 'Solicitar Informes'
-    };
-
-    saveAnnouncementData(updated);
-    renderInterstitialContent(updated);
-    alertNotice("Anuncio intersticial guardado exitosamente.");
-  };
-
-  window.handleAdminDirectReset = function(e) {
-    e.preventDefault();
-    const targetInput = document.getElementById('adminResetTargetMatricula');
-    const matricula = targetInput ? targetInput.value.trim().toUpperCase() : '';
-
-    if (!matricula) {
-      alertNotice("Ingrese la matrícula a restablecer.");
-      return;
-    }
-
-    const db = getStudentsDb();
-    if (!db[matricula]) {
-      db[matricula] = {
-        password: config.defaultPassword,
-        isDefault: true,
-        name: "Alumna " + matricula
-      };
-    } else {
-      db[matricula].password = config.defaultPassword;
-      db[matricula].isDefault = true;
-    }
-
-    saveStudentsDb(db);
-    alertNotice(`Matrícula ${matricula} restablecida a la contraseña por defecto (${config.defaultPassword}).`);
-    if (targetInput) targetInput.value = '';
-  };
-
-  if (adminModal) {
-    adminModal.addEventListener('click', (e) => {
-      if (e.target === adminModal) {
-        window.closeAdminModal();
-      }
-    });
-  }
-
-  // ==========================================
-  // 3. BASE DE DATOS Y PORTAL DE ALUMNAS
-  // ==========================================
-  function getStudentsDb() {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY_STUDENTS);
-      if (data) return JSON.parse(data);
-    } catch (e) {
-      console.error("Error al leer base de datos de alumnas:", e);
-    }
-    const initialDb = {
-      "TB-01": { password: config.defaultPassword, isDefault: true, name: "Alumna Total Beauty" },
-      "TB-102": { password: config.defaultPassword, isDefault: true, name: "Estudiante de Estilismo" }
-    };
-    localStorage.setItem(STORAGE_KEY_STUDENTS, JSON.stringify(initialDb));
-    return initialDb;
-  }
-
-  function saveStudentsDb(db) {
-    try {
-      localStorage.setItem(STORAGE_KEY_STUDENTS, JSON.stringify(db));
-    } catch (e) {
-      console.error("Error al guardar base de datos de alumnas:", e);
-    }
-  }
-
-  let currentStudentSession = {
-    matricula: "",
-    isDefault: false
-  };
-
-  const studentModal = document.getElementById('studentModal');
-  const viewLogin = document.getElementById('studentViewLogin');
-  const viewChangePass = document.getElementById('studentViewChangePass');
-  const viewDashboard = document.getElementById('studentViewDashboard');
-
-  function showStudentView(viewName) {
-    if (viewLogin) viewLogin.classList.remove('active');
-    if (viewChangePass) viewChangePass.classList.remove('active');
-    if (viewDashboard) viewDashboard.classList.remove('active');
-
-    if (viewName === 'login' && viewLogin) viewLogin.classList.add('active');
-    if (viewName === 'changePass' && viewChangePass) viewChangePass.classList.add('active');
-    if (viewName === 'dashboard' && viewDashboard) viewDashboard.classList.add('active');
-  }
-
-  window.openStudentModal = function() {
-    if (studentModal) {
       showStudentView('login');
-      studentModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      const userInput = document.getElementById('studentMatricula');
-      if (userInput) {
-        userInput.value = "";
-        userInput.focus();
-      }
-      const passInput = document.getElementById('studentPassword');
-      if (passInput) passInput.value = "";
+      const matInput = document.getElementById('studentMatricula') || document.getElementById('studentLoginMatricula');
+      if (matInput) matInput.focus();
     }
   };
 
-  window.closeStudentModal = function() {
+  window.closeStudentModal = function () {
     if (studentModal) {
       studentModal.classList.remove('active');
       document.body.style.overflow = '';
-      currentStudentSession = { matricula: "", isDefault: false };
     }
   };
 
-  window.handleStudentLogin = function(e) {
-    e.preventDefault();
-    const matriculaInput = document.getElementById('studentMatricula');
-    const passInput = document.getElementById('studentPassword');
+  function showStudentView(viewName) {
+    const vLogin = document.getElementById('studentViewLogin') || document.getElementById('studentLoginView');
+    const vChange = document.getElementById('studentViewChangePass') || document.getElementById('studentChangePassView');
+    const vDash = document.getElementById('studentViewDashboard');
 
-    const matricula = matriculaInput ? matriculaInput.value.trim().toUpperCase() : "";
-    const password = passInput ? passInput.value.trim() : "";
+    if (vLogin) vLogin.style.display = (viewName === 'login') ? 'block' : 'none';
+    if (vChange) vChange.style.display = (viewName === 'change') ? 'block' : 'none';
+    if (vDash) vDash.style.display = (viewName === 'dashboard') ? 'block' : 'none';
+  }
+
+  window.handleStudentLogin = async function (e) {
+    e.preventDefault();
+    const matInput = document.getElementById('studentMatricula') || document.getElementById('studentLoginMatricula');
+    const passInput = document.getElementById('studentPassword') || document.getElementById('studentLoginPassword');
+
+    const matricula = (matInput ? matInput.value : '').trim().toUpperCase();
+    const password = (passInput ? passInput.value : '').trim();
 
     if (!matricula || !password) {
-      alertNotice("Por favor, ingrese su matrícula y contraseña.");
+      alertNotice("Por favor ingrese su matricula y contrasena.");
       return;
     }
 
-    const db = getStudentsDb();
-    let student = db[matricula];
+    let student = null;
+    if (typeof TB_FIREBASE !== 'undefined') {
+      student = await TB_FIREBASE.getAlumna(matricula);
+    }
 
     if (!student) {
-      if (password === config.defaultPassword) {
-        student = {
-          password: config.defaultPassword,
-          isDefault: true,
-          name: "Alumna " + matricula
-        };
-        db[matricula] = student;
-        saveStudentsDb(db);
-      } else {
-        alertNotice("Matrícula no registrada o contraseña incorrecta. La clave inicial por defecto es TB2026.");
-        return;
-      }
+      alertNotice("Matricula no encontrada en el sistema academico. Solicite su alta al WhatsApp 5650560824.");
+      return;
     }
 
     if (student.password !== password) {
-      if (password === config.defaultPassword && !student.isDefault) {
-        alertNotice("Esta matrícula ya cuenta con una contraseña personalizada. Si la olvidó, contacte a soporte vía WhatsApp al 5650560824.");
-      } else {
-        alertNotice("Contraseña incorrecta para la matrícula " + matricula + ". Si la olvidó, contacte a soporte por WhatsApp al 5650560824.");
-      }
+      alertNotice("Contrasena incorrecta. Si la olvido, contacte a Total Beauty al WhatsApp 5650560824.");
       return;
     }
 
-    currentStudentSession.matricula = matricula;
+    pendingChangeMatricula = matricula;
 
-    if (student.isDefault || password === config.defaultPassword) {
-      currentStudentSession.isDefault = true;
-      const changeNotice = document.getElementById('changePassNoticeMatricula');
-      if (changeNotice) changeNotice.textContent = matricula;
+    // Si la contrasena es la clave inicial TB2026, exige cambiarla
+    if (password === config.defaultPassword || student.isDefault === true) {
+      const noticeMatEl = document.getElementById('changePassNoticeMatricula');
+      if (noticeMatEl) noticeMatEl.textContent = matricula;
 
+      const targetMatEl = document.getElementById('changePassTargetMatricula');
+      if (targetMatEl) targetMatEl.value = matricula;
+
+      showStudentView('change');
+      alertNotice("Seguridad: Clave inicial detectada. Por favor elija una contrasena personal.");
       const newPassInput = document.getElementById('newStudentPass');
-      if (newPassInput) newPassInput.value = "";
-      const confirmPassInput = document.getElementById('confirmStudentPass');
-      if (confirmPassInput) confirmPassInput.value = "";
-
-      showStudentView('changePass');
       if (newPassInput) newPassInput.focus();
       return;
     }
 
-    cargarDashboard(matricula, student);
+    // Acceso correcto al aula
+    currentActiveStudent = student;
+    renderStudentDashboard(student);
+    showStudentView('dashboard');
+    alertNotice(`Bienvenida, ${student.nombre || student.matricula}. Acceso academico activo.`);
   };
 
-  window.handlePasswordChange = function(e) {
+  window.handlePasswordChange = window.handleStudentChangePassword = async function (e) {
     e.preventDefault();
-    const newPass = document.getElementById('newStudentPass')?.value.trim();
-    const confirmPass = document.getElementById('confirmStudentPass')?.value.trim();
+    const newPassInput = document.getElementById('newStudentPass');
+    const confirmPassInput = document.getElementById('confirmStudentPass');
 
-    if (!newPass || !confirmPass) {
-      alertNotice("Complete ambos campos de contraseña.");
-      return;
-    }
+    const matricula = pendingChangeMatricula;
+    const newPass = (newPassInput ? newPassInput.value : '').trim();
+    const confirmPass = (confirmPassInput ? confirmPassInput.value : '').trim();
 
-    if (newPass === config.defaultPassword) {
-      alertNotice("La nueva contraseña no puede ser la clave por defecto TB2026. Elija una clave personal.");
-      return;
-    }
-
-    if (newPass.length < 5) {
-      alertNotice("Por seguridad, su nueva contraseña debe tener al menos 5 caracteres.");
-      return;
-    }
-
-    if (newPass !== confirmPass) {
-      alertNotice("Las contraseñas no coinciden. Verifíquelas nuevamente.");
-      return;
-    }
-
-    const db = getStudentsDb();
-    const matricula = currentStudentSession.matricula;
-
-    if (!matricula || !db[matricula]) {
-      alertNotice("Error de sesión. Vuelva a ingresar su matrícula.");
+    if (!matricula) {
+      alertNotice("Error de sesion. Ingrese nuevamente.");
       showStudentView('login');
       return;
     }
 
-    db[matricula].password = newPass;
-    db[matricula].isDefault = false;
-    saveStudentsDb(db);
+    if (!newPass || !confirmPass) {
+      alertNotice("Por favor complete los campos de contrasena.");
+      return;
+    }
 
-    alertNotice("Contraseña actualizada exitosamente. Bienvenida a su portal de alumna.");
-    cargarDashboard(matricula, db[matricula]);
+    if (newPass !== confirmPass) {
+      alertNotice("Las contrasenas no coinciden. Verifique nuevamente.");
+      return;
+    }
+
+    if (newPass === config.defaultPassword) {
+      alertNotice("La nueva contrasena no puede ser la clave por defecto TB2026. Elija una clave personal.");
+      return;
+    }
+
+    if (newPass.length < 5) {
+      alertNotice("Por seguridad, su nueva contrasena debe tener al menos 5 caracteres.");
+      return;
+    }
+
+    if (typeof TB_FIREBASE !== 'undefined') {
+      await TB_FIREBASE.updateAlumnaPassword(matricula, newPass);
+      currentActiveStudent = await TB_FIREBASE.getAlumna(matricula);
+    }
+
+    alertNotice("Contrasena actualizada correctamente en Firebase. Bienvenida al aula.");
+    renderStudentDashboard(currentActiveStudent || { matricula });
+    showStudentView('dashboard');
   };
 
-  function cargarDashboard(matricula, student) {
-    const dashMatricula = document.getElementById('dashMatricula');
-    if (dashMatricula) dashMatricula.textContent = matricula;
-    showStudentView('dashboard');
+  function renderStudentDashboard(student) {
+    const dashMat = document.getElementById('dashMatricula');
+    if (dashMat) dashMat.textContent = student.matricula || "TB-01";
   }
 
-  window.logoutStudent = function() {
-    currentStudentSession = { matricula: "", isDefault: false };
+  window.logoutStudent = function () {
+    currentActiveStudent = null;
+    pendingChangeMatricula = null;
     showStudentView('login');
-    alertNotice("Sesión cerrada correctamente.");
+    const passInput = document.getElementById('studentPassword') || document.getElementById('studentLoginPassword');
+    if (passInput) passInput.value = '';
+    window.closeStudentModal();
+    alertNotice("Sesion academica finalizada.");
   };
 
   if (studentModal) {
@@ -474,27 +286,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 4. MODAL DE SERVICIOS EN INDEX.HTML (SALÓN)
+  // 3. MODAL DE SERVICIOS EN INDEX.HTML (SALON)
   // ==========================================
   const modalData = {
     salon: {
-      tag: "Total Beauty Salón",
-      title: "Servicios de Salón",
-      description: "Seleccione una opción para comunicarse con recepción o agendar su cita:",
+      tag: "Total Beauty Salon",
+      title: "Servicios de Salon",
+      description: "Seleccione una opcion para comunicarse con recepcion o agendar su cita:",
       options: [
         {
           label: "Reservar Cita Personalizada",
-          action: () => openBookingModal("salon_reserva"),
-          detail: "Atención prioritaria"
+          action: () => openBookingModal(),
+          detail: "Atencion prioritaria"
         },
         {
-          label: "Catálogo de Servicios y Precios",
-          action: () => alertNotice("Catálogo de servicios disponible en recepción y vía digital."),
-          detail: "Corte, colorimetría, spa"
+          label: "Catalogo de Servicios y Precios",
+          action: () => alertNotice("Catalogo de servicios disponible en recepcion y via digital."),
+          detail: "Corte, colorimetria, spa"
         },
         {
-          label: "Contactar Recepción por WhatsApp",
-          action: () => openWhatsApp("Hola, deseo solicitar informes y agendar una cita en Total Beauty Salón."),
+          label: "Contactar Recepcion por WhatsApp",
+          action: () => openWhatsApp("Hola, deseo solicitar informes y agendar una cita en Total Beauty Salon."),
           detail: "Respuesta directa (5650560824)"
         }
       ]
@@ -508,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalLinksContainer = document.getElementById('modalLinksContainer');
   const modalCloseBtn = document.getElementById('modalCloseBtn');
 
-  window.openModal = function(type) {
+  window.openModal = function (type) {
     if (type === 'salon' && config.salonUrl) {
       window.location.href = config.salonUrl;
       return;
@@ -545,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'hidden';
   };
 
-  window.closeModal = function() {
+  window.closeModal = function () {
     if (!modalOverlay) return;
     modalOverlay.classList.remove('active');
     document.body.style.overflow = '';
@@ -563,18 +375,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Cierre global con tecla Escape (si el temporizador de 5s ya terminó para el intersticial)
+  // Cierre global con tecla Escape (si el temporizador de 5s ya concluyo)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (interstitialCanClose) window.closeInterstitial();
       if (modalOverlay && modalOverlay.classList.contains('active')) window.closeModal();
       if (studentModal && studentModal.classList.contains('active')) window.closeStudentModal();
-      if (adminModal && adminModal.classList.contains('active')) window.closeAdminModal();
     }
   });
 
   // ==========================================
-  // 5. FILTRO DE CURSOS EN ACADEMIA.HTML
+  // 4. FILTRO DE CURSOS EN ACADEMIA.HTML
   // ==========================================
   const filterButtons = document.querySelectorAll('.category-filter-bar .filter-btn');
   const courseCards = document.querySelectorAll('#coursesGrid .course-card');
@@ -601,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 6. FUNCIONES DE CONTACTO Y TOAST
+  // 5. FUNCIONES DE CONTACTO Y TOAST
   // ==========================================
   function openWhatsApp(message) {
     const text = encodeURIComponent(message);
@@ -639,8 +450,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3800);
   }
 
-  function openBookingModal(type) {
+  function openBookingModal() {
     window.closeModal();
-    openWhatsApp("Hola, solicito agendar una cita para servicios en Total Beauty Salón.");
+    openWhatsApp("Hola, solicito agendar una cita para servicios en Total Beauty Salon.");
   }
 });

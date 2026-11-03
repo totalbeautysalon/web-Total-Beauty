@@ -9,15 +9,20 @@ Página web de bienvenida y menú diseñada para Total Beauty Salon & Academia, 
 - **Página Principal (index.html):**
   - Encabezado con logotipo centrado y elegante sin elementos distractores.
   - Menú de 2 opciones optimizado para pantallas táctiles y móviles: **Salón** y **Academia**.
-  - Anuncio intersticial modal al entrar con temporizador de 5 segundos antes de habilitar el botón de cierre.
+  - Anuncio intersticial modal al entrar sincronizado con Firebase y con temporizador de 5 segundos antes de habilitar el botón de cierre.
+  - Enlace discreto en el pie de página hacia el portal administrativo independiente.
 - **Página de Academia (academia.html):**
   - Oferta completa de cursos prácticos (90% práctico y 10% teórico) con entrega de constancia de finalización.
   - Botón de acceso exclusivo para alumnas en la barra superior (**Soy Alumna / Ingresar**).
+  - Autenticación y actualización de contraseñas conectadas a Firebase Realtime Database.
   - Filtro por especialidades con desplazamiento táctil horizontal en móviles.
-- **Panel de Administración (Enlace en pie de página):**
-  - Acceso mediante PIN administrativo: `ADMIN2026` (o `04012021`).
-  - **Módulo de Anuncios Intersticiales:** Activar o desactivar anuncio al entrar, editar título, imagen, descripción, enlace o WhatsApp de destino y botón de acción, con opción de previsualización inmediata.
-  - **Módulo de Alumnas:** Restablecer contraseñas olvidadas a la clave inicial por defecto (`TB2026`).
+- **Portal de Administración Independiente (admin.html):**
+  - Página dedicada y segura con barrera de acceso mediante PIN administrativo: `ADMIN2026` (o `04012021`).
+  - Sincronización en la nube con Firebase Realtime Database (`totalbregis`).
+  - **Módulo de Anuncios Intersticiales:** Activar o pausar anuncio al entrar, editar título, imagen, descripción, enlace o WhatsApp de destino y botón de acción, con previsualización en vivo (5 segundos).
+  - **Módulo de Alumnas y Contraseñas:** Métricas en tiempo real (KPIs), registro de nuevas alumnas, buscador en vivo y reseteo directo de contraseñas a la clave inicial (`TB2026`) con un solo clic.
+- **Módulo Firebase (firebase-config.js):**
+  - Conexión centralizada con Firebase Realtime Database y respaldo inteligente en caché local para navegación sin interrupciones.
 
 ---
 
