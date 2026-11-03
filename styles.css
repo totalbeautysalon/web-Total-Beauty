@@ -92,7 +92,7 @@ body {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 1.25rem 2rem;
+  padding: 1.75rem 1.25rem 2rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -100,8 +100,7 @@ body {
 
 /* Header & Marca */
 .brand-header {
-  text-align: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
   padding-bottom: 1.25rem;
   position: relative;
 }
@@ -112,22 +111,32 @@ body {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
+  width: 70px;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
 }
 
+/* Fila de Encabezado: Logo y Opción de Alumna al Lado */
+.header-content-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
 .brand-logo-container {
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
+  gap: 1rem;
   text-decoration: none;
   color: inherit;
-  margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 .brand-logo-img {
-  max-height: 65px;
+  max-height: 60px;
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.25));
@@ -139,14 +148,19 @@ body {
   filter: drop-shadow(0 4px 16px rgba(212, 175, 55, 0.4));
 }
 
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
 .brand-title {
   font-family: var(--font-serif);
-  font-size: 1.75rem;
-  letter-spacing: 0.22em;
+  font-size: 1.65rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #ffffff;
-  margin-top: 0.4rem;
   font-weight: 500;
+  line-height: 1.1;
 }
 
 .brand-title span {
@@ -157,12 +171,64 @@ body {
 
 .brand-tagline {
   font-size: 0.72rem;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
   font-weight: 400;
   opacity: 0.85;
+}
+
+/* Botón: Soy Alumna / Ingresar (Ubicado al lado del Logo) */
+.btn-student-access {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 1.05rem;
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid var(--gold-border);
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  flex-shrink: 0;
+}
+
+.btn-student-access:hover {
+  background: rgba(28, 28, 36, 0.95);
+  border-color: var(--gold-border-hover);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 16px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.student-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--gold-primary);
+  flex-shrink: 0;
+}
+
+.student-label {
+  color: #e6e6ee;
+  font-weight: 500;
+}
+
+.student-divider {
+  color: rgba(212, 175, 55, 0.5);
+  font-size: 0.7rem;
+}
+
+.student-cta {
+  color: var(--gold-light);
+  font-weight: 600;
 }
 
 /* Sección de Bienvenida */
@@ -204,7 +270,7 @@ body {
   letter-spacing: 0.01em;
 }
 
-/* Menú Principal - Cuadrícula de 2 Opciones (Más Compacta) */
+/* Menú Principal - Cuadrícula de 2 Opciones (Compacta) */
 .menu-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -214,7 +280,7 @@ body {
   width: 100%;
 }
 
-/* Tarjeta de Opción - Tamaño Optimizado */
+/* Tarjeta de Opción */
 .option-card {
   position: relative;
   background: var(--bg-card);
@@ -453,9 +519,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 0 2rem;
+  padding: 1rem 0 1.75rem;
   border-bottom: 1px solid rgba(212, 175, 55, 0.15);
   margin-bottom: 2.5rem;
+  gap: 1.25rem;
+}
+
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .btn-back {
@@ -872,7 +945,7 @@ body {
 }
 
 /* ==========================================================================
-   MODAL Y PIE DE PÁGINA
+   MODAL, FORMULARIO DE ALUMNAs Y PIE DE PÁGINA
    ========================================================================== */
 
 /* Modal Emergente */
@@ -901,9 +974,9 @@ body {
   background: #0d0d12;
   border: 1px solid var(--gold-border);
   border-radius: 12px;
-  max-width: 500px;
+  max-width: 480px;
   width: 100%;
-  padding: 2rem 1.75rem;
+  padding: 2.25rem 2rem;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 35px rgba(212, 175, 55, 0.15);
   transform: translateY(20px) scale(0.98);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -947,7 +1020,7 @@ body {
 
 .modal-title {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   color: #ffffff;
   margin-bottom: 0.65rem;
   letter-spacing: 0.04em;
@@ -988,6 +1061,83 @@ body {
   border-color: var(--gold-primary);
   color: var(--gold-light);
   transform: translateX(3px);
+}
+
+/* Campos de Formulario: Modal de Alumnas */
+.student-form-group {
+  margin-bottom: 1.15rem;
+  text-align: left;
+}
+
+.student-form-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 0.35rem;
+}
+
+.student-form-input {
+  width: 100%;
+  padding: 0.75rem 0.95rem;
+  background: #121218;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 6px;
+  color: #f8f8f8;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  transition: var(--transition-smooth);
+  outline: none;
+}
+
+.student-form-input:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+  background: #171720;
+}
+
+.btn-student-submit {
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #c5a059 0%, #ecd48d 50%, #b38838 100%);
+  color: #070709;
+  border: 1px solid #d4af37;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+}
+
+.btn-student-submit:hover {
+  background: linear-gradient(135deg, #ecd48d 0%, #ffffff 50%, #d4af37 100%);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+  transform: translateY(-2px);
+}
+
+.student-help-link {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: var(--transition-smooth);
+  text-align: center;
+}
+
+.student-help-link span {
+  color: var(--gold-light);
+  text-decoration: underline;
+}
+
+.student-help-link:hover {
+  color: #ffffff;
 }
 
 /* Footer Minimalista */
@@ -1081,9 +1231,36 @@ body {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+}
+
+@media (max-width: 640px) {
+  .header-content-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.95rem;
+  }
+
+  .brand-logo-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.4rem;
+  }
 
   .brand-title {
     font-size: 1.5rem;
+  }
+
+  .academia-nav {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .nav-right-group {
+    flex-direction: column;
+    gap: 0.85rem;
+    align-items: center;
   }
 }
 

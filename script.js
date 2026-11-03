@@ -1,18 +1,70 @@
 /**
  * TOTAL BEAUTY SALON & ACADEMIA
- * Script de Navegación, Modal y Filtros
+ * Script de Navegación, Modal, Portal de Alumnas y Filtros
  * Cero Emojis - Estética Minimalista y de Lujo
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Configuración de Enlaces Directos
   const config = {
-    salonUrl: "",      // Si se asigna una URL, el salón redirigirá en vez de abrir modal
+    salonUrl: "",          // Si se asigna una URL, el salón redirigirá en vez de abrir modal
+    studentPortalUrl: "",  // Si se asigna una URL (ej. Intranet/Classroom), "Soy Alumna" redirige allí
     whatsappNumber: "5210000000000",
   };
 
   // ==========================================
-  // 1. MANEJO DEL MODAL EN INDEX.HTML (SALÓN)
+  // 1. MANEJO DEL MODAL DE ALUMNAS (SOY ALUMNA / INGRESAR)
+  // ==========================================
+  const studentModal = document.getElementById('studentModal');
+
+  window.openStudentModal = function() {
+    if (config.studentPortalUrl) {
+      window.location.href = config.studentPortalUrl;
+      return;
+    }
+    if (studentModal) {
+      studentModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      const userInput = document.getElementById('studentUser');
+      if (userInput) userInput.focus();
+    }
+  };
+
+  window.closeStudentModal = function() {
+    if (studentModal) {
+      studentModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  };
+
+  window.handleStudentLogin = function(e) {
+    e.preventDefault();
+    const user = document.getElementById('studentUser')?.value.trim();
+    const pass = document.getElementById('studentPass')?.value.trim();
+
+    if (!user || !pass) return;
+
+    // Notificación de ingreso o enlace a Intranet
+    alertUser(`Validando credenciales de ${user}... Si cuenta con plataforma interna activa, será redirigida.`);
+    setTimeout(() => {
+      window.closeStudentModal();
+      // Si existe un archivo o sistema de intranet local o URL configurada
+      if (config.studentPortalUrl) {
+        window.location.href = config.studentPortalUrl;
+      }
+    }, 1500);
+  };
+
+  if (studentModal) {
+    studentModal.addEventListener('click', (e) => {
+      if (e.target === studentModal) {
+        window.closeStudentModal();
+      }
+    });
+  }
+
+  // ==========================================
+  // 2. MANEJO DEL MODAL EN INDEX.HTML (SALÓN)
   // ==========================================
   const modalData = {
     salon: {
@@ -101,14 +153,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Cierre global con tecla Escape
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) {
-      window.closeModal();
+    if (e.key === 'Escape') {
+      if (modalOverlay && modalOverlay.classList.contains('active')) {
+        window.closeModal();
+      }
+      if (studentModal && studentModal.classList.contains('active')) {
+        window.closeStudentModal();
+      }
     }
   });
 
   // ==========================================
-  // 2. FILTRO DE CURSOS EN ACADEMIA.HTML
+  // 3. FILTRO DE CURSOS EN ACADEMIA.HTML
   // ==========================================
   const filterButtons = document.querySelectorAll('.category-filter-bar .filter-btn');
   const courseCards = document.querySelectorAll('#coursesGrid .course-card');
@@ -135,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 3. FUNCIONES DE UTILIDAD Y CONTACTO
+  // 4. FUNCIONES DE UTILIDAD Y CONTACTO
   // ==========================================
   function openWhatsApp(message) {
     const text = encodeURIComponent(message);

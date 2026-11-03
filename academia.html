@@ -28,7 +28,7 @@
   <!-- Contenedor Principal del Sitio -->
   <div class="site-wrapper">
     
-    <!-- Barra Superior de Navegación -->
+    <!-- Barra Superior de Navegación con Opción al lado del Logo -->
     <nav class="academia-nav animate-fade-in" aria-label="Navegación de Academia">
       <a href="index.html" class="btn-back" aria-label="Volver al menú principal">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -38,15 +38,29 @@
         <span>Menú Principal</span>
       </a>
 
-      <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
-        <img 
-          src="assets/images/logoheader.png" 
-          alt="Total Beauty Logo" 
-          class="brand-logo-img"
-          style="max-height: 48px;"
-          onerror="this.onerror=null; this.src='assets/images/logo.png';"
-        >
-      </a>
+      <!-- Grupo de la Derecha: Logo y Opción Soy Alumna / Ingresar -->
+      <div class="nav-right-group">
+        <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="brand-logo-img"
+            style="max-height: 44px;"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+        </a>
+
+        <!-- Opción al lado del Logo: Soy Alumna / Ingresar -->
+        <button type="button" class="btn-student-access" onclick="openStudentModal()" aria-label="Acceso para Alumnas: Ingresar">
+          <svg class="student-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="student-label">Soy Alumna</span>
+          <span class="student-divider" aria-hidden="true">|</span>
+          <span class="student-cta">Ingresar</span>
+        </button>
+      </div>
     </nav>
 
     <!-- Hero de Academia -->
@@ -326,6 +340,42 @@
       </p>
     </footer>
 
+  </div>
+
+  <!-- Ventana Modal de Acceso para Alumnas -->
+  <div id="studentModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="studentModalTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close-btn" onclick="closeStudentModal()" aria-label="Cerrar ventana de alumnas">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Portal Académico</div>
+      <h3 id="studentModalTitle" class="modal-title">Acceso de Alumnas</h3>
+      <p class="modal-description">Ingrese con su matrícula o correo institucional para consultar calificaciones, temarios y avisos:</p>
+
+      <form id="studentLoginForm" onsubmit="handleStudentLogin(event)">
+        <div class="student-form-group">
+          <label for="studentUser" class="student-form-label">Matrícula o Correo</label>
+          <input type="text" id="studentUser" class="student-form-input" placeholder="ej. A-2026 o correo@ejemplo.com" required autocomplete="username">
+        </div>
+
+        <div class="student-form-group">
+          <label for="studentPass" class="student-form-label">Contraseña</label>
+          <input type="password" id="studentPass" class="student-form-input" placeholder="Contraseña de acceso" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn-student-submit">
+          <span>Ingresar al Portal</span>
+        </button>
+      </form>
+
+      <a href="https://api.whatsapp.com/send?text=Hola,%20soy%20alumna%20y%20necesito%20asistencia%20con%20mis%20claves%20de%20acceso%20al%20portal." target="_blank" rel="noopener noreferrer" class="student-help-link">
+        ¿Olvidó su contraseña? <span>Contactar a Control Escolar por WhatsApp</span>
+      </a>
+    </div>
   </div>
 
   <!-- Script de Interacción -->

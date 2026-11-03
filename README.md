@@ -9,44 +9,37 @@ Página de menú y bienvenida diseñada para Total Beauty Salon & Academia, opti
 - **Estilo:** Minimalista y sobrio (Luxury Dark).
 - **Paleta de Colores:** Fondo negro profundo (`#070709`) con detalles y gradientes dorados metálicos (`#d4af37`).
 - **Arquitectura:**
-  - **index.html:** Portal de bienvenida con menú de opciones compacto:
-    - **Salón:** Servicios de peluquería, colorimetría, maquillaje y spa.
+  - **index.html:** Portal principal con logotipo y acceso directo para alumnas al lado:
+    - **Opción Soy Alumna / Ingresar:** Botón de acceso al portal académico / aula virtual junto al logotipo.
+    - **Salón:** Servicios de peluquería, colorimetría, maquillaje y spa capilar.
     - **Academia:** Acceso directo a la página especializada de formación.
-  - **academia.html:** Página especializada de la academia con diplomados, masterclasses, filtros por área de especialidad (Estilismo, Colorimetría, Maquillaje, Uñas y Mirada), metodología y contacto de inscripciones.
+  - **academia.html:** Página especializada de la academia con diplomados, masterclasses, filtros por área de especialidad (Estilismo, Colorimetría, Maquillaje, Uñas y Mirada), metodología, contacto de inscripciones y botón de acceso a alumnas en la barra superior.
   - **Cero emojis:** Todos los archivos mantienen una presentación tipográfica y vectorial pura sin emojis.
 
 ---
 
-## Estructura de Archivos
+## Configuración de Enlaces
 
-```text
-TotalBeauty_GitHub/
-│
-├── index.html              # Portal de bienvenida y menú principal
-├── academia.html           # Página especializada de la Academia
-├── styles.css              # Hoja de estilos compartida (Luxury Dark & Dorado)
-├── script.js               # Control de interacciones, filtros y modales
-├── .nojekyll               # Configuración para GitHub Pages
-├── README.md               # Documentación
-└── assets/
-    ├── favicon.ico         # Icono del sitio
-    └── images/
-        ├── logoheader.png  # Logotipo oficial horizontal
-        ├── logo.png        # Logotipo alternativo
-        ├── salon.jpg       # Fotografía del Salón
-        └── academia.jpg    # Fotografía de la Academia
+En el archivo `script.js` se pueden configurar los siguientes enlaces directos:
+
+```javascript
+const config = {
+  salonUrl: "",          // Si desea redirigir a un sitio externo de citas
+  studentPortalUrl: "",  // Si cuenta con aula virtual / intranet para alumnas
+  whatsappNumber: "5210000000000",
+};
 ```
 
 ---
 
 ## Cómo Publicar en GitHub Pages
 
-1. Inicie sesión en [GitHub](https://github.com/) y cree un nuevo repositorio público (por ejemplo: `total-beauty`).
+1. Inicie sesión en [GitHub](https://github.com/) y cree un repositorio público (por ejemplo: `total-beauty`).
 2. En la terminal dentro de `TotalBeauty_GitHub`, ejecute:
 
 ```bash
 git add .
-git commit -m "Actualizacion de diseno compacto y pagina de academia"
+git commit -m "Agregada opcion de Soy Alumna / Ingresar junto al logo"
 git remote add origin https://github.com/TU-USUARIO/TU-REPOSITORIO.git
 git push -u origin main
 ```
