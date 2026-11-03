@@ -9,14 +9,14 @@ Página web de bienvenida y menú diseñada para Total Beauty Salon & Academia, 
 - **Página Principal (index.html):**
   - Encabezado con logotipo centrado y elegante sin elementos distractores.
   - Menú de 2 opciones optimizado para pantallas táctiles y móviles: **Salón** y **Academia**.
-  - Barra de anuncios oficial en la parte superior (configurable desde el panel de control).
+  - Anuncio intersticial modal al entrar con temporizador de 5 segundos antes de habilitar el botón de cierre.
 - **Página de Academia (academia.html):**
   - Oferta completa de cursos prácticos (90% práctico y 10% teórico) con entrega de constancia de finalización.
   - Botón de acceso exclusivo para alumnas en la barra superior (**Soy Alumna / Ingresar**).
   - Filtro por especialidades con desplazamiento táctil horizontal en móviles.
 - **Panel de Administración (Enlace en pie de página):**
   - Acceso mediante PIN administrativo: `ADMIN2026` (o `04012021`).
-  - **Módulo de Anuncios:** Activar o desactivar anuncios, editar mensaje, enlace o WhatsApp de destino y texto del botón.
+  - **Módulo de Anuncios Intersticiales:** Activar o desactivar anuncio al entrar, editar título, imagen, descripción, enlace o WhatsApp de destino y botón de acción, con opción de previsualización inmediata.
   - **Módulo de Alumnas:** Restablecer contraseñas olvidadas a la clave inicial por defecto (`TB2026`).
 
 ---

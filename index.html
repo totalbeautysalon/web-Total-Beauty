@@ -21,24 +21,55 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Barra de Anuncios Configurable desde Panel Admin -->
-  <aside id="announcementBar" class="announcement-bar" style="display: none;" role="region" aria-label="Anuncio Oficial">
-    <div class="announcement-container">
-      <div class="announcement-content">
-        <span class="announcement-bullet" aria-hidden="true"></span>
-        <span id="announcementText" class="announcement-text"></span>
-        <a id="announcementLink" href="#" target="_blank" rel="noopener noreferrer" class="announcement-btn" style="display: none;">
-          <span id="announcementBtnText">Ver Detalles</span>
-        </a>
+  <!-- Anuncio Intersticial al Entrar (Cierre tras 5 Segundos) -->
+  <div id="interstitialOverlay" class="interstitial-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="interstitialTitle">
+    <div class="interstitial-card">
+      
+      <!-- Barra Superior: Temporizador de 5 Segundos y Botón Cerrar -->
+      <div class="interstitial-timer-wrap">
+        <span class="interstitial-tag">Aviso Oficial</span>
+        <div id="interstitialTimerWrap">
+          <span id="interstitialCountdownText" class="interstitial-countdown">Cerrar en 5s</span>
+          <button type="button" id="interstitialCloseBtn" class="interstitial-close-btn" onclick="closeInterstitial()" aria-label="Cerrar anuncio" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Cerrar</span>
+          </button>
+        </div>
       </div>
-      <button type="button" class="announcement-close" onclick="closeAnnouncementBar()" aria-label="Cerrar anuncio">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
+
+      <!-- Título del Anuncio -->
+      <h2 id="interstitialTitle" class="interstitial-title">Inscripciones Abiertas a Cursos Prácticos</h2>
+
+      <!-- Imagen del Anuncio -->
+      <div class="interstitial-image-wrap">
+        <img 
+          id="interstitialImg" 
+          src="assets/images/academia.jpg" 
+          alt="Anuncio Total Beauty" 
+          class="interstitial-img"
+          onerror="this.onerror=null; this.src='assets/images/salon.jpg';"
+        >
+        <div class="interstitial-img-overlay"></div>
+      </div>
+
+      <!-- Texto y Botón de Acción -->
+      <p id="interstitialText" class="interstitial-text">
+        Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.
+      </p>
+
+      <a id="interstitialBtn" href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos." target="_blank" rel="noopener noreferrer" class="btn-action btn-salon interstitial-action-btn">
+        <span id="interstitialBtnText">Solicitar Informes por WhatsApp</span>
+        <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
         </svg>
-      </button>
+      </a>
+
     </div>
-  </aside>
+  </div>
 
   <!-- Fondos Ambientales -->
   <div class="ambient-glow" aria-hidden="true"></div>
@@ -272,15 +303,16 @@
         </form>
       </div>
 
-      <!-- VISTA 2: DASHBOARD DE ADMINISTRACIÓN (ANUNCIOS Y ALUMNAS) -->
+      <!-- VISTA 2: DASHBOARD DE ADMINISTRACIÓN (ANUNCIO INTERSTICIAL Y ALUMNAS) -->
       <div id="adminDashboardView" style="display: none;">
         <h3 class="modal-title">Panel de Control</h3>
-        <p class="modal-description" style="margin-bottom: 1rem;">Gestión de anuncios de la página y reseteo de claves:</p>
+        <p class="modal-description" style="margin-bottom: 1rem;">Gestión del anuncio intersticial al entrar y reseteo de claves:</p>
 
-        <!-- SECCIÓN DE ANUNCIOS -->
+        <!-- SECCIÓN DE ANUNCIO INTERSTICIAL -->
         <form id="adminAnnouncementForm" onsubmit="handleSaveAnnouncement(event)" style="margin-bottom: 1.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(212, 175, 55, 0.15);">
+          
           <div class="admin-toggle-row">
-            <label for="adminAnnToggle" class="toggle-switch-label">Mostrar Anuncio en la Página</label>
+            <label for="adminAnnToggle" class="toggle-switch-label">Mostrar Intersticial al Entrar</label>
             <label class="switch-control">
               <input type="checkbox" id="adminAnnToggle">
               <span class="switch-slider"></span>
@@ -288,22 +320,36 @@
           </div>
 
           <div class="student-form-group">
-            <label for="adminAnnText" class="student-form-label">Texto del Anuncio</label>
-            <textarea id="adminAnnText" class="student-form-textarea" placeholder="Escriba el mensaje del anuncio oficial..."></textarea>
+            <label for="adminAnnTitle" class="student-form-label">Título del Anuncio</label>
+            <input type="text" id="adminAnnTitle" class="student-form-input" placeholder="ej. Inscripciones Abiertas a Cursos Prácticos" required>
           </div>
 
           <div class="student-form-group">
-            <label for="adminAnnLink" class="student-form-label">Enlace o WhatsApp de Destino (Opcional)</label>
+            <label for="adminAnnImg" class="student-form-label">URL o Ruta de la Imagen</label>
+            <input type="text" id="adminAnnImg" class="student-form-input" placeholder="ej. assets/images/academia.jpg o URL web">
+          </div>
+
+          <div class="student-form-group">
+            <label for="adminAnnText" class="student-form-label">Texto o Descripción del Anuncio</label>
+            <textarea id="adminAnnText" class="student-form-textarea" placeholder="Escriba los detalles de la promoción o aviso..."></textarea>
+          </div>
+
+          <div class="student-form-group">
+            <label for="adminAnnLink" class="student-form-label">Enlace o WhatsApp de Destino</label>
             <input type="text" id="adminAnnLink" class="student-form-input" placeholder="https://api.whatsapp.com/send?phone=525650560824...">
           </div>
 
           <div class="student-form-group">
-            <label for="adminAnnBtnText" class="student-form-label">Texto del Botón (Opcional)</label>
-            <input type="text" id="adminAnnBtnText" class="student-form-input" placeholder="ej. Ver Detalles / Solicitar Informes">
+            <label for="adminAnnBtnText" class="student-form-label">Texto del Botón</label>
+            <input type="text" id="adminAnnBtnText" class="student-form-input" placeholder="ej. Solicitar Informes por WhatsApp">
           </div>
 
           <button type="submit" class="btn-student-submit">
-            <span>Guardar Anuncio</span>
+            <span>Guardar Anuncio Intersticial</span>
+          </button>
+
+          <button type="button" class="btn-student-secondary" onclick="previewInterstitialNow()">
+            <span>Previsualizar Intersticial (Probar Ahora)</span>
           </button>
         </form>
 

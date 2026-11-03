@@ -1,6 +1,6 @@
 /**
  * TOTAL BEAUTY SALON & ACADEMIA
- * Script de Navegación, Sistema de Anuncios, Panel de Administración y Alumnas
+ * Script de Navegación, Anuncio Intersticial (5s), Panel de Administración y Alumnas
  * Cero Emojis - Estética Minimalista y de Lujo
  */
 
@@ -19,9 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const STORAGE_KEY_ANNOUNCEMENT = "totalbeauty_announcement_data";
 
   let isAdminUnlocked = false;
+  let interstitialTimerInterval = null;
+  let interstitialCanClose = false;
 
   // ==========================================
-  // 1. SISTEMA DE ANUNCIOS DE LA PÁGINA
+  // 1. SISTEMA DE ANUNCIO INTERSTICIAL (AL ENTRAR)
   // ==========================================
   function getAnnouncementData() {
     try {
@@ -30,12 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       console.error("Error al leer datos de anuncios:", e);
     }
-    // Configuración inicial por defecto
+    // Configuración inicial por defecto del intersticial
     const initialData = {
       enabled: true,
-      text: "Inscripciones abiertas a cursos prácticos. Cupo limitado para atención personalizada.",
+      title: "Inscripciones Abiertas a Cursos Prácticos",
+      image: "assets/images/academia.jpg",
+      text: "Inicia tu formación profesional con metodología 90% práctica en modelos reales. Cupo limitado para atención personalizada en cabina.",
       link: `https://api.whatsapp.com/send?phone=${config.whatsappPhone}&text=Hola%20Total%20Beauty%20Academia,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20a%20los%20cursos.`,
-      btnText: "Informes por WhatsApp"
+      btnText: "Solicitar Informes por WhatsApp"
     };
     localStorage.setItem(STORAGE_KEY_ANNOUNCEMENT, JSON.stringify(initialData));
     return initialData;
@@ -49,43 +53,105 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function renderAnnouncementBar() {
-    const bar = document.getElementById('announcementBar');
-    if (!bar) return;
-
+  function initInterstitial() {
     const data = getAnnouncementData();
-    if (!data.enabled || !data.text.trim()) {
-      bar.style.display = 'none';
-      return;
-    }
+    if (!data.enabled) return;
 
-    const textEl = document.getElementById('announcementText');
-    const linkEl = document.getElementById('announcementLink');
-    const btnTextEl = document.getElementById('announcementBtnText');
+    const overlay = document.getElementById('interstitialOverlay');
+    if (!overlay) return;
 
-    if (textEl) textEl.textContent = data.text;
+    renderInterstitialContent(data);
 
-    if (linkEl) {
-      if (data.link && data.link.trim()) {
-        linkEl.href = data.link.trim();
-        linkEl.style.display = 'inline-flex';
-        if (btnTextEl) btnTextEl.textContent = data.btnText || 'Ver Detalles';
-      } else {
-        linkEl.style.display = 'none';
-      }
-    }
-
-    bar.style.display = 'block';
+    // Muestra el anuncio tras 500ms al entrar a la página
+    setTimeout(() => {
+      openInterstitialModal();
+    }, 500);
   }
 
-  window.closeAnnouncementBar = function() {
-    const bar = document.getElementById('announcementBar');
-    if (bar) {
-      bar.style.display = 'none';
+  function renderInterstitialContent(data) {
+    const titleEl = document.getElementById('interstitialTitle');
+    const imgEl = document.getElementById('interstitialImg');
+    const textEl = document.getElementById('interstitialText');
+    const btnEl = document.getElementById('interstitialBtn');
+    const btnTextEl = document.getElementById('interstitialBtnText');
+
+    if (titleEl) titleEl.textContent = data.title || "Aviso Oficial";
+    if (imgEl && data.image) imgEl.src = data.image;
+    if (textEl) textEl.textContent = data.text || "";
+
+    if (btnEl) {
+      btnEl.href = data.link || `https://api.whatsapp.com/send?phone=${config.whatsappPhone}`;
+      if (btnTextEl) btnTextEl.textContent = data.btnText || "Solicitar Informes";
     }
+  }
+
+  function openInterstitialModal() {
+    const overlay = document.getElementById('interstitialOverlay');
+    if (!overlay) return;
+
+    overlay.style.display = 'flex';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    startInterstitialTimer();
+  }
+
+  function startInterstitialTimer() {
+    const countdownEl = document.getElementById('interstitialCountdownText');
+    const closeBtn = document.getElementById('interstitialCloseBtn');
+    let secondsLeft = 5;
+    interstitialCanClose = false;
+
+    if (countdownEl) {
+      countdownEl.style.display = 'inline-flex';
+      countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+    }
+    if (closeBtn) {
+      closeBtn.style.display = 'none';
+    }
+
+    if (interstitialTimerInterval) clearInterval(interstitialTimerInterval);
+
+    interstitialTimerInterval = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft > 0) {
+        if (countdownEl) countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+      } else {
+        clearInterval(interstitialTimerInterval);
+        interstitialCanClose = true;
+        if (countdownEl) countdownEl.style.display = 'none';
+        if (closeBtn) {
+          closeBtn.style.display = 'inline-flex';
+          closeBtn.style.animation = 'fadeIn 0.35s ease forwards';
+        }
+      }
+    }, 1000);
+  }
+
+  window.closeInterstitial = function() {
+    if (!interstitialCanClose) return; // Solo permite cerrar una vez transcurridos los 5 segundos
+
+    const overlay = document.getElementById('interstitialOverlay');
+    if (overlay) {
+      overlay.classList.remove('active');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 350);
+      document.body.style.overflow = '';
+    }
+    if (interstitialTimerInterval) clearInterval(interstitialTimerInterval);
   };
 
-  renderAnnouncementBar();
+  window.previewInterstitialNow = function() {
+    const data = getAnnouncementData();
+    renderInterstitialContent(data);
+    window.closeAdminModal();
+    setTimeout(() => {
+      openInterstitialModal();
+    }, 300);
+  };
+
+  // Inicializar al cargar la página
+  initInterstitial();
 
   // ==========================================
   // 2. PANEL DE ADMINISTRACIÓN
@@ -141,11 +207,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const annData = getAnnouncementData();
     const toggle = document.getElementById('adminAnnToggle');
+    const titleInput = document.getElementById('adminAnnTitle');
+    const imgInput = document.getElementById('adminAnnImg');
     const textInput = document.getElementById('adminAnnText');
     const linkInput = document.getElementById('adminAnnLink');
     const btnTextInput = document.getElementById('adminAnnBtnText');
 
     if (toggle) toggle.checked = annData.enabled;
+    if (titleInput) titleInput.value = annData.title || '';
+    if (imgInput) imgInput.value = annData.image || '';
     if (textInput) textInput.value = annData.text || '';
     if (linkInput) linkInput.value = annData.link || '';
     if (btnTextInput) btnTextInput.value = annData.btnText || '';
@@ -157,20 +227,24 @@ document.addEventListener('DOMContentLoaded', () => {
   window.handleSaveAnnouncement = function(e) {
     e.preventDefault();
     const toggle = document.getElementById('adminAnnToggle');
+    const titleInput = document.getElementById('adminAnnTitle');
+    const imgInput = document.getElementById('adminAnnImg');
     const textInput = document.getElementById('adminAnnText');
     const linkInput = document.getElementById('adminAnnLink');
     const btnTextInput = document.getElementById('adminAnnBtnText');
 
     const updated = {
       enabled: toggle ? toggle.checked : false,
+      title: titleInput ? titleInput.value.trim() : 'Aviso Oficial',
+      image: imgInput ? imgInput.value.trim() : 'assets/images/academia.jpg',
       text: textInput ? textInput.value.trim() : '',
       link: linkInput ? linkInput.value.trim() : '',
-      btnText: btnTextInput ? btnTextInput.value.trim() : 'Ver Detalles'
+      btnText: btnTextInput ? btnTextInput.value.trim() : 'Solicitar Informes'
     };
 
     saveAnnouncementData(updated);
-    renderAnnouncementBar();
-    alertNotice("Anuncio guardado y actualizado en la página.");
+    renderInterstitialContent(updated);
+    alertNotice("Anuncio intersticial guardado exitosamente.");
   };
 
   window.handleAdminDirectReset = function(e) {
@@ -489,9 +563,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Cierre global con tecla Escape
+  // Cierre global con tecla Escape (si el temporizador de 5s ya terminó para el intersticial)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (interstitialCanClose) window.closeInterstitial();
       if (modalOverlay && modalOverlay.classList.contains('active')) window.closeModal();
       if (studentModal && studentModal.classList.contains('active')) window.closeStudentModal();
       if (adminModal && adminModal.classList.contains('active')) window.closeAdminModal();
@@ -551,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
     notice.style.fontSize = '0.82rem';
     notice.style.letterSpacing = '0.03em';
     notice.style.boxShadow = '0 10px 30px rgba(0,0,0,0.85), 0 0 20px rgba(212,175,55,0.25)';
-    notice.style.zIndex = '99999';
+    notice.style.zIndex = '999999';
     notice.style.transition = 'opacity 0.4s ease';
     notice.style.maxWidth = '92%';
     notice.style.textAlign = 'center';
