@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Academia | Total Beauty</title>
+  <meta name="description" content="Total Beauty Academia. Cursos, diplomados y certificaciones profesionales en estilismo, colorimetría, maquillaje y estética integral.">
+  <meta name="theme-color" content="#070709">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Fuentes Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Contenedor Principal del Sitio -->
+  <div class="site-wrapper">
+    
+    <!-- Barra Superior de Navegación -->
+    <nav class="academia-nav animate-fade-in" aria-label="Navegación de Academia">
+      <a href="index.html" class="btn-back" aria-label="Volver al menú principal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Menú Principal</span>
+      </a>
+
+      <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+        <img 
+          src="assets/images/logoheader.png" 
+          alt="Total Beauty Logo" 
+          class="brand-logo-img"
+          style="max-height: 48px;"
+          onerror="this.onerror=null; this.src='assets/images/logo.png';"
+        >
+      </a>
+    </nav>
+
+    <!-- Hero de Academia -->
+    <header class="academia-hero animate-fade-in delay-1">
+      <div class="academia-hero-badge">
+        <span class="gold-dot"></span>
+        <span>Formación Profesional</span>
+      </div>
+
+      <h1 class="academia-hero-title">
+        Total Beauty <span>Academia</span>
+      </h1>
+
+      <p class="academia-hero-subtitle">
+        Programas de especialización y diplomados técnicos diseñados para formar profesionales líderes en la industria del estilismo, la colorimetría y la estética integral.
+      </p>
+    </header>
+
+    <!-- Indicadores Clave -->
+    <section class="academia-metrics-grid animate-fade-in delay-2" aria-label="Beneficios de la Academia">
+      <div class="metric-card">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Práctica Clínica</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Grupos</div>
+        <div class="metric-label">Cupo Reducido</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Validez</div>
+        <div class="metric-label">Certificación Oficial</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Mentoría</div>
+        <div class="metric-label">Docentes Activos</div>
+      </div>
+    </section>
+
+    <!-- Sección de Programas Académicos -->
+    <main role="main">
+      <div class="section-header">
+        <span class="section-tag">Oferta Educativa</span>
+        <h2 class="section-title">Diplomados y Cursos Especializados</h2>
+      </div>
+
+      <!-- Barra de Filtros por Categoría -->
+      <div class="category-filter-bar" role="tablist" aria-label="Filtro de cursos">
+        <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+        <button type="button" class="filter-btn" data-filter="estilismo">Estilismo &amp; Cabello</button>
+        <button type="button" class="filter-btn" data-filter="colorimetria">Colorimetría</button>
+        <button type="button" class="filter-btn" data-filter="maquillaje">Maquillaje</button>
+        <button type="button" class="filter-btn" data-filter="unas-mirada">Uñas &amp; Mirada</button>
+      </div>
+
+      <!-- Cuadrícula de Cursos -->
+      <div class="courses-grid" id="coursesGrid">
+        
+        <!-- Curso 1: Diplomado en Estilismo -->
+        <article class="course-card" data-category="estilismo">
+          <div class="course-card-header">
+            <span class="course-mode-badge">Presencial</span>
+            <span class="course-duration">6 Meses</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Estilismo &amp; Cabello</span>
+            <h3 class="course-title">Diplomado Integral en Estilismo Profesional</h3>
+            <p class="course-desc">
+              Domine el diseño capilar completo: corte avanzado para dama y caballero, visagismo, peinado social y editorial, y fundamentos de salud capilar.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Geometría y técnicas de corte de precisión</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Peinado de novias, recogidos y styling</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Práctica supervisada con modelos reales</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20y%20el%20plan%20de%20estudios%20del%20Diplomado%20Integral%20en%20Estilismo%20Profesional." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan de Estudios</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Curso 2: Colorimetría Avanzada -->
+        <article class="course-card" data-category="colorimetria">
+          <div class="course-card-header">
+            <span class="course-mode-badge">Intensivo</span>
+            <span class="course-duration">4 Semanas</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Colorimetría</span>
+            <h3 class="course-title">Masterclass de Colorimetría Avanzada &amp; Balayage</h3>
+            <p class="course-desc">
+              Especialización en neutralización, fondos de aclaración, técnicas de difuminado balayage, corrección de color y preservación de la fibra capilar.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Leyes del color y formulación personalizada</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Técnicas de falso crecimiento y contouring</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Corrección de tonos cobrizos y no deseados</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20y%20temario%20de%20la%20Masterclass%20de%20Colorimetr%C3%ADa%20Avanzada%20y%20Balayage." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan de Estudios</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Curso 3: Maquillaje Profesional -->
+        <article class="course-card" data-category="maquillaje">
+          <div class="course-card-header">
+            <span class="course-mode-badge">Presencial</span>
+            <span class="course-duration">3 Meses</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Maquillaje</span>
+            <h3 class="course-title">Certificación en Maquillaje Profesional</h3>
+            <p class="course-desc">
+              Aprenda técnicas de visagismo, piel blindada resistente al agua, maquillaje social, novias y maquillaje para fotografía y eventos de gala.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Preparación y tipología de piel</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Técnicas de ojos: smokey, cut crease y difuminados</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Manejo de portafolio y creación de marca</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20de%20la%20Certificaci%C3%B3n%20en%20Maquillaje%20Profesional." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan de Estudios</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Curso 4: Estructuras de Uñas -->
+        <article class="course-card" data-category="unas-mirada">
+          <div class="course-card-header">
+            <span class="course-mode-badge">Práctico</span>
+            <span class="course-duration">8 Semanas</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Uñas &amp; Nail Art</span>
+            <h3 class="course-title">Especialidad en Estructuras de Uñas &amp; Manicura Rusa</h3>
+            <p class="course-desc">
+              Formación completa en manicura combinada con torno, control del producto acrílico, polygel, nivelación con rubber base y diseños de salón.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Estructuras clásicas y modernas (Square, Almond, Coffin)</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Protocolo estricto de bioseguridad y esterilización</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Esmaltado perfecto bajo cutícula</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20de%20la%20Especialidad%20en%20Estructuras%20de%20U%C3%B1as." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan de Estudios</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Curso 5: Diseño de Mirada -->
+        <article class="course-card" data-category="unas-mirada">
+          <div class="course-card-header">
+            <span class="course-mode-badge">Intensivo</span>
+            <span class="course-duration">3 Semanas</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Cejas &amp; Pestañas</span>
+            <h3 class="course-title">Master en Diseño de Mirada: Cejas &amp; Pestañas</h3>
+            <p class="course-desc">
+              Domine el visagismo de cejas, laminado profesional, tinte con henna, lifting de pestañas queratinizado y aplicación técnica de extensiones clásicas.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Mapeo facial y arquitectura de cejas</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Lifting y botox capilar de pestañas</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Práctica directa en cabina profesional</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20del%20Master%20en%20Dise%C3%B1o%20de%20Mirada." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan de Estudios</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Curso 6: Peinado y Styling -->
+        <article class="course-card" data-category="estilismo">
+          <div class="course-card-header">
+            <span class="course-mode-badge">Práctico</span>
+            <span class="course-duration">4 Semanas</span>
+          </div>
+          <div class="course-card-body">
+            <span class="course-category-tag">Estilismo &amp; Cabello</span>
+            <h3 class="course-title">Especialidad en Peinado Social y de Novias</h3>
+            <p class="course-desc">
+              Técnicas contemporáneas de preparación del cabello, ondas al agua, textura rusa, trenzados artísticos y colocación de tocados y velos.
+            </p>
+            <ul class="course-topics-list">
+              <li class="course-topic-item"><span class="dot"></span><span>Fijación y durabilidad sin apelmazar</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Creación de volumen y estructuras sólidas</span></li>
+              <li class="course-topic-item"><span class="dot"></span><span>Montaje de estilismos para sesiones fotográficas</span></li>
+            </ul>
+            <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20del%20curso%20de%20Peinado%20Social%20y%20de%20Novias." target="_blank" rel="noopener noreferrer" class="btn-inquire">
+              <span>Solicitar Plan de Estudios</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <!-- Metodología de Formación -->
+    <section class="methodology-section" aria-label="Metodología de Estudio">
+      <div class="section-header" style="margin-bottom: 1rem;">
+        <span class="section-tag">Metodología Total Beauty</span>
+        <h2 class="section-title">El Estándar de Nuestra Formación</h2>
+      </div>
+
+      <div class="methodology-grid">
+        <div class="methodology-item">
+          <span class="methodology-number">01</span>
+          <h3 class="methodology-title">Práctica Clínica con Modelos</h3>
+          <p class="methodology-desc">
+            Cada alumno trabaja directamente con modelos reales bajo supervisión continua, adquiriendo seguridad técnica desde el primer módulo.
+          </p>
+        </div>
+
+        <div class="methodology-item">
+          <span class="methodology-number">02</span>
+          <h3 class="methodology-title">Materiales y Productos de Primer Nivel</h3>
+          <p class="methodology-desc">
+            Las clases se imparten con líneas profesionales reconocidas para que el estudiante aprenda con los insumos reales del mercado.
+          </p>
+        </div>
+
+        <div class="methodology-item">
+          <span class="methodology-number">03</span>
+          <h3 class="methodology-title">Mentoría y Formación de Negocio</h3>
+          <p class="methodology-desc">
+            Brindamos asesoría en cotización de servicios, atención al cliente, ética profesional y estrategias para abrir su propio espacio.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Banner de Inscripciones / Contacto WhatsApp -->
+    <section class="enrollment-banner" aria-label="Inscripciones Abiertas">
+      <h2 class="enrollment-title">Inscripciones Abiertas</h2>
+      <p class="enrollment-desc">
+        Los grupos se mantienen reducidos para garantizar un seguimiento personalizado. Póngase en contacto con nuestra coordinación académica para consultar fechas de inicio, costos y promociones vigentes.
+      </p>
+
+      <a href="https://api.whatsapp.com/send?text=Hola,%20deseo%20solicitar%20informes%20sobre%20las%20inscripciones%20y%20cursos%20de%20Total%20Beauty%20Academia." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <span>Solicitar Informes por WhatsApp</span>
+      </a>
+    </section>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="brand-footer animate-fade-in delay-3">
+      <div class="footer-social-links">
+        <a href="https://www.instagram.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram</span>
+        </a>
+
+        <a href="https://www.facebook.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+          <span>Facebook</span>
+        </a>
+      </div>
+
+      <p class="footer-copyright">
+        &copy; Total Beauty Salon &amp; Academia. Todos los derechos reservados.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Script de Interacción -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   
   <title>Total Beauty | Salón &amp; Academia</title>
-  <meta name="description" content="Bienvenido a Total Beauty Salon &amp; Academia. Servicios de belleza de alta gama y programas de formación profesional en estilismo y estética.">
+  <meta name="description" content="Total Beauty Salon &amp; Academia. Servicios de belleza y formación profesional en estilismo.">
   <meta name="theme-color" content="#070709">
 
   <!-- Favicon -->
@@ -38,7 +38,7 @@
           onerror="this.onerror=null; this.src='assets/images/logo.png';"
         >
         <h1 class="brand-title">TOTAL <span>BEAUTY</span></h1>
-        <p class="brand-tagline">Salón &amp; Academia de Alta Gama</p>
+        <p class="brand-tagline">Salón &amp; Academia</p>
       </a>
     </header>
 
@@ -46,25 +46,19 @@
     <section class="welcome-section animate-fade-in delay-1" aria-label="Mensaje de Bienvenida">
       <div class="welcome-badge">
         <span class="gold-dot"></span>
-        <span>Experiencia Exclusiva</span>
+        <span>Portal Oficial</span>
       </div>
 
-      <h2 class="welcome-heading">
-        Bienvenido a <span class="text-gold">Total Beauty</span>
-      </h2>
-
       <p class="welcome-description">
-        Le damos la más distinguida bienvenida a nuestro espacio, donde la elegancia, la técnica de autor y el servicio personalizado convergen. Seleccione el área que desea explorar el día de hoy:
+        Le damos la bienvenida a nuestro espacio. Seleccione la opción a la que desea ingresar:
       </p>
-
-      <p class="welcome-instruction">Seleccione su experiencia</p>
     </section>
 
-    <!-- Menú de Opciones: Salón y Academia -->
+    <!-- Menú de Opciones: Salón y Academia (Compacto) -->
     <main class="menu-container animate-fade-in delay-2" role="main">
       
       <!-- Opción 1: SALÓN -->
-      <article class="option-card" aria-label="Total Beauty Salón">
+      <div class="option-card" onclick="openModal('salon')" role="button" tabindex="0" aria-label="Ingresar a Total Beauty Salón">
         <div class="option-image-wrap">
           <img 
             src="assets/images/salon.jpg" 
@@ -74,55 +68,51 @@
             loading="lazy"
           >
           <div class="image-overlay"></div>
-          <span class="option-category-badge">Área Salón</span>
+          <span class="option-category-badge">Salón</span>
         </div>
 
         <div class="option-content">
-          <span class="option-subtitle">Servicios &amp; Atención de Autor</span>
-          <h3 class="option-title">
+          <span class="option-subtitle">Servicios &amp; Atención</span>
+          <h2 class="option-title">
             <span>Salón de Belleza</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
               <path d="M6 3v12"></path>
               <path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
               <path d="M6 21a2 2 0 0 1-2-2v-2h4v2a2 2 0 0 1-2 2z"></path>
             </svg>
-          </h3>
+          </h2>
 
           <p class="option-description">
-            Sublime su imagen con nuestros servicios de alta peluquería, colorimetría de precisión, estilismo, maquillaje social y tratamientos capilares avanzados en un entorno de absoluto confort y distinción.
+            Servicios de peluquería, diseño de color, maquillaje, spa capilar y tratamientos estéticos con atención personalizada.
           </p>
 
           <ul class="option-highlights" aria-label="Destacados de Salón">
             <li class="highlight-item">
               <span class="highlight-bullet"></span>
-              <span>Estilismo, Diseño y Colorimetría de Autor</span>
+              <span>Corte, Peinado y Colorimetría</span>
             </li>
             <li class="highlight-item">
               <span class="highlight-bullet"></span>
-              <span>Tratamientos Capilares y Spa Restaurativo</span>
+              <span>Tratamientos Capilares y Spa</span>
             </li>
             <li class="highlight-item">
               <span class="highlight-bullet"></span>
-              <span>Maquillaje Profesional y Cuidado Personal</span>
-            </li>
-            <li class="highlight-item">
-              <span class="highlight-bullet"></span>
-              <span>Atención y Asesoría Personalizada</span>
+              <span>Maquillaje Social y Novias</span>
             </li>
           </ul>
 
-          <button type="button" class="btn-action btn-salon" onclick="openModal('salon')" aria-label="Ingresar a Total Beauty Salón">
+          <div class="btn-action btn-salon">
             <span>Ingresar al Salón</span>
             <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
-          </button>
+          </div>
         </div>
-      </article>
+      </div>
 
-      <!-- Opción 2: ACADEMIA -->
-      <article class="option-card" aria-label="Total Beauty Academia">
+      <!-- Opción 2: ACADEMIA (Navega a academia.html) -->
+      <a href="academia.html" class="option-card" aria-label="Ingresar a Total Beauty Academia">
         <div class="option-image-wrap">
           <img 
             src="assets/images/academia.jpg" 
@@ -132,21 +122,21 @@
             loading="lazy"
           >
           <div class="image-overlay"></div>
-          <span class="option-category-badge">Área Academia</span>
+          <span class="option-category-badge">Academia</span>
         </div>
 
         <div class="option-content">
           <span class="option-subtitle">Formación &amp; Certificación</span>
-          <h3 class="option-title">
+          <h2 class="option-title">
             <span>Academia</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
               <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
               <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
             </svg>
-          </h3>
+          </h2>
 
           <p class="option-description">
-            Fórmese con los más altos estándares de la industria del estilismo y la cosmetología. Programas estructurados, diplomados especializados, masterclasses y práctica guiada orientada al éxito profesional.
+            Cursos, diplomados y certificaciones profesionales con práctica clínica guiada y técnicas de vanguardia en estilismo.
           </p>
 
           <ul class="option-highlights" aria-label="Destacados de Academia">
@@ -156,27 +146,23 @@
             </li>
             <li class="highlight-item">
               <span class="highlight-bullet"></span>
-              <span>Técnicas de Vanguardia y Tendencias Globales</span>
+              <span>Práctica con Modelos Reales</span>
             </li>
             <li class="highlight-item">
               <span class="highlight-bullet"></span>
-              <span>Práctica Guiada con Modelos Reales</span>
-            </li>
-            <li class="highlight-item">
-              <span class="highlight-bullet"></span>
-              <span>Mentoría Directa con Instructores Calificados</span>
+              <span>Masterclasses y Especialidades</span>
             </li>
           </ul>
 
-          <button type="button" class="btn-action btn-academia" onclick="openModal('academia')" aria-label="Ingresar a Total Beauty Academia">
+          <div class="btn-action btn-academia">
             <span>Ingresar a la Academia</span>
             <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
-          </button>
+          </div>
         </div>
-      </article>
+      </a>
 
     </main>
 
@@ -210,14 +196,11 @@
       <p class="footer-copyright">
         &copy; Total Beauty Salon &amp; Academia. Todos los derechos reservados.
       </p>
-      <p class="footer-motto">
-        Elegancia &bull; Maestría &bull; Distinción
-      </p>
     </footer>
 
   </div>
 
-  <!-- Ventana Modal de Interacción -->
+  <!-- Ventana Modal de Interacción para Salón -->
   <div id="optionsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-box">
       <button type="button" id="modalCloseBtn" class="modal-close-btn" aria-label="Cerrar ventana">
@@ -227,9 +210,9 @@
         </svg>
       </button>
 
-      <div id="modalTag" class="modal-tag">Total Beauty</div>
-      <h3 id="modalTitle" class="modal-title">Título de Opción</h3>
-      <p id="modalDesc" class="modal-description">Descripción detallada de la opción seleccionada.</p>
+      <div id="modalTag" class="modal-tag">Total Beauty Salón</div>
+      <h3 id="modalTitle" class="modal-title">Servicios de Salón</h3>
+      <p id="modalDesc" class="modal-description">Seleccione una opción para comunicarse con nuestro equipo:</p>
 
       <div id="modalLinksContainer" class="modal-links-list">
         <!-- Generado dinámicamente mediante script.js -->
