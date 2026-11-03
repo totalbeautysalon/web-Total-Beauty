@@ -16,6 +16,14 @@ echo.
 where git >nul 2>nul
 if errorlevel 1 goto :GIT_NOT_FOUND
 
+REM Actualizacion automatica del catalogo de fotos para la galeria de academia
+if exist "fotosacademia" (
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$f = 'fotosacademia'; $imgs = @(Get-ChildItem $f | Where-Object { $_.Extension -match '\.(jpg|jpeg|png|webp|JPG|JPEG|PNG|WEBP)$' } | Select-Object -ExpandProperty Name); if ($imgs.Count -gt 0) { $imgs | ConvertTo-Json | Set-Content (Join-Path $f 'manifest.json') -Encoding UTF8 }" >nul 2>nul
+)
+if exist "assets\fotosacademia" (
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$f = 'assets\fotosacademia'; $imgs = @(Get-ChildItem $f | Where-Object { $_.Extension -match '\.(jpg|jpeg|png|webp|JPG|JPEG|PNG|WEBP)$' } | Select-Object -ExpandProperty Name); if ($imgs.Count -gt 0) { $imgs | ConvertTo-Json | Set-Content (Join-Path $f 'manifest.json') -Encoding UTF8 }" >nul 2>nul
+)
+
 echo Verificando archivos modificados o nuevos...
 echo ----------------------------------------------------------------
 git status -s

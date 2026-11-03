@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let interstitialCanClose = false;
   let currentActiveStudent = null;
   let pendingChangeMatricula = null;
+  let currentGalleryPhotos = [];
+  let currentLightboxIndex = 0;
 
   // Inicialización
   init();
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function init() {
     await initInterstitial();
     await loadAcademyCourses();
+    await initAcademyGallery();
   }
 
   // ==========================================
@@ -379,12 +382,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Cierre global con tecla Escape (si el temporizador de 5s ya concluyó)
+  // Cierre global con tecla Escape y navegación de fotos en Lightbox
   document.addEventListener('keydown', (e) => {
+    const lightbox = document.getElementById('photoLightboxModal');
+    const isLightboxActive = lightbox && lightbox.style.display !== 'none';
+
     if (e.key === 'Escape') {
+      if (isLightboxActive) {
+        window.closePhotoLightbox();
+        return;
+      }
       if (interstitialCanClose) window.closeInterstitial();
       if (modalOverlay && modalOverlay.classList.contains('active')) window.closeModal();
       if (studentModal && studentModal.classList.contains('active')) window.closeStudentModal();
+    } else if (isLightboxActive) {
+      if (e.key === 'ArrowLeft') {
+        window.navigatePhotoLightbox(-1);
+      } else if (e.key === 'ArrowRight') {
+        window.navigatePhotoLightbox(1);
+      }
     }
   });
 
@@ -587,5 +603,189 @@ document.addEventListener('DOMContentLoaded', () => {
   function openBookingModal() {
     window.closeModal();
     openWhatsApp("Hola, solicito agendar una cita para servicios en Total Beauty Salón.");
+  }
+
+  // ==========================================
+  // 6. GALERÍA DE LA ACADEMIA (ESTILO TELÉFONO Y LIGHTBOX)
+  // ==========================================
+  async function initAcademyGallery() {
+    const grid = document.getElementById('phoneGalleryGrid');
+    if (!grid) return;
+
+    let photos = [];
+
+    // Intento 1: Cargar catálogo manifest.json generado automáticamente en fotosacademia
+    try {
+      const res = await fetch('fotosacademia/manifest.json?_cb=' + Date.now());
+      if (res.ok) {
+        const list = await res.json();
+        if (Array.isArray(list) && list.length > 0) {
+          photos = list.map(item => {
+            const name = typeof item === 'string' ? item : (item.name || item.src);
+            return name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`;
+          });
+        }
+      }
+    } catch (e) {
+      // Intento en assets/fotosacademia
+      try {
+        const res2 = await fetch('assets/fotosacademia/manifest.json?_cb=' + Date.now());
+        if (res2.ok) {
+          const list2 = await res2.json();
+          if (Array.isArray(list2) && list2.length > 0) {
+            photos = list2.map(item => {
+              const name = typeof item === 'string' ? item : (item.name || item.src);
+              return name.startsWith('assets/fotosacademia/') ? name : `assets/fotosacademia/${name}`;
+            });
+          }
+        }
+      } catch (err) {
+        // Continuar
+      }
+    }
+
+    // Intento 2: Consulta vía GitHub API pública
+    if (photos.length === 0) {
+      try {
+        const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia');
+        if (ghRes.ok) {
+          const ghList = await ghRes.json();
+          if (Array.isArray(ghList)) {
+            photos = ghList
+              .filter(f => f.type === 'file' && /\.(jpe?g|png|webp)$/i.test(f.name))
+              .map(f => f.path);
+          }
+        }
+      } catch (e) {
+        // Continuar
+      }
+    }
+
+    // Intento 3: Lista de respaldo de fotografías iniciales de fotosacademia
+    if (photos.length === 0) {
+      photos = [
+        "fotosacademia/foto01.jpg", "fotosacademia/foto02.jpg", "fotosacademia/foto03.jpg",
+        "fotosacademia/foto04.jpg", "fotosacademia/foto05.jpg", "fotosacademia/foto06.jpg",
+        "fotosacademia/foto07.jpg", "fotosacademia/foto08.jpg", "fotosacademia/foto09.jpg",
+        "fotosacademia/foto10.jpg", "fotosacademia/foto11.jpg", "fotosacademia/foto12.jpg"
+      ];
+    }
+
+    currentGalleryPhotos = photos;
+    renderPhoneGallery(photos);
+    setupLightboxEvents();
+  }
+
+  function renderPhoneGallery(photos) {
+    const grid = document.getElementById('phoneGalleryGrid');
+    const actionWrap = document.getElementById('galleryActionWrap');
+    if (!grid) return;
+
+    if (photos.length === 0) {
+      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #a6a6b0; font-size: 0.85rem; padding: 2.5rem 1rem;">Próximamente se publicarán fotos de la academia.</div>';
+      if (actionWrap) actionWrap.style.display = 'none';
+      return;
+    }
+
+    // Renderizar puras imágenes: las primeras 10 visibles, las restantes ocultas
+    grid.innerHTML = photos.map((src, index) => {
+      const isHidden = index >= 10;
+      const hiddenClass = isHidden ? ' gallery-hidden' : '';
+      return `
+        <div class="phone-gallery-item${hiddenClass}" onclick="openPhotoLightbox(${index})" role="button" tabindex="0" aria-label="Ver fotografía ${index + 1} en grande">
+          <img src="${escapeHtml(src)}" alt="Total Beauty Academia" class="phone-gallery-img" loading="lazy">
+        </div>
+      `;
+    }).join('');
+
+    // Mostrar botón 'Ver Más' únicamente si hay más de 10 imágenes
+    if (actionWrap) {
+      actionWrap.style.display = photos.length > 10 ? 'flex' : 'none';
+    }
+  }
+
+  window.showAllGalleryPhotos = function () {
+    const hiddenItems = document.querySelectorAll('.phone-gallery-item.gallery-hidden');
+    hiddenItems.forEach(item => {
+      item.classList.remove('gallery-hidden');
+      item.style.animation = 'fadeIn 0.35s ease forwards';
+    });
+
+    const actionWrap = document.getElementById('galleryActionWrap');
+    if (actionWrap) actionWrap.style.display = 'none';
+  };
+
+  window.openPhotoLightbox = function (index) {
+    if (!currentGalleryPhotos || currentGalleryPhotos.length === 0) return;
+    if (index < 0) index = 0;
+    if (index >= currentGalleryPhotos.length) index = currentGalleryPhotos.length - 1;
+
+    currentLightboxIndex = index;
+    const modal = document.getElementById('photoLightboxModal');
+    const img = document.getElementById('lightboxLargeImg');
+    const counter = document.getElementById('lightboxCounter');
+
+    if (img) {
+      img.src = currentGalleryPhotos[index];
+    }
+    if (counter) {
+      counter.textContent = `Foto ${index + 1} de ${currentGalleryPhotos.length}`;
+    }
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  window.closePhotoLightbox = function () {
+    const modal = document.getElementById('photoLightboxModal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  };
+
+  window.navigatePhotoLightbox = function (direction) {
+    if (!currentGalleryPhotos || currentGalleryPhotos.length <= 1) return;
+    const total = currentGalleryPhotos.length;
+    const nextIndex = (currentLightboxIndex + direction + total) % total;
+    window.openPhotoLightbox(nextIndex);
+  };
+
+  function setupLightboxEvents() {
+    const modal = document.getElementById('photoLightboxModal');
+    const container = document.getElementById('lightboxImageContainer');
+
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target === container) {
+          window.closePhotoLightbox();
+        }
+      });
+
+      // Gestos de deslizamiento táctil (swipe en teléfonos)
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      modal.addEventListener('touchstart', (e) => {
+        if (e.changedTouches && e.changedTouches.length > 0) {
+          touchStartX = e.changedTouches[0].screenX;
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchend', (e) => {
+        if (e.changedTouches && e.changedTouches.length > 0) {
+          touchEndX = e.changedTouches[0].screenX;
+          const diff = touchEndX - touchStartX;
+          if (Math.abs(diff) > 45) {
+            if (diff < 0) {
+              window.navigatePhotoLightbox(1);
+            } else {
+              window.navigatePhotoLightbox(-1);
+            }
+          }
+        }
+      }, { passive: true });
+    }
   }
 });
