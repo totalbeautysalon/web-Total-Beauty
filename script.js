@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 6. GALERÍA DE LA ACADEMIA (ESTILO TELÉFONO Y LIGHTBOX)
+  // 6. GALERÍA DE LA ACADEMIA (DETECCIÓN DINÁMICA DE FOTOS Y LIGHTBOX)
   // ==========================================
   async function initAcademyGallery() {
     const grid = document.getElementById('phoneGalleryGrid');
@@ -614,66 +614,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let photos = [];
 
-    // Intento 1: Cargar catálogo manifest.json generado automáticamente en fotosacademia
+    // 1. Cargar catálogo manifest.json en fotosacademia
     try {
       const res = await fetch('fotosacademia/manifest.json?_cb=' + Date.now());
       if (res.ok) {
-        const list = await res.json();
-        if (Array.isArray(list) && list.length > 0) {
-          photos = list.map(item => {
-            const name = typeof item === 'string' ? item : (item.name || item.src);
-            return name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`;
-          });
+        const raw = await res.json();
+        const list = Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+        const valid = list.filter(item => typeof item === 'string' && /\.(jpe?g|png|webp|gif)$/i.test(item));
+        if (valid.length > 0) {
+          photos = valid.map(name => name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`);
         }
       }
     } catch (e) {
-      // Intento en assets/fotosacademia
-      try {
-        const res2 = await fetch('assets/fotosacademia/manifest.json?_cb=' + Date.now());
-        if (res2.ok) {
-          const list2 = await res2.json();
-          if (Array.isArray(list2) && list2.length > 0) {
-            photos = list2.map(item => {
-              const name = typeof item === 'string' ? item : (item.name || item.src);
-              return name.startsWith('assets/fotosacademia/') ? name : `assets/fotosacademia/${name}`;
-            });
-          }
-        }
-      } catch (err) {
-        // Continuar
-      }
+      // Continuar al siguiente método si no está disponible
     }
 
-    // Intento 2: Consulta vía GitHub API pública
+    // 2. Consulta en tiempo real a la API de GitHub (para el sitio publicado en GitHub Pages)
     if (photos.length === 0) {
       try {
-        const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia');
+        const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia?_cb=' + Date.now(), {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
         if (ghRes.ok) {
           const ghList = await ghRes.json();
           if (Array.isArray(ghList)) {
             photos = ghList
-              .filter(f => f.type === 'file' && /\.(jpe?g|png|webp)$/i.test(f.name))
-              .map(f => f.path);
+              .filter(f => f.type === 'file' && /\.(jpe?g|png|webp|gif)$/i.test(f.name))
+              .map(f => f.path || `fotosacademia/${f.name}`);
           }
         }
       } catch (e) {
-        // Continuar
+        // Continuar si la red o API no responde
       }
     }
 
-    // Intento 3: Lista de respaldo de fotografías iniciales de fotosacademia
+    // 3. Detección activa de archivos reales existentes (solo fotos que realmente carguen)
     if (photos.length === 0) {
-      photos = [
-        "fotosacademia/foto01.jpg", "fotosacademia/foto02.jpg", "fotosacademia/foto03.jpg",
-        "fotosacademia/foto04.jpg", "fotosacademia/foto05.jpg", "fotosacademia/foto06.jpg",
-        "fotosacademia/foto07.jpg", "fotosacademia/foto08.jpg", "fotosacademia/foto09.jpg",
-        "fotosacademia/foto10.jpg", "fotosacademia/foto11.jpg", "fotosacademia/foto12.jpg"
-      ];
+      photos = await probeExistingPhotos();
     }
 
     currentGalleryPhotos = photos;
     renderPhoneGallery(photos);
     setupLightboxEvents();
+  }
+
+  async function probeExistingPhotos() {
+    const candidates = [];
+    for (let i = 1; i <= 50; i++) {
+      const pad = String(i).padStart(2, '0');
+      candidates.push(`fotosacademia/foto${pad}.jpg`);
+      candidates.push(`fotosacademia/foto${pad}.png`);
+      candidates.push(`fotosacademia/foto${pad}.webp`);
+      candidates.push(`fotosacademia/foto${i}.jpg`);
+      candidates.push(`fotosacademia/foto${i}.png`);
+      candidates.push(`fotosacademia/foto${i}.webp`);
+      candidates.push(`fotosacademia/${i}.jpg`);
+      candidates.push(`fotosacademia/${i}.png`);
+    }
+
+    const testImg = (src) => new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(src);
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
+
+    const results = await Promise.all(candidates.map(testImg));
+    return [...new Set(results.filter(Boolean))];
   }
 
   function renderPhoneGallery(photos) {
