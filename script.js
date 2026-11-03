@@ -614,22 +614,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let photos = [];
 
-    // 1. Cargar catálogo manifest.json en fotosacademia
-    try {
-      const res = await fetch('fotosacademia/manifest.json?_cb=' + Date.now());
-      if (res.ok) {
-        const raw = await res.json();
-        const list = Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-        const valid = list.filter(item => typeof item === 'string' && /\.(jpe?g|png|webp|gif)$/i.test(item));
-        if (valid.length > 0) {
-          photos = valid.map(name => name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`);
-        }
-      }
-    } catch (e) {
-      // Continuar al siguiente método si no está disponible
+    // Prioridad 1: Catálogo precargado de fotosacademia/galeria.js (funciona tanto en web como en apertura local)
+    if (window.TOTAL_BEAUTY_GALERIA && Array.isArray(window.TOTAL_BEAUTY_GALERIA) && window.TOTAL_BEAUTY_GALERIA.length > 0) {
+      photos = window.TOTAL_BEAUTY_GALERIA
+        .filter(item => typeof item === 'string' && /\.(jpe?g|png|webp|gif)$/i.test(item))
+        .map(name => name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`);
     }
 
-    // 2. Consulta en tiempo real a la API de GitHub (para el sitio publicado en GitHub Pages)
+    // Prioridad 2: Cargar catálogo manifest.json en fotosacademia (con limpieza de BOM \uFEFF)
+    if (photos.length === 0) {
+      try {
+        const res = await fetch('fotosacademia/manifest.json?_cb=' + Date.now());
+        if (res.ok) {
+          const text = await res.text();
+          const cleanText = text.replace(/^\uFEFF/, '').trim();
+          const raw = JSON.parse(cleanText);
+          const list = Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+          const valid = list.filter(item => typeof item === 'string' && /\.(jpe?g|png|webp|gif)$/i.test(item));
+          if (valid.length > 0) {
+            photos = valid.map(name => name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`);
+          }
+        }
+      } catch (e) {
+        // Continuar al siguiente método si la lectura directa falla
+      }
+    }
+
+    // Prioridad 3: Consulta en tiempo real a la API de GitHub
     if (photos.length === 0) {
       try {
         const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia?_cb=' + Date.now(), {
@@ -644,11 +655,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       } catch (e) {
-        // Continuar si la red o API no responde
+        // Continuar si hay restricción de red
       }
     }
 
-    // 3. Detección activa de archivos reales existentes (solo fotos que realmente carguen)
+    // Prioridad 4: Detección activa de archivos reales existentes (solo fotos que realmente carguen)
     if (photos.length === 0) {
       photos = await probeExistingPhotos();
     }

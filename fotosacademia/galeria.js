@@ -1,0 +1,10 @@
+window.TOTAL_BEAUTY_GALERIA = [
+    "foto01.jpg",
+    "IMG_9124.JPG",
+    "IMG_9125.JPG",
+    "IMG_9126.JPG",
+    "IMG_9128.JPG",
+    "IMG_9129.JPG",
+    "IMG_9130.JPG",
+    "IMG_9132.JPG"
+];
