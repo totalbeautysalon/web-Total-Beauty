@@ -15,6 +15,43 @@ document.addEventListener('DOMContentLoaded', () => {
     whatsappDisplay: "5650560824"
   };
 
+  // Claves y tiempo de espera para control de frecuencia de anuncios (1 hora)
+  const STORAGE_KEYS = {
+    ACADEMY_VIDEO: 'tb_academy_video_last_shown',
+    INDEX_ANNOUNCEMENT: 'tb_index_announcement_last_shown'
+  };
+  const ANNOUNCEMENT_COOLDOWN_MS = 60 * 60 * 1000; // 1 hora (3,600,000 milisegundos)
+
+  function isAnnouncementOnCooldown(storageKey) {
+    try {
+      const lastShown = localStorage.getItem(storageKey);
+      if (!lastShown) return false;
+      const elapsed = Date.now() - parseInt(lastShown, 10);
+      return !isNaN(elapsed) && elapsed < ANNOUNCEMENT_COOLDOWN_MS;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markAnnouncementShown(storageKey) {
+    try {
+      localStorage.setItem(storageKey, Date.now().toString());
+    } catch (e) {
+      // Ignorar si el almacenamiento local está restringido
+    }
+  }
+
+  // Utilidad global en consola para reiniciar tiempos de espera durante pruebas
+  window.resetAnnouncementCooldowns = function () {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.ACADEMY_VIDEO);
+      localStorage.removeItem(STORAGE_KEYS.INDEX_ANNOUNCEMENT);
+      console.log('Tiempos de espera de anuncios reiniciados exitosamente.');
+    } catch (e) {
+      console.warn('No se pudo acceder a localStorage:', e);
+    }
+  };
+
   let interstitialTimerInterval = null;
   let interstitialCanClose = false;
   let videoTimerInterval = null;
@@ -42,6 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoEl = document.getElementById('academyPresentationVideo');
     if (!videoModal || !videoEl) return;
 
+    // Regla de frecuencia: Si ya se mostró hoy, no volver a mostrar hasta dentro de 1 hora
+    if (isAnnouncementOnCooldown(STORAGE_KEYS.ACADEMY_VIDEO)) {
+      return;
+    }
+
     // Cierre automático al finalizar la reproducción completa del video
     videoEl.onended = () => {
       window.closeAcademyVideoModal(true);
@@ -63,26 +105,71 @@ document.addEventListener('DOMContentLoaded', () => {
   function openAcademyVideoModal() {
     const videoModal = document.getElementById('academyVideoModal');
     const videoEl = document.getElementById('academyPresentationVideo');
-    if (!videoModal) return;
+    const promptOverlay = document.getElementById('videoAudioPromptOverlay');
+    if (!videoModal || !videoEl) return;
+
+    // Registrar marca de tiempo de visualización para el límite de 1 hora
+    markAnnouncementShown(STORAGE_KEYS.ACADEMY_VIDEO);
 
     videoModal.style.display = 'flex';
     void videoModal.offsetWidth;
     videoModal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
+    // Iniciar siempre sin silencio para que reproduzca audio si el navegador lo permite
+    videoEl.muted = false;
+    videoEl.currentTime = 0;
+
+    // Ocultar capa de aviso de audio por defecto
+    if (promptOverlay) {
+      promptOverlay.style.display = 'none';
+    }
+
+    // Iniciar temporizador de 5 segundos
     startVideoCountdown();
 
+    const playPromise = videoEl.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        // Reproducción con audio automática exitosa sin requerir toque
+        if (promptOverlay) {
+          promptOverlay.style.display = 'none';
+        }
+      }).catch(() => {
+        // El navegador bloqueó sonido automático por política de interacción previa:
+        // Pausar y mostrar el aviso elegante para tocar y reproducir con audio
+        videoEl.pause();
+        if (promptOverlay) {
+          promptOverlay.style.display = 'flex';
+        }
+      });
+    }
+  }
+
+  window.startAcademyVideoWithAudio = function () {
+    const promptOverlay = document.getElementById('videoAudioPromptOverlay');
+    const videoEl = document.getElementById('academyPresentationVideo');
+
+    if (promptOverlay) {
+      promptOverlay.style.display = 'none';
+    }
+
     if (videoEl) {
-      // Iniciar reproducción; si las políticas del navegador bloquean el sonido automático, continuar silenciado
+      videoEl.muted = false;
+      videoEl.currentTime = 0;
       const playPromise = videoEl.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
+          // Si el dispositivo tiene restricciones estrictas adicionales
           videoEl.muted = true;
           videoEl.play().catch(() => {});
         });
       }
     }
-  }
+
+    // Reiniciar la cuenta regresiva de 5 segundos al comenzar la reproducción con audio
+    startVideoCountdown();
+  };
 
   function startVideoCountdown() {
     const countdownEl = document.getElementById('videoCountdownText');
@@ -121,10 +208,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const videoModal = document.getElementById('academyVideoModal');
     const videoEl = document.getElementById('academyPresentationVideo');
+    const promptOverlay = document.getElementById('videoAudioPromptOverlay');
 
     // Pausar inmediatamente el video para que el audio no continúe sonando
     if (videoEl) {
       videoEl.pause();
+    }
+
+    if (promptOverlay) {
+      promptOverlay.style.display = 'none';
     }
 
     if (videoTimerInterval) {
@@ -146,6 +238,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function initInterstitial() {
     const overlay = document.getElementById('interstitialOverlay');
     if (!overlay) return;
+
+    // Regla de frecuencia: Si ya se mostró hoy, no volver a mostrar hasta dentro de 1 hora
+    if (isAnnouncementOnCooldown(STORAGE_KEYS.INDEX_ANNOUNCEMENT)) {
+      return;
+    }
 
     let data;
     if (typeof TB_FIREBASE !== 'undefined') {
@@ -191,6 +288,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function openInterstitialModal() {
     const overlay = document.getElementById('interstitialOverlay');
     if (!overlay) return;
+
+    // Registrar marca de tiempo de visualización para el límite de 1 hora
+    markAnnouncementShown(STORAGE_KEYS.INDEX_ANNOUNCEMENT);
 
     overlay.style.display = 'flex';
     overlay.classList.add('active');

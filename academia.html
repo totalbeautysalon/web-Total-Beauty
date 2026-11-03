@@ -52,6 +52,22 @@
         >
           Su navegador no soporta reproducción de video HTML5.
         </video>
+
+        <!-- Capa de Activación de Audio (si el navegador bloquea sonido automático sin interacción) -->
+        <div id="videoAudioPromptOverlay" class="video-audio-prompt-overlay" style="display: none;" onclick="startAcademyVideoWithAudio()">
+          <div class="video-audio-prompt-box">
+            <div class="video-audio-prompt-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+            </div>
+            <div class="video-audio-prompt-info">
+              <span class="video-audio-prompt-title">Toca para reproducir con audio</span>
+              <span class="video-audio-prompt-subtitle">Presentación de Total Beauty Academia</span>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>

@@ -386,6 +386,86 @@ select,
   outline: none;
 }
 
+/* Capa de Activación Táctil para Audio */
+.video-audio-prompt-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 4, 7, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  z-index: 20;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.video-audio-prompt-box {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  background: linear-gradient(135deg, rgba(24, 24, 30, 0.96) 0%, rgba(10, 10, 14, 0.98) 100%);
+  border: 1px solid var(--gold-primary);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 25px rgba(212, 175, 55, 0.28);
+  padding: 0.95rem 1.6rem;
+  border-radius: 40px;
+  color: #ffffff;
+  transition: all 0.25s ease;
+  animation: pulseGoldGlow 2.4s infinite ease-in-out;
+  user-select: none;
+}
+
+.video-audio-prompt-box:hover {
+  transform: scale(1.03);
+  border-color: var(--gold-light);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 175, 55, 0.45);
+}
+
+.video-audio-prompt-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.16);
+  border: 1px solid var(--gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-primary);
+  flex-shrink: 0;
+}
+
+.video-audio-prompt-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.video-audio-prompt-title {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.video-audio-prompt-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--gold-light);
+  opacity: 0.85;
+}
+
+@keyframes pulseGoldGlow {
+  0%, 100% {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 175, 55, 0.22);
+  }
+  50% {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 32px rgba(212, 175, 55, 0.45);
+  }
+}
+
 @media (max-width: 768px) {
   .academy-video-overlay {
     padding: 0.75rem;
@@ -396,6 +476,21 @@ select,
   }
   .academy-presentation-video {
     max-height: 65vh;
+  }
+  .video-audio-prompt-box {
+    padding: 0.8rem 1.15rem;
+    gap: 0.85rem;
+    border-radius: 20px;
+  }
+  .video-audio-prompt-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .video-audio-prompt-title {
+    font-size: 0.82rem;
+  }
+  .video-audio-prompt-subtitle {
+    font-size: 0.68rem;
   }
 }
 
