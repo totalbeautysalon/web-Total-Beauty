@@ -604,7 +604,7 @@ body {
   margin-bottom: 1.75rem;
 }
 
-/* Indicadores Clave de Academia */
+/* Indicadores Clave de Academia: 90% Práctico, 10% Teórico */
 .academia-metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -644,7 +644,7 @@ body {
   color: var(--text-muted);
 }
 
-/* Sección de Cursos y Diplomados */
+/* Sección de Cursos */
 .section-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -832,7 +832,7 @@ body {
   box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
 }
 
-/* Sección de Metodología y Ventajas */
+/* Metodología: 90% Práctica, 10% Teoría, Constancia de Finalización */
 .methodology-section {
   background: rgba(13, 13, 18, 0.6);
   border: 1px solid var(--gold-border);
@@ -875,7 +875,7 @@ body {
   font-weight: 300;
 }
 
-/* Banner de Contacto / Inscripciones */
+/* Banner de Inscripciones / Contacto WhatsApp */
 .enrollment-banner {
   text-align: center;
   background: linear-gradient(180deg, rgba(20, 20, 26, 0.8) 0%, rgba(13, 13, 18, 0.95) 100%);
@@ -945,10 +945,10 @@ body {
 }
 
 /* ==========================================================================
-   MODAL, FORMULARIO DE ALUMNAs Y PIE DE PÁGINA
+   MODALES Y PORTAL DE ALUMNAS
    ========================================================================== */
 
-/* Modal Emergente */
+/* Modal Base */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1063,6 +1063,16 @@ body {
   transform: translateX(3px);
 }
 
+/* Vistas Interactivas del Portal de Alumnas */
+.student-portal-view {
+  display: none;
+}
+
+.student-portal-view.active {
+  display: block;
+  animation: fadeIn 0.4s ease forwards;
+}
+
 /* Campos de Formulario: Modal de Alumnas */
 .student-form-group {
   margin-bottom: 1.15rem;
@@ -1112,6 +1122,7 @@ body {
   cursor: pointer;
   transition: var(--transition-smooth);
   box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+  margin-top: 0.5rem;
 }
 
 .btn-student-submit:hover {
@@ -1120,6 +1131,80 @@ body {
   transform: translateY(-2px);
 }
 
+.btn-student-secondary {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-top: 0.75rem;
+}
+
+.btn-student-secondary:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+/* Mensajes de Alerta y Notificación en el Modal */
+.modal-alert-box {
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.78rem;
+  color: #ececf2;
+  line-height: 1.5;
+}
+
+.modal-alert-box.alert-warning {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.12);
+  color: #fff6db;
+}
+
+/* Tarjeta de Información de Alumna Autenticada */
+.student-profile-card {
+  background: #14141c;
+  border: 1px solid var(--gold-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.student-profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  font-size: 0.8rem;
+}
+
+.student-profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-label {
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.profile-value {
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+/* Enlaces de Ayuda y Administrador */
 .student-help-link {
   display: block;
   margin-top: 1.25rem;
@@ -1129,6 +1214,7 @@ body {
   letter-spacing: 0.04em;
   transition: var(--transition-smooth);
   text-align: center;
+  line-height: 1.6;
 }
 
 .student-help-link span {
@@ -1138,6 +1224,25 @@ body {
 
 .student-help-link:hover {
   color: #ffffff;
+}
+
+.admin-trigger-link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border-bottom: 1px dotted rgba(212, 175, 55, 0.3);
+  padding-bottom: 2px;
+  cursor: pointer;
+}
+
+.admin-trigger-link:hover {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold-primary);
 }
 
 /* Footer Minimalista */
