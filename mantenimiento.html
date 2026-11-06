@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Total Beauty | Renovando Nuestra Experiencia</title>
+  <meta name="description" content="Total Beauty Salón &amp; Academia se encuentra en mantenimiento temporal. Nuestras instalaciones físicas y atención por WhatsApp continúan operando con normalidad.">
+  <meta name="theme-color" content="#070709">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Fuentes Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-mantenimiento">
+
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Capa de Notificación de Reanudación Automática -->
+  <div id="reconnectToast" class="maintenance-reconnect-toast" style="display: none;" role="status" aria-live="polite">
+    <div class="reconnect-content">
+      <span class="gold-pulse-dot"></span>
+      <span>¡Plataforma nuevamente disponible! Redirigiendo al portal...</span>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal del Sitio -->
+  <div class="site-wrapper maintenance-wrapper">
+    
+    <!-- Encabezado y Marca -->
+    <header class="brand-header animate-fade-in">
+      <div class="brand-logo-container" aria-label="Total Beauty Salón &amp; Academia">
+        <img 
+          src="assets/images/logo.png" 
+          alt="Total Beauty Salón &amp; Academia" 
+          class="brand-logo-img"
+          onerror="this.onerror=null; this.src='assets/images/logoheader.png';"
+        >
+        <p class="brand-tagline">Salón &amp; Academia</p>
+      </div>
+    </header>
+
+    <!-- Tarjeta Principal de Mantenimiento -->
+    <main class="maintenance-card animate-fade-in delay-1" role="main">
+
+      <!-- Badge Superior de Estado -->
+      <div class="maintenance-status-badge">
+        <span class="gold-pulse-dot"></span>
+        <span>Mantenimiento Programado</span>
+      </div>
+
+      <!-- ANIMACIÓN DE SALÓN DE BELLEZA (SVG PURO VECTORIAL DE ALTA GAMA) -->
+      <div class="salon-animation-container" aria-hidden="true">
+        <svg 
+          class="salon-svg-scene" 
+          viewBox="0 0 480 300" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <!-- Gradientes de Oro y Metal -->
+            <linearGradient id="goldGradientMain" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fdf4cf" />
+              <stop offset="35%" stop-color="#d4af37" />
+              <stop offset="70%" stop-color="#aa8420" />
+              <stop offset="100%" stop-color="#f4e08c" />
+            </linearGradient>
+
+            <linearGradient id="goldSoft" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#f4e08c" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#9a7618" stop-opacity="0.8" />
+            </linearGradient>
+
+            <radialGradient id="mirrorAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#d4af37" stop-opacity="0.22" />
+              <stop offset="65%" stop-color="#d4af37" stop-opacity="0.05" />
+              <stop offset="100%" stop-color="#070709" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="bulbAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff8db" stop-opacity="0.9" />
+              <stop offset="40%" stop-color="#d4af37" stop-opacity="0.5" />
+              <stop offset="100%" stop-color="#070709" stop-opacity="0" />
+            </radialGradient>
+
+            <linearGradient id="mirrorGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#14141d" />
+              <stop offset="50%" stop-color="#1d1d28" />
+              <stop offset="100%" stop-color="#0c0c12" />
+            </linearGradient>
+
+            <linearGradient id="glassShineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+              <stop offset="50%" stop-color="#ffffff" stop-opacity="0.18" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </linearGradient>
+
+            <linearGradient id="dysonBody" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2a2a35" />
+              <stop offset="50%" stop-color="#161620" />
+              <stop offset="100%" stop-color="#0e0e14" />
+            </linearGradient>
+
+            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Halo Ambiental Central -->
+          <ellipse cx="240" cy="145" rx="190" ry="120" fill="url(#mirrorAura)" />
+
+          <!-- Base / Superficie del Tocador de Mármol Oscuro -->
+          <ellipse cx="240" cy="265" rx="180" ry="18" fill="#111118" stroke="url(#goldGradientMain)" stroke-width="1.2" stroke-opacity="0.4" />
+          <line x1="80" y1="265" x2="400" y2="265" stroke="url(#goldGradientMain)" stroke-width="1.5" stroke-opacity="0.6" />
+
+          <!-- ==============================================
+               1. ESPEJO DE TOCADOR OVALADO DE ALTA GAMA
+               ============================================== -->
+          <g class="vanity-mirror-group">
+            <!-- Marco Exterior Doble -->
+            <ellipse cx="240" cy="140" rx="98" ry="118" fill="none" stroke="url(#goldGradientMain)" stroke-width="3" filter="url(#softGlow)" />
+            <ellipse cx="240" cy="140" rx="90" ry="110" fill="none" stroke="url(#goldSoft)" stroke-width="1.2" stroke-dasharray="3 3" />
+            
+            <!-- Cristal del Espejo -->
+            <ellipse cx="240" cy="140" rx="86" ry="106" fill="url(#mirrorGlass)" />
+
+            <!-- Reflejo Dinámico del Cristal (Barra de brillo que cruza) -->
+            <g clip-path="url(#mirrorClip)">
+              <clipPath id="mirrorClip">
+                <ellipse cx="240" cy="140" rx="86" ry="106" />
+              </clipPath>
+              <rect class="mirror-glass-shine" x="140" y="20" width="45" height="250" fill="url(#glassShineGrad)" transform="rotate(30 240 140)" />
+            </g>
+
+            <!-- Luces de Tocador Alrededor del Marco (Vanity Bulbs) -->
+            <g class="vanity-bulbs">
+              <circle cx="240" cy="22" r="4.5" fill="#fff9e6" class="bulb-pulse b1" />
+              <circle cx="240" cy="22" r="10" fill="url(#bulbAura)" class="bulb-pulse b1" />
+
+              <circle cx="318" cy="62" r="4.5" fill="#fff9e6" class="bulb-pulse b2" />
+              <circle cx="318" cy="62" r="10" fill="url(#bulbAura)" class="bulb-pulse b2" />
+
+              <circle cx="338" cy="140" r="4.5" fill="#fff9e6" class="bulb-pulse b3" />
+              <circle cx="338" cy="140" r="10" fill="url(#bulbAura)" class="bulb-pulse b3" />
+
+              <circle cx="318" cy="218" r="4.5" fill="#fff9e6" class="bulb-pulse b4" />
+              <circle cx="318" cy="218" r="10" fill="url(#bulbAura)" class="bulb-pulse b4" />
+
+              <circle cx="240" cy="258" r="4.5" fill="#fff9e6" class="bulb-pulse b5" />
+              <circle cx="240" cy="258" r="10" fill="url(#bulbAura)" class="bulb-pulse b5" />
+
+              <circle cx="162" cy="218" r="4.5" fill="#fff9e6" class="bulb-pulse b6" />
+              <circle cx="162" cy="218" r="10" fill="url(#bulbAura)" class="bulb-pulse b6" />
+
+              <circle cx="142" cy="140" r="4.5" fill="#fff9e6" class="bulb-pulse b7" />
+              <circle cx="142" cy="140" r="10" fill="url(#bulbAura)" class="bulb-pulse b7" />
+
+              <circle cx="162" cy="62" r="4.5" fill="#fff9e6" class="bulb-pulse b8" />
+              <circle cx="162" cy="62" r="10" fill="url(#bulbAura)" class="bulb-pulse b8" />
+            </g>
+          </g>
+
+          <!-- ==============================================
+               2. SECADORA DE ESTILISMO PROFESIONAL (IZQUIERDA)
+               ============================================== -->
+          <g class="salon-dryer-group" transform="translate(65, 140)">
+            <!-- Cuerpo Cilíndrico de Secadora -->
+            <path d="M25 35 L75 35 Q85 35 85 45 L85 55 Q85 65 75 65 L25 65 Z" fill="url(#dysonBody)" stroke="url(#goldGradientMain)" stroke-width="1.5" />
+            <!-- Anillo Dorado Trasero -->
+            <ellipse cx="25" cy="50" rx="5" ry="15" fill="#1b1b24" stroke="url(#goldGradientMain)" stroke-width="1.5" />
+            <circle cx="25" cy="50" r="2.5" fill="#d4af37" />
+            <!-- Boquilla Delantera -->
+            <path d="M85 40 L102 36 L102 64 L85 60 Z" fill="url(#dysonBody)" stroke="url(#goldGradientMain)" stroke-width="1.2" />
+            <!-- Mango Ergonómico -->
+            <path d="M48 65 L44 112 Q44 118 50 118 L56 118 Q62 118 62 112 L58 65 Z" fill="url(#dysonBody)" stroke="url(#goldGradientMain)" stroke-width="1.4" />
+            <line x1="53" y1="80" x2="53" y2="92" stroke="#d4af37" stroke-width="1.5" />
+            
+            <!-- Flujo de Viento / Líneas de Aire Cálido Dorado -->
+            <g class="dryer-wind-stream">
+              <path class="wind-line w1" d="M106 42 Q125 36 148 44 T175 42" stroke="url(#goldGradientMain)" stroke-width="1.4" stroke-linecap="round" fill="none" />
+              <path class="wind-line w2" d="M106 50 Q130 52 155 48 T182 52" stroke="url(#goldGradientMain)" stroke-width="1.8" stroke-linecap="round" fill="none" />
+              <path class="wind-line w3" d="M106 58 Q125 64 148 56 T175 60" stroke="url(#goldGradientMain)" stroke-width="1.4" stroke-linecap="round" fill="none" />
+            </g>
+          </g>
+
+          <!-- ==============================================
+               3. PEINE PROFESIONAL DE PRECISIÓN (CENTRO-BASE)
+               ============================================== -->
+          <g class="salon-comb-group" transform="translate(180, 245) rotate(-6)">
+            <!-- Lomo del Peine -->
+            <rect x="0" y="0" width="115" height="7" rx="3.5" fill="url(#goldGradientMain)" />
+            <!-- Dientes del Peine -->
+            <g fill="url(#goldSoft)">
+              <rect x="10" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="16" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="22" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="28" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="34" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="40" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="46" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="52" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="58" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="64" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="70" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="76" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="82" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="88" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="94" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="100" y="7" width="1.6" height="15" rx="0.8" />
+            </g>
+          </g>
+
+          <!-- ==============================================
+               4. TIJERAS PROFESIONALES DE ESTILISMO (DERECHA)
+               ANIMACIÓN RÍTMICA DE CORTE SUAVE Y ELEGANTE
+               ============================================== -->
+          <g class="salon-scissors-assembly" transform="translate(345, 155)">
+            
+            <!-- Hoja y Mango Superior -->
+            <g class="scissor-blade-top">
+              <!-- Hoja Afilada -->
+              <path d="M0 0 L-68 -22 Q-66 -18 0 4 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
+              <!-- Mango y Anillo Superior -->
+              <path d="M0 0 L25 15 Q30 20 40 18 Q48 14 46 4 Q44 -6 34 -6 Q24 -6 20 4 Z" fill="none" stroke="url(#goldGradientMain)" stroke-width="3" stroke-linecap="round" />
+              <!-- Apoya Dedos Ergonómico -->
+              <path d="M44 14 Q52 18 55 24" fill="none" stroke="url(#goldGradientMain)" stroke-width="2.2" stroke-linecap="round" />
+            </g>
+
+            <!-- Hoja y Mango Inferior -->
+            <g class="scissor-blade-bottom">
+              <!-- Hoja Afilada -->
+              <path d="M0 0 L-68 18 Q-66 14 0 -4 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
+              <!-- Mango y Anillo Inferior -->
+              <path d="M0 0 L25 -15 Q30 -20 40 -18 Q48 -14 46 -4 Q44 6 34 6 Q24 6 20 -4 Z" fill="none" stroke="url(#goldGradientMain)" stroke-width="3" stroke-linecap="round" />
+            </g>
+
+            <!-- Tornillo Pivote Central Dorado de Precisión -->
+            <circle cx="0" cy="0" r="5" fill="#fdf4cf" stroke="#aa8420" stroke-width="1.2" />
+            <circle cx="0" cy="0" r="2" fill="#070709" />
+          </g>
+
+          <!-- ==============================================
+               5. DESTELLOS Y ESTRELLAS DORADAS (SPARKLES)
+               ============================================== -->
+          <!-- Destello 1 (Cerca de las tijeras) -->
+          <g class="sparkle-star s1" transform="translate(275, 135)">
+            <path d="M0 -10 Q0 0 10 0 Q0 0 0 10 Q0 0 -10 0 Q0 0 0 -10 Z" fill="url(#goldGradientMain)" />
+          </g>
+          <!-- Destello 2 (Sobre el espejo) -->
+          <g class="sparkle-star s2" transform="translate(235, 38)">
+            <path d="M0 -7 Q0 0 7 0 Q0 0 0 7 Q0 0 -7 0 Q0 0 0 -7 Z" fill="#ffffff" />
+          </g>
+          <!-- Destello 3 (Lado izquierdo) -->
+          <g class="sparkle-star s3" transform="translate(130, 85)">
+            <path d="M0 -8 Q0 0 8 0 Q0 0 0 8 Q0 0 -8 0 Q0 0 0 -8 Z" fill="url(#goldGradientMain)" />
+          </g>
+          <!-- Destello 4 (Cerca del peine) -->
+          <g class="sparkle-star s4" transform="translate(305, 235)">
+            <path d="M0 -6 Q0 0 6 0 Q0 0 0 6 Q0 0 -6 0 Q0 0 0 -6 Z" fill="#fdf4cf" />
+          </g>
+          <!-- Destello 5 (Brisa de secadora) -->
+          <g class="sparkle-star s5" transform="translate(215, 185)">
+            <path d="M0 -7 Q0 0 7 0 Q0 0 0 7 Q0 0 -7 0 Q0 0 0 -7 Z" fill="url(#goldGradientMain)" />
+          </g>
+
+          <!-- Partículas de Polvo Dorado Flotantes -->
+          <circle cx="170" cy="110" r="1.8" fill="#d4af37" class="dust-particle dp1" />
+          <circle cx="210" cy="70" r="1.3" fill="#f4e08c" class="dust-particle dp2" />
+          <circle cx="290" cy="95" r="1.6" fill="#d4af37" class="dust-particle dp3" />
+          <circle cx="330" cy="190" r="1.4" fill="#f4e08c" class="dust-particle dp4" />
+          <circle cx="150" cy="230" r="1.5" fill="#d4af37" class="dust-particle dp5" />
+          <circle cx="260" cy="210" r="1.8" fill="#fdf4cf" class="dust-particle dp6" />
+
+        </svg>
+      </div>
+
+      <!-- Título y Mensaje de Mantenimiento -->
+      <h1 id="mntDisplayTitle" class="maintenance-main-title">
+        Renovando Nuestra Experiencia para Ti
+      </h1>
+
+      <p id="mntDisplayMessage" class="maintenance-main-desc">
+        Estamos realizando mejoras exclusivas en nuestras plataformas digitales para brindarte un servicio más ágil, sofisticado y personalizado. Nuestro salón de belleza físico y las clases en academia continúan operando con total normalidad.
+      </p>
+
+      <!-- Tarjeta Informativa de Atención en Salón Físico -->
+      <div class="maintenance-salon-status-card">
+        <div class="salon-status-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </div>
+        <div class="salon-status-content">
+          <span class="salon-status-title">Instalaciones Físicas y Cabinas Abiertas</span>
+          <p class="salon-status-desc">
+            Nuestros servicios de uñas, pestañas, cejas, corte, colorimetría y tratamientos capilares continúan atendiéndose con cita previa.
+          </p>
+        </div>
+      </div>
+
+      <!-- Cuadro de Horario / Reapertura Estimada (Condicional) -->
+      <div id="mntEstimatedBox" class="maintenance-time-box" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span class="time-label">Reapertura digital estimada:</span>
+        <strong id="mntEstimatedText" class="time-value">Muy pronto</strong>
+      </div>
+
+      <!-- Botón de Atención Directa por WhatsApp -->
+      <div id="mntWhatsappWrap" class="maintenance-actions-wrap">
+        <a 
+          id="mntWhatsappBtn"
+          href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20agendar%20una%20cita%20o%20solicitar%20informes%20mientras%20la%20p%C3%A1gina%20se%20encuentra%20en%20mantenimiento."
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-maintenance-whatsapp"
+          aria-label="Agendar Cita en Salón por WhatsApp"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+          <span>Agendar Cita o Consultar por WhatsApp</span>
+        </a>
+      </div>
+
+      <!-- Canales Oficiales Alternativos -->
+      <div class="maintenance-secondary-links">
+        <span class="secondary-title">Nuestros Canales de Contacto:</span>
+        <div class="secondary-buttons-row">
+          <a href="https://www.instagram.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="btn-maintenance-sec" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram Oficial</span>
+          </a>
+
+          <a href="https://www.facebook.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="btn-maintenance-sec" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+            <span>Página de Facebook</span>
+          </a>
+
+          <a href="tel:525650560824" class="btn-maintenance-sec" aria-label="Teléfono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span>Llamar al Salón</span>
+          </a>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="brand-footer animate-fade-in delay-2">
+      <p class="footer-copyright">
+        &copy; Total Beauty Salón &amp; Academia. Todos los derechos reservados.
+      </p>
+      <div style="margin-top: 0.75rem;">
+        <a href="admin.html" class="maintenance-admin-link">Acceso para Personal Autorizado</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="firebase-config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      'use strict';
+
+      const titleEl = document.getElementById('mntDisplayTitle');
+      const msgEl = document.getElementById('mntDisplayMessage');
+      const estimatedBox = document.getElementById('mntEstimatedBox');
+      const estimatedText = document.getElementById('mntEstimatedText');
+      const whatsappWrap = document.getElementById('mntWhatsappWrap');
+      const whatsappBtn = document.getElementById('mntWhatsappBtn');
+      const reconnectToast = document.getElementById('reconnectToast');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const isPreview = urlParams.get('preview') === '1';
+
+      async function applyMaintenanceData() {
+        if (!window.TB_FIREBASE || !TB_FIREBASE.getMaintenanceMode) return;
+        try {
+          const mnt = await TB_FIREBASE.getMaintenanceMode();
+
+          if (mnt.titulo && titleEl) titleEl.textContent = mnt.titulo;
+          if (mnt.mensaje && msgEl) msgEl.textContent = mnt.mensaje;
+
+          if (mnt.fechaFinEstimada && estimatedBox && estimatedText) {
+            const dateObj = new Date(mnt.fechaFinEstimada);
+            if (!isNaN(dateObj.getTime())) {
+              estimatedText.textContent = dateObj.toLocaleString('es-MX', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              estimatedBox.style.display = 'inline-flex';
+            } else {
+              estimatedBox.style.display = 'none';
+            }
+          } else if (estimatedBox) {
+            estimatedBox.style.display = 'none';
+          }
+
+          if (whatsappWrap) {
+            if (mnt.permitirWhatsapp === false) {
+              whatsappWrap.style.display = 'none';
+            } else {
+              whatsappWrap.style.display = 'block';
+              if (whatsappBtn && mnt.whatsappNumero) {
+                const phone = mnt.whatsappNumero.replace(/\D/g, '');
+                whatsappBtn.href = `https://api.whatsapp.com/send?phone=${phone}&text=Hola%20Total%20Beauty,%20deseo%20agendar%20una%20cita%20o%20solicitar%20informes%20mientras%20la%20p%C3%A1gina%20se%20encuentra%20en%20mantenimiento.`;
+              }
+            }
+          }
+
+          // Si el modo mantenimiento ha sido desactivado en el admin y no es preview:
+          if (!mnt.activo && !isPreview) {
+            triggerSiteReopened();
+          }
+
+        } catch (e) {
+          console.warn('Error al cargar datos de mantenimiento:', e);
+        }
+      }
+
+      function triggerSiteReopened() {
+        if (reconnectToast) reconnectToast.style.display = 'block';
+        setTimeout(() => {
+          window.location.replace('index.html');
+        }, 1200);
+      }
+
+      await applyMaintenanceData();
+
+      // Sondeo periódico cada 12 segundos para detectar si el administrador desactivó el mantenimiento
+      if (!isPreview) {
+        setInterval(async () => {
+          try {
+            if (window.TB_FIREBASE && TB_FIREBASE.getMaintenanceMode) {
+              const mnt = await TB_FIREBASE.getMaintenanceMode();
+              if (!mnt.activo) {
+                triggerSiteReopened();
+              }
+            }
+          } catch (e) {}
+        }, 12000);
+      }
+
+    });
+  </script>
+</body>
+</html>

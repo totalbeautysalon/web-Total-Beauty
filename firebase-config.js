@@ -25,7 +25,8 @@ const TB_FIREBASE = (function () {
     cursos: "portal_web/cursos",
     encuestas: "encuestas",
     cupones: "cupones",
-    configCupones: "configuracion_cupones"
+    configCupones: "configuracion_cupones",
+    mantenimiento: "portal_web/mantenimiento"
   };
 
   const LOCAL_CACHE = {
@@ -34,7 +35,8 @@ const TB_FIREBASE = (function () {
     cursos: "totalbeauty_cursos_db",
     encuestas: "totalbeauty_encuestas_db",
     cupones: "totalbeauty_cupones_db",
-    configCupones: "totalbeauty_config_cupones"
+    configCupones: "totalbeauty_config_cupones",
+    mantenimiento: "totalbeauty_mantenimiento_data"
   };
 
   const DEFAULT_CONFIG_CUPONES = {
@@ -45,6 +47,16 @@ const TB_FIREBASE = (function () {
       { min: 500, max: 700, porcentaje: 15, etiqueta: "De $501 a $700" },
       { min: 700, porcentaje: 20, etiqueta: "Más de $701" }
     ]
+  };
+
+  const DEFAULT_MANTENIMIENTO = {
+    activo: false,
+    titulo: "Renovando Nuestra Experiencia para Ti",
+    mensaje: "Estamos realizando mejoras exclusivas en nuestras plataformas digitales para brindarte un servicio más ágil y sofisticado. Nuestro salón físico y academia continúan operando con normalidad.",
+    fechaFinEstimada: "",
+    permitirWhatsapp: true,
+    whatsappNumero: "525650560824",
+    ultimaModificacion: new Date().toISOString()
   };
 
   const DEFAULT_CURSOS = {
@@ -795,6 +807,107 @@ const TB_FIREBASE = (function () {
     }
   }
 
+  // ==========================================
+  // SERVICIOS DE MODO MANTENIMIENTO TEMPORAL
+  // ==========================================
+  async function getMaintenanceMode() {
+    try {
+      const res = await fetch(getUrl(PATHS.mantenimiento), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          const merged = Object.assign({}, DEFAULT_MANTENIMIENTO, data);
+          try {
+            if (typeof localStorage !== 'undefined') {
+              localStorage.setItem(LOCAL_CACHE.mantenimiento, JSON.stringify(merged));
+              localStorage.setItem('totalbeauty_maintenance_active', merged.activo ? 'true' : 'false');
+            }
+          } catch (e) {}
+          return merged;
+        }
+      }
+    } catch (err) {
+      console.warn("Fallo lectura Firebase mantenimiento, usando respaldo local:", err);
+    }
+
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const cached = localStorage.getItem(LOCAL_CACHE.mantenimiento);
+        if (cached) return Object.assign({}, DEFAULT_MANTENIMIENTO, JSON.parse(cached));
+      }
+    } catch (e) {}
+
+    return DEFAULT_MANTENIMIENTO;
+  }
+
+  async function saveMaintenanceMode(data) {
+    const payload = Object.assign({}, DEFAULT_MANTENIMIENTO, data, {
+      ultimaModificacion: new Date().toISOString()
+    });
+
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(LOCAL_CACHE.mantenimiento, JSON.stringify(payload));
+        localStorage.setItem('totalbeauty_maintenance_active', payload.activo ? 'true' : 'false');
+      }
+    } catch (e) {}
+
+    try {
+      await fetch(getUrl(PATHS.mantenimiento), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return payload;
+    } catch (err) {
+      console.error("Error al guardar mantenimiento en Firebase:", err);
+      return payload;
+    }
+  }
+
+  function initMaintenanceRedirect() {
+    if (typeof window === 'undefined') return;
+    try {
+      const pathname = (window.location.pathname || '').toLowerCase();
+      const isMantenimientoPage = pathname.endsWith('mantenimiento.html') || pathname.includes('mantenimiento.html');
+      const isExempt = isMantenimientoPage ||
+                       pathname.endsWith('admin.html') || pathname.includes('admin.html') ||
+                       pathname.endsWith('validar-cupon.html') || pathname.includes('validar-cupon.html');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const isBypass = urlParams.get('bypass') === '1' ||
+                       urlParams.get('preview') === '1' ||
+                       sessionStorage.getItem('totalbeauty_admin_bypass') === 'true';
+
+      if (isBypass && !isMantenimientoPage) return;
+
+      // 1. Verificación instantánea vía localStorage para evitar parpadeos
+      const isCachedActive = localStorage.getItem('totalbeauty_maintenance_active') === 'true';
+      if (!isExempt && isCachedActive && !isBypass) {
+        window.location.replace('mantenimiento.html');
+        return;
+      }
+
+      // 2. Consulta asíncrona a Firebase RTDB
+      getMaintenanceMode().then(mnt => {
+        if (!isExempt) {
+          if (mnt.activo && !isBypass) {
+            window.location.replace('mantenimiento.html');
+          }
+        } else if (isMantenimientoPage) {
+          if (!mnt.activo && urlParams.get('preview') !== '1') {
+            window.location.replace('index.html');
+          }
+        }
+      }).catch(() => {});
+    } catch (e) {
+      // Ignorar errores
+    }
+  }
+
   return {
     config: CONFIG,
     DEFAULT_CURSOS,
@@ -822,6 +935,10 @@ const TB_FIREBASE = (function () {
     checkClientRecentSurvey,
     getConfigCupones,
     saveConfigCupones,
+    getMaintenanceMode,
+    saveMaintenanceMode,
+    initMaintenanceRedirect,
+    DEFAULT_MANTENIMIENTO,
     checkConnection
   };
 })();
@@ -831,4 +948,9 @@ if (typeof window !== 'undefined') {
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = TB_FIREBASE;
+}
+if (typeof window !== 'undefined') {
+  try {
+    TB_FIREBASE.initMaintenanceRedirect();
+  } catch (e) {}
 }

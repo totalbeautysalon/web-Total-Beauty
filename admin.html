@@ -209,6 +209,13 @@
           </svg>
           <span>Alumnas</span>
         </button>
+
+        <button type="button" class="admin-tab-btn" data-tab="pane-mantenimiento" onclick="switchAdminTab('pane-mantenimiento')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          <span>Modo Mantenimiento</span>
+        </button>
       </nav>
 
       <!-- ==========================================
@@ -216,6 +223,27 @@
            ========================================== -->
       <div id="pane-dashboard" class="admin-module-pane active">
         
+        <!-- Banner de Estado de Mantenimiento en Dashboard -->
+        <section id="dashboardMntBanner" class="admin-mnt-status-card live" style="margin-bottom: 1.5rem;">
+          <div class="admin-mnt-status-info">
+            <div class="admin-mnt-status-icon">
+              <svg id="dashMntIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </div>
+            <div>
+              <span id="dashMntBadge" class="admin-mnt-badge-pill">Sitio En Vivo</span>
+              <h3 id="dashMntTitle" class="admin-mnt-title">El portal web está disponible para todas las clientas</h3>
+              <p id="dashMntSub" class="admin-mnt-sub">Acceso público activo en salón, cursos, buen fin y cupones.</p>
+            </div>
+          </div>
+          <button type="button" class="btn-action-small" onclick="switchAdminTab('pane-mantenimiento')">
+            <span>Configurar Mantenimiento</span>
+          </button>
+        </section>
+
         <!-- Tarjetas de Indicadores Principales (KPIs) -->
         <section class="admin-kpi-grid">
           
@@ -988,6 +1016,126 @@
               </tbody>
             </table>
           </div>
+
+        </section>
+
+      </div>
+
+      <!-- ==========================================
+           MÓDULO 8: MODO MANTENIMIENTO TEMPORAL
+           ========================================== -->
+      <div id="pane-mantenimiento" class="admin-module-pane">
+        
+        <section class="admin-panel-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="admin-section-tag">Control de Disponibilidad Web</span>
+              <h2 class="admin-card-title">Modo Mantenimiento Temporal</h2>
+            </div>
+            <a href="mantenimiento.html?preview=1" target="_blank" rel="noopener noreferrer" class="admin-subnav-btn">
+              <span>Previsualizar Pantalla</span>
+            </a>
+          </div>
+
+          <p class="admin-card-desc">
+            Cuando el modo mantenimiento está activado, todas las clientas que visiten el portal web verán la pantalla especial con la animación del salón de belleza y el botón para agendar citas directamente por WhatsApp.
+          </p>
+
+          <!-- Tarjeta de Estado Activo / Inactivo -->
+          <div id="adminMntCard" class="admin-mnt-status-card live">
+            <div class="admin-mnt-status-info">
+              <div class="admin-mnt-status-icon">
+                <svg id="adminMntIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+              <div>
+                <span id="adminMntBadge" class="admin-mnt-badge-pill">Sitio En Vivo</span>
+                <h3 id="adminMntHeading" class="admin-mnt-title">Página Web Abierta al Público</h3>
+                <p id="adminMntDesc" class="admin-mnt-sub">Las clientas pueden navegar libremente por el portal.</p>
+              </div>
+            </div>
+
+            <label class="luxury-switch-wrap" title="Haz clic para activar o desactivar el modo mantenimiento">
+              <span id="adminMntSwitchLabel" style="font-size: 0.84rem; font-weight: 600; color: #ffffff;">Mantenimiento Desactivado</span>
+              <input type="checkbox" id="chkToggleMantenimiento" class="luxury-switch-input" onchange="handleMntToggleChange(this.checked)">
+              <span class="luxury-switch-track">
+                <span class="luxury-switch-handle"></span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Formulario de Personalización -->
+          <form id="formMaintenanceSettings" onsubmit="handleSaveMaintenanceSettings(event)" class="admin-form" style="margin-top: 1.5rem;">
+            
+            <div class="student-form-group">
+              <label for="inputMntTitulo" class="student-form-label">Título Principal en la Pantalla</label>
+              <input 
+                type="text" 
+                id="inputMntTitulo" 
+                class="student-form-input" 
+                placeholder="ej. Renovando Nuestra Experiencia para Ti" 
+                required
+              >
+            </div>
+
+            <div class="student-form-group">
+              <label for="inputMntMensaje" class="student-form-label">Mensaje Explicativo para las Clientas</label>
+              <textarea 
+                id="inputMntMensaje" 
+                class="student-form-input" 
+                rows="3" 
+                placeholder="Describe el motivo o aclara que el salón físico y citas continúan con normalidad"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="student-form-group">
+                <label for="inputMntFechaFin" class="student-form-label">Fecha y Hora Estimada de Reapertura (Opcional)</label>
+                <input 
+                  type="datetime-local" 
+                  id="inputMntFechaFin" 
+                  class="student-form-input"
+                >
+                <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem; display: block;">Déjalo vacío si no deseas mostrar una hora específica.</span>
+              </div>
+
+              <div class="student-form-group">
+                <label for="inputMntWhatsappNum" class="student-form-label">Número de WhatsApp de Atención</label>
+                <input 
+                  type="text" 
+                  id="inputMntWhatsappNum" 
+                  class="student-form-input" 
+                  value="525650560824"
+                  placeholder="ej. 525650560824"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="student-form-group" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+              <label class="luxury-switch-wrap" style="cursor: pointer;">
+                <input type="checkbox" id="chkMntPermitirWhatsapp" class="luxury-switch-input" checked>
+                <span class="luxury-switch-track">
+                  <span class="luxury-switch-handle"></span>
+                </span>
+                <span style="font-size: 0.85rem; color: #dedede;">Mostrar botón para agendar citas por WhatsApp mientras está en mantenimiento</span>
+              </label>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <button type="submit" id="btnSaveMntSettings" class="btn-student-submit" style="flex: 1; min-width: 200px;">
+                <span>Guardar Configuración y Aplicar</span>
+              </button>
+              <a href="mantenimiento.html?preview=1" target="_blank" rel="noopener noreferrer" class="btn-action-small" style="display: inline-flex; align-items: center; justify-content: center; padding: 0.85rem 1.4rem;">
+                <span>Ver Pantalla Completa</span>
+              </a>
+            </div>
+
+          </form>
 
         </section>
 

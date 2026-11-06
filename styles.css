@@ -5065,4 +5065,569 @@ select,
     flex-direction: column;
   }
 }
+/* ==========================================================================
+   PÁGINA DE MANTENIMIENTO TEMPORAL CON ANIMACIÓN DE SALÓN DE BELLEZA
+   ========================================================================== */
+.page-mantenimiento {
+  background-color: var(--bg-primary, #070709);
+  color: var(--text-main, #ffffff);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
+.maintenance-wrapper {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  width: 100%;
+}
+
+.maintenance-card {
+  background: radial-gradient(circle at 50% 0%, #161622 0%, #0e0e14 70%, #070709 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 20px;
+  padding: 2.25rem 1.75rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(212, 175, 55, 0.12);
+  margin-bottom: 2rem;
+}
+
+.maintenance-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4af37, #fdf4cf, #d4af37, transparent);
+}
+
+.maintenance-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 1rem;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--gold-light, #f4e08c);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.gold-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #d4af37;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #d4af37;
+  display: inline-block;
+  animation: pulseGoldDot 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseGoldDot {
+  0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #d4af37; }
+  50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 14px #f4e08c; }
+  100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #d4af37; }
+}
+
+/* Contenedor y Escena SVG del Salón */
+.salon-animation-container {
+  max-width: 440px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.salon-svg-scene {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.7));
+}
+
+/* Animación de Espejo y Reflejo */
+.mirror-glass-shine {
+  animation: mirrorShineSweep 5.5s infinite ease-in-out;
+}
+
+@keyframes mirrorShineSweep {
+  0% { transform: rotate(30deg) translate(-220px, 0); opacity: 0; }
+  20% { opacity: 0.65; }
+  45% { transform: rotate(30deg) translate(220px, 0); opacity: 0; }
+  100% { transform: rotate(30deg) translate(220px, 0); opacity: 0; }
+}
+
+/* Animación de Luces del Tocador (Vanity Bulbs) */
+.bulb-pulse {
+  animation: bulbPulsing 2.4s infinite ease-in-out alternate;
+}
+.bulb-pulse.b1 { animation-delay: 0s; }
+.bulb-pulse.b2 { animation-delay: 0.3s; }
+.bulb-pulse.b3 { animation-delay: 0.6s; }
+.bulb-pulse.b4 { animation-delay: 0.9s; }
+.bulb-pulse.b5 { animation-delay: 1.2s; }
+.bulb-pulse.b6 { animation-delay: 1.5s; }
+.bulb-pulse.b7 { animation-delay: 1.8s; }
+.bulb-pulse.b8 { animation-delay: 2.1s; }
+
+@keyframes bulbPulsing {
+  0% { opacity: 0.45; }
+  100% { opacity: 1; }
+}
+
+/* Animación de Tijeras de Salón Doradas */
+.scissor-blade-top {
+  transform-origin: 0 0;
+  animation: scissorCutTop 1.6s infinite ease-in-out;
+}
+
+.scissor-blade-bottom {
+  transform-origin: 0 0;
+  animation: scissorCutBottom 1.6s infinite ease-in-out;
+}
+
+@keyframes scissorCutTop {
+  0% { transform: rotate(0deg); }
+  35% { transform: rotate(-14deg); }
+  60% { transform: rotate(2deg); }
+  75% { transform: rotate(-6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes scissorCutBottom {
+  0% { transform: rotate(0deg); }
+  35% { transform: rotate(14deg); }
+  60% { transform: rotate(-2deg); }
+  75% { transform: rotate(6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Animación de Flujo de Viento de Secadora */
+.wind-line {
+  stroke-dasharray: 6 3;
+  animation: windStreamFlow 2s linear infinite;
+}
+.wind-line.w1 { animation-delay: 0s; }
+.wind-line.w2 { animation-delay: 0.3s; }
+.wind-line.w3 { animation-delay: 0.6s; }
+
+@keyframes windStreamFlow {
+  0% { stroke-dashoffset: 24; opacity: 0.2; }
+  50% { opacity: 0.95; }
+  100% { stroke-dashoffset: 0; opacity: 0.2; }
+}
+
+/* Animación de Peine */
+.salon-comb-group {
+  transform-origin: 50px 3px;
+  animation: combGentleSway 3.6s infinite ease-in-out;
+}
+
+@keyframes combGentleSway {
+  0% { transform: translate(180px, 245px) rotate(-6deg); }
+  50% { transform: translate(180px, 242px) rotate(-2deg); }
+  100% { transform: translate(180px, 245px) rotate(-6deg); }
+}
+
+/* Animación de Destellos y Estrellas */
+.sparkle-star {
+  animation: sparkleTwinkle 2.8s infinite ease-in-out;
+}
+.sparkle-star.s1 { animation-delay: 0s; }
+.sparkle-star.s2 { animation-delay: 0.7s; }
+.sparkle-star.s3 { animation-delay: 1.4s; }
+.sparkle-star.s4 { animation-delay: 2.1s; }
+.sparkle-star.s5 { animation-delay: 1.0s; }
+
+@keyframes sparkleTwinkle {
+  0% { transform: scale(0.3) rotate(0deg); opacity: 0.1; }
+  50% { transform: scale(1.15) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 6px #f4e08c); }
+  100% { transform: scale(0.3) rotate(90deg); opacity: 0.1; }
+}
+
+/* Partículas de Polvo Dorado */
+.dust-particle {
+  animation: dustFloat 3.4s infinite ease-in-out alternate;
+}
+.dust-particle.dp1 { animation-delay: 0.2s; }
+.dust-particle.dp2 { animation-delay: 0.8s; }
+.dust-particle.dp3 { animation-delay: 1.4s; }
+.dust-particle.dp4 { animation-delay: 2.0s; }
+.dust-particle.dp5 { animation-delay: 0.5s; }
+.dust-particle.dp6 { animation-delay: 1.7s; }
+
+@keyframes dustFloat {
+  0% { transform: translateY(0); opacity: 0.3; }
+  100% { transform: translateY(-12px); opacity: 0.9; }
+}
+
+/* Títulos y Contenido de Mantenimiento */
+.maintenance-main-title {
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: 1.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.9rem;
+  line-height: 1.25;
+}
+
+.maintenance-main-desc {
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.94rem;
+  line-height: 1.68;
+  color: #b5b5c2;
+  max-width: 620px;
+  margin: 0 auto 1.75rem;
+}
+
+/* Tarjeta Informativa de Atención en Salón Físico */
+.maintenance-salon-status-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(212, 175, 55, 0.07);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 12px;
+  padding: 1.15rem 1.35rem;
+  text-align: left;
+  max-width: 620px;
+  margin: 0 auto 1.5rem;
+}
+
+.salon-status-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-light, #f4e08c);
+  flex-shrink: 0;
+}
+
+.salon-status-content {
+  flex: 1;
+}
+
+.salon-status-title {
+  display: block;
+  font-family: var(--font-cinzel, 'Cinzel', serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gold-light, #f4e08c);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+
+.salon-status-desc {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #dedede;
+  margin: 0;
+}
+
+/* Cuadro de Horario / Reapertura Estimada */
+.maintenance-time-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: #111118;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #b5b5c2;
+  margin-bottom: 1.75rem;
+}
+
+.maintenance-time-box svg {
+  color: var(--gold-primary, #d4af37);
+  flex-shrink: 0;
+}
+
+.maintenance-time-box .time-value {
+  color: var(--gold-light, #f4e08c);
+  text-transform: capitalize;
+}
+
+/* Botón de Atención por WhatsApp */
+.maintenance-actions-wrap {
+  margin-bottom: 2rem;
+}
+
+.btn-maintenance-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #1f7a42 0%, #25d366 100%);
+  color: #ffffff;
+  font-family: var(--font-cinzel, 'Cinzel', serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 1.05rem 2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  max-width: 90%;
+}
+
+.btn-maintenance-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(37, 211, 102, 0.5);
+  filter: brightness(1.08);
+}
+
+.btn-maintenance-whatsapp svg {
+  flex-shrink: 0;
+}
+
+/* Canales Secundarios de Contacto */
+.maintenance-secondary-links {
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+  padding-top: 1.4rem;
+}
+
+.secondary-title {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted, #858595);
+  margin-bottom: 0.9rem;
+}
+
+.secondary-buttons-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn-maintenance-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  background: #121218;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 8px;
+  color: #dedede;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btn-maintenance-sec:hover {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: var(--gold-primary, #d4af37);
+  color: var(--gold-light, #f4e08c);
+  transform: translateY(-1px);
+}
+
+.maintenance-admin-link {
+  font-size: 0.72rem;
+  color: var(--text-muted, #858595);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease;
+}
+
+.maintenance-admin-link:hover {
+  color: var(--gold-light, #f4e08c);
+  text-decoration: underline;
+}
+
+/* Toast de Reconexión Automática */
+.maintenance-reconnect-toast {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #14141d;
+  border: 1px solid var(--gold-primary, #d4af37);
+  color: #ffffff;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.9), 0 0 20px rgba(212,175,55,0.3);
+  z-index: 999999;
+  animation: slideDownToast 0.4s ease-out;
+}
+
+.reconnect-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@keyframes slideDownToast {
+  from { transform: translate(-50%, -20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* ==========================================================================
+   ESTILOS DEL MÓDULO MANTENIMIENTO EN PANEL DE ADMINISTRACIÓN
+   ========================================================================== */
+.admin-mnt-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.35rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.75rem;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.admin-mnt-status-card.live {
+  background: rgba(39, 174, 96, 0.08);
+  border-color: rgba(39, 174, 96, 0.3);
+}
+
+.admin-mnt-status-card.maintenance {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.1);
+}
+
+.admin-mnt-status-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-mnt-status-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-mnt-status-card.live .admin-mnt-status-icon {
+  background: rgba(39, 174, 96, 0.2);
+  color: #2ecc71;
+}
+
+.admin-mnt-status-card.maintenance .admin-mnt-status-icon {
+  background: rgba(212, 175, 55, 0.2);
+  color: #f4e08c;
+}
+
+.admin-mnt-badge-pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.admin-mnt-status-card.live .admin-mnt-badge-pill {
+  background: rgba(39, 174, 96, 0.25);
+  color: #2ecc71;
+}
+
+.admin-mnt-status-card.maintenance .admin-mnt-badge-pill {
+  background: rgba(212, 175, 55, 0.25);
+  color: #f4e08c;
+}
+
+.admin-mnt-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.admin-mnt-sub {
+  font-size: 0.8rem;
+  color: #b5b5c2;
+  margin: 0;
+}
+
+/* Switch Toggle de Alta Gama */
+.luxury-switch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.luxury-switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.luxury-switch-track {
+  width: 52px;
+  height: 28px;
+  background: #1b1b24;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.luxury-switch-handle {
+  width: 22px;
+  height: 22px;
+  background: #dedede;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.luxury-switch-input:checked + .luxury-switch-track {
+  background: linear-gradient(135deg, #aa8420, #d4af37);
+  border-color: #f4e08c;
+}
+
+.luxury-switch-input:checked + .luxury-switch-track .luxury-switch-handle {
+  transform: translateX(24px);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 600px) {
+  .maintenance-card {
+    padding: 1.75rem 1.15rem;
+  }
+  .maintenance-main-title {
+    font-size: 1.45rem;
+  }
+  .maintenance-salon-status-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .admin-mnt-status-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

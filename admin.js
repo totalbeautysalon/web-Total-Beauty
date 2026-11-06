@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAnnouncementData();
     loadCoursesData();
     loadStudentsData();
+    loadMaintenanceAdminData();
   }
 
   window.handleAdminLogin = function (e) {
@@ -1507,6 +1508,178 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
+
+
+  // ==========================================
+  // 11. MODO MANTENIMIENTO TEMPORAL
+  // ==========================================
+  let currentMaintenanceConfig = null;
+
+  async function loadMaintenanceAdminData() {
+    try {
+      if (!window.TB_FIREBASE || !TB_FIREBASE.getMaintenanceMode) return;
+      const mnt = await TB_FIREBASE.getMaintenanceMode();
+      currentMaintenanceConfig = mnt;
+
+      updateMaintenanceUI(mnt);
+    } catch (e) {
+      console.warn("Error cargando configuración de mantenimiento:", e);
+    }
+  }
+
+  function updateMaintenanceUI(mnt) {
+    if (!mnt) return;
+    const isActive = mnt.activo === true;
+
+    // 1. Banner en el Dashboard Principal
+    const dashBanner = document.getElementById('dashboardMntBanner');
+    const dashBadge = document.getElementById('dashMntBadge');
+    const dashTitle = document.getElementById('dashMntTitle');
+    const dashSub = document.getElementById('dashMntSub');
+
+    if (dashBanner) {
+      dashBanner.className = isActive ? 'admin-mnt-status-card maintenance' : 'admin-mnt-status-card live';
+    }
+    if (dashBadge) {
+      dashBadge.textContent = isActive ? 'Mantenimiento Activo' : 'Sitio En Vivo';
+    }
+    if (dashTitle) {
+      dashTitle.textContent = isActive 
+        ? 'El portal web está cerrado al público en general'
+        : 'El portal web está disponible para todas las clientas';
+    }
+    if (dashSub) {
+      dashSub.textContent = isActive
+        ? 'Las visitantes son dirigidas automáticamente a la pantalla de mantenimiento con opción de WhatsApp.'
+        : 'Acceso público activo en salón, cursos, buen fin y cupones.';
+    }
+
+    // 2. Tarjeta en el Módulo pane-mantenimiento
+    const adminMntCard = document.getElementById('adminMntCard');
+    const adminMntBadge = document.getElementById('adminMntBadge');
+    const adminMntHeading = document.getElementById('adminMntHeading');
+    const adminMntDesc = document.getElementById('adminMntDesc');
+    const chkToggle = document.getElementById('chkToggleMantenimiento');
+    const switchLabel = document.getElementById('adminMntSwitchLabel');
+
+    if (adminMntCard) {
+      adminMntCard.className = isActive ? 'admin-mnt-status-card maintenance' : 'admin-mnt-status-card live';
+    }
+    if (adminMntBadge) {
+      adminMntBadge.textContent = isActive ? 'Mantenimiento Activo' : 'Sitio En Vivo';
+    }
+    if (adminMntHeading) {
+      adminMntHeading.textContent = isActive 
+        ? 'Portal Web en Mantenimiento Temporal'
+        : 'Página Web Abierta al Público';
+    }
+    if (adminMntDesc) {
+      adminMntDesc.textContent = isActive
+        ? 'Los visitantes son dirigidos automáticamente a la pantalla de mantenimiento.'
+        : 'Las clientas pueden navegar libremente por el portal.';
+    }
+    if (chkToggle) {
+      chkToggle.checked = isActive;
+    }
+    if (switchLabel) {
+      switchLabel.textContent = isActive ? 'Mantenimiento ACTIVADO' : 'Mantenimiento Desactivado';
+      switchLabel.style.color = isActive ? 'var(--gold-light)' : '#dedede';
+    }
+
+    // 3. Formulario
+    const inputTitulo = document.getElementById('inputMntTitulo');
+    const inputMensaje = document.getElementById('inputMntMensaje');
+    const inputFechaFin = document.getElementById('inputMntFechaFin');
+    const inputWhatsapp = document.getElementById('inputMntWhatsappNum');
+    const chkWhatsapp = document.getElementById('chkMntPermitirWhatsapp');
+
+    if (inputTitulo && mnt.titulo) inputTitulo.value = mnt.titulo;
+    if (inputMensaje && mnt.mensaje) inputMensaje.value = mnt.mensaje;
+    if (inputWhatsapp && mnt.whatsappNumero) inputWhatsapp.value = mnt.whatsappNumero;
+    if (chkWhatsapp) chkWhatsapp.checked = mnt.permitirWhatsapp !== false;
+
+    if (inputFechaFin && mnt.fechaFinEstimada) {
+      try {
+        const d = new Date(mnt.fechaFinEstimada);
+        if (!isNaN(d.getTime())) {
+          const pad = (n) => String(n).padStart(2, '0');
+          const localIso = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+          inputFechaFin.value = localIso;
+        }
+      } catch (e) {}
+    }
+  }
+
+  window.handleMntToggleChange = async function (checked) {
+    try {
+      if (!window.TB_FIREBASE || !TB_FIREBASE.saveMaintenanceMode) return;
+      const current = currentMaintenanceConfig || {};
+      const updated = Object.assign({}, current, {
+        activo: checked
+      });
+      currentMaintenanceConfig = updated;
+      updateMaintenanceUI(updated);
+
+      await TB_FIREBASE.saveMaintenanceMode(updated);
+
+      if (checked) {
+        showToast("Modo Mantenimiento ACTIVADO. Las clientas verán la pantalla de mantenimiento.");
+      } else {
+        showToast("Modo Mantenimiento DESACTIVADO. El portal web está nuevamente en vivo.");
+      }
+    } catch (e) {
+      console.error("Error al alternar modo mantenimiento:", e);
+      showToast("Error al guardar en Firebase");
+    }
+  };
+
+  window.handleSaveMaintenanceSettings = async function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    try {
+      if (!window.TB_FIREBASE || !TB_FIREBASE.saveMaintenanceMode) return;
+
+      const btn = document.getElementById('btnSaveMntSettings');
+      if (btn) btn.disabled = true;
+
+      const chkToggle = document.getElementById('chkToggleMantenimiento');
+      const inputTitulo = document.getElementById('inputMntTitulo');
+      const inputMensaje = document.getElementById('inputMntMensaje');
+      const inputFechaFin = document.getElementById('inputMntFechaFin');
+      const inputWhatsapp = document.getElementById('inputMntWhatsappNum');
+      const chkWhatsapp = document.getElementById('chkMntPermitirWhatsapp');
+
+      let fechaFinIso = "";
+      if (inputFechaFin && inputFechaFin.value) {
+        try {
+          fechaFinIso = new Date(inputFechaFin.value).toISOString();
+        } catch (err) {}
+      }
+
+      const payload = {
+        activo: chkToggle ? chkToggle.checked : false,
+        titulo: (inputTitulo ? inputTitulo.value : '').trim() || "Renovando Nuestra Experiencia para Ti",
+        mensaje: (inputMensaje ? inputMensaje.value : '').trim() || "Estamos realizando mejoras exclusivas...",
+        fechaFinEstimada: fechaFinIso,
+        permitirWhatsapp: chkWhatsapp ? chkWhatsapp.checked : true,
+        whatsappNumero: (inputWhatsapp ? inputWhatsapp.value : '').trim() || "525650560824"
+      };
+
+      currentMaintenanceConfig = payload;
+      updateMaintenanceUI(payload);
+
+      await TB_FIREBASE.saveMaintenanceMode(payload);
+      showToast("Configuración de mantenimiento guardada exitosamente");
+
+      if (btn) btn.disabled = false;
+    } catch (err) {
+      console.error("Error al guardar mantenimiento:", err);
+      showToast("No se pudo guardar la configuración.");
+      const btn = document.getElementById('btnSaveMntSettings');
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  window.loadMaintenanceAdminData = loadMaintenanceAdminData;
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
