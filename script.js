@@ -558,14 +558,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 3. MODAL DE SERVICIOS EN INDEX.HTML (SALÓN)
+  // 3. MODAL DE SERVICIOS EN INDEX.HTML (SALÓN Y BUEN FIN)
   // ==========================================
   const modalData = {
+    buenfin: {
+      tag: "El Buen Fin Oficial",
+      title: "Paquetes del Buen Fin",
+      description: "Aprovecha nuestras promociones exclusivas con precios autorizados:",
+      options: [
+        {
+          label: "Ver Todos los Paquetes del Buen Fin",
+          action: () => window.location.href = "buenfin.html",
+          detail: "Descuentos en pestañas, cejas, uñas y spa"
+        },
+        {
+          label: "Paquete Dúo Mirada Sublime ($699)",
+          action: () => openWhatsApp("Hola Total Beauty, deseo reservar el Paquete Dúo Mirada Sublime ($699) de la promoción del Buen Fin."),
+          detail: "Pestañas clásicas + Ceja HD"
+        },
+        {
+          label: "Paquete Spa Manos y Pies Deluxe ($649)",
+          action: () => openWhatsApp("Hola Total Beauty, deseo reservar el Paquete Spa Manos y Pies Deluxe ($649) de la promoción del Buen Fin."),
+          detail: "Uñas acrílicas + Pedicure Spa + Gelish"
+        },
+        {
+          label: "Paquete Glow Total VIP ($899)",
+          action: () => openWhatsApp("Hola Total Beauty, deseo reservar el Paquete Glow Total VIP ($899) de la promoción del Buen Fin."),
+          detail: "Pestañas volumen + Cejas laminadas + Uñas acrílicas"
+        }
+      ]
+    },
     salon: {
       tag: "Total Beauty Salón",
       title: "Servicios de Salón",
       description: "Seleccione una opción para comunicarse con recepción o agendar su cita:",
       options: [
+        {
+          label: "Promociones del Buen Fin",
+          action: () => window.location.href = "buenfin.html",
+          detail: "Paquetes de belleza con precios autorizados"
+        },
         {
           label: "Reservar Cita Personalizada",
           action: () => openBookingModal(),
@@ -588,6 +620,11 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Redes Sociales & Enlaces",
       description: "Seleccione el canal oficial al que desea dirigirse:",
       options: [
+        {
+          label: "Paquetes del Buen Fin",
+          action: () => window.location.href = "buenfin.html",
+          detail: "Promociones exclusivas de temporada"
+        },
         {
           label: "Instagram Oficial",
           action: () => window.open("https://www.instagram.com/totalbeautysalonacademia/", "_blank", "noopener,noreferrer"),

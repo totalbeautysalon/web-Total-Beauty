@@ -3462,3 +3462,477 @@ select,
     padding: 1.25rem 1.15rem 1.15rem;
   }
 }
+
+/* ==========================================================================
+   ESTILOS DE EL BUEN FIN TOTAL BEAUTY
+   ========================================================================== */
+
+/* Tarjeta en el Menú Principal (index.html) */
+.option-card-buenfin {
+  border-color: rgba(212, 175, 55, 0.45);
+  box-shadow: 0 8px 25px -10px rgba(0, 0, 0, 0.7), 0 0 18px rgba(212, 175, 55, 0.16);
+}
+
+.option-card-buenfin:hover {
+  border-color: var(--gold-light);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.85), 0 0 32px rgba(212, 175, 55, 0.38);
+}
+
+.badge-buenfin {
+  background: linear-gradient(135deg, #d4af37 0%, #ecd48d 50%, #997a24 100%);
+  color: #070709;
+  font-weight: 700;
+  border: 1px solid #fff2b2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn-buenfin {
+  background: linear-gradient(135deg, #c5a059 0%, #f7e6a7 45%, #d4af37 75%, #8f691e 100%);
+  color: #070709;
+  border: 1px solid #ffe899;
+  font-weight: 600;
+  box-shadow: 0 3px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-buenfin:hover {
+  background: linear-gradient(135deg, #ecd48d 0%, #ffffff 50%, #d4af37 100%);
+  color: #000000;
+  box-shadow: 0 5px 22px rgba(212, 175, 55, 0.55);
+  transform: translateY(-2px);
+}
+
+/* Página Buen Fin (buenfin.html) */
+.page-buenfin {
+  background-color: var(--bg-dark);
+}
+
+.buenfin-hero {
+  text-align: center;
+  max-width: 760px;
+  margin: 1.25rem auto 2.5rem;
+  padding: 0 1rem;
+}
+
+.buenfin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 1rem;
+}
+
+.buenfin-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.85rem;
+  line-height: 1.2;
+}
+
+.buenfin-title span {
+  color: var(--gold-primary);
+  font-style: italic;
+}
+
+.buenfin-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.buenfin-perks-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding: 0.85rem 1.25rem;
+  background: rgba(18, 18, 24, 0.65);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 8px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.buenfin-perk-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: #dedede;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.buenfin-perk-item svg {
+  color: var(--gold-primary);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.buenfin-filter-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 2rem auto 2.5rem;
+  max-width: 720px;
+  padding: 0 1rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.15rem;
+  border-radius: 999px;
+  background: rgba(18, 18, 24, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #b0b0b8;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.filter-btn:hover {
+  border-color: var(--gold-primary);
+  color: #ffffff;
+  background: rgba(28, 28, 36, 0.9);
+}
+
+.filter-btn.active {
+  background: var(--gold-primary);
+  color: #070709;
+  border-color: var(--gold-light);
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.35);
+}
+
+.buenfin-packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.6rem;
+  max-width: 1050px;
+  margin: 0 auto 3.5rem;
+  width: 100%;
+}
+
+.package-card {
+  position: relative;
+  background: linear-gradient(150deg, rgba(20, 20, 26, 0.95) 0%, rgba(10, 10, 14, 0.98) 100%);
+  border: 1px solid var(--gold-border);
+  border-radius: 14px;
+  padding: 1.65rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.package-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.package-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold-primary);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9), 0 0 28px rgba(212, 175, 55, 0.22);
+  background: linear-gradient(150deg, rgba(26, 26, 36, 0.98) 0%, rgba(14, 14, 20, 0.99) 100%);
+}
+
+.package-card:hover::before {
+  opacity: 1;
+}
+
+.package-card.hidden {
+  display: none;
+}
+
+.package-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.package-badge {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.package-badge.badge-vip {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(245, 226, 150, 0.12) 100%);
+  border-color: var(--gold-primary);
+  color: #ffffff;
+}
+
+.package-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+}
+
+.package-desc {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+
+.package-services-list {
+  list-style: none;
+  padding: 1rem 0;
+  margin-bottom: 1.25rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.12);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.package-service-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.8rem;
+  color: #e4e4eb;
+  line-height: 1.45;
+}
+
+.package-service-item svg {
+  width: 14px;
+  height: 14px;
+  color: var(--gold-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.package-service-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.package-service-detail {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  display: block;
+}
+
+.package-pricing-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 0.95rem;
+  background: rgba(10, 10, 14, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 8px;
+}
+
+.package-price-regular {
+  display: flex;
+  flex-direction: column;
+}
+
+.package-regular-label {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.package-regular-amount {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  color: #8c8c98;
+  text-decoration: line-through;
+}
+
+.package-price-promo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.package-promo-label {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+.package-promo-amount {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  line-height: 1;
+}
+
+.package-savings-pill {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--gold-primary);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  margin-top: 0.25rem;
+}
+
+.btn-package-book {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  background: linear-gradient(135deg, #c5a059 0%, #ecd48d 50%, #b38838 100%);
+  color: #070709;
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+}
+
+.btn-package-book:hover {
+  background: linear-gradient(135deg, #ecd48d 0%, #ffffff 50%, #d4af37 100%);
+  color: #000000;
+  box-shadow: 0 6px 22px rgba(212, 175, 55, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-package-book svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.btn-package-book:hover svg {
+  transform: translateX(4px);
+}
+
+.buenfin-policies-card {
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  padding: 1.75rem 1.85rem;
+  background: rgba(14, 14, 18, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.buenfin-policies-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.buenfin-policies-title svg {
+  width: 18px;
+  height: 18px;
+  color: var(--gold-primary);
+}
+
+.buenfin-policies-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.85rem 1.5rem;
+}
+
+.buenfin-policy-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.buenfin-policy-item svg {
+  width: 14px;
+  height: 14px;
+  color: var(--gold-primary);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+@media (max-width: 768px) {
+  .buenfin-title {
+    font-size: 1.85rem;
+  }
+  .buenfin-perks-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .buenfin-packages-grid {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+    padding: 0 0.5rem;
+  }
+  .package-card {
+    padding: 1.35rem 1.15rem 1.25rem;
+  }
+  .buenfin-policies-card {
+    padding: 1.35rem 1.15rem;
+  }
+}

@@ -99,10 +99,47 @@
       </p>
     </section>
 
-    <!-- Menú de Opciones: Salón y Academia -->
+    <!-- Menú de Opciones: Buen Fin, Salón, Academia y Redes Sociales -->
     <main class="menu-container animate-fade-in delay-2" role="main">
       
-      <!-- Opción 1: SALÓN -->
+      <!-- Opción 1: EL BUEN FIN (Hasta arriba de Salón de Belleza) -->
+      <a href="buenfin.html" class="option-card option-card-buenfin" aria-label="Ingresar a Promociones del Buen Fin">
+        <div class="option-image-wrap">
+          <img 
+            src="assets/images/salon.jpg" 
+            alt="Promociones Exclusivas del Buen Fin Total Beauty" 
+            class="option-image"
+            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80';"
+            loading="lazy"
+          >
+          <div class="image-overlay"></div>
+          <span class="option-category-badge badge-buenfin">El Buen Fin</span>
+        </div>
+
+        <div class="option-content">
+          <span class="option-subtitle">Edición Especial</span>
+          <h2 class="option-title">
+            <span>El Buen Fin</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </h2>
+
+          <p class="option-description">
+            Paquetes exclusivos de belleza con precios preferenciales autorizados en pestañas, cejas, uñas, manicure y pedicure. ¡Aprovecha los descuentos por tiempo limitado!
+          </p>
+
+          <div class="btn-action btn-buenfin">
+            <span>Ver Paquetes del Buen Fin</span>
+            <svg class="btn-icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Opción 2: SALÓN -->
       <div class="option-card" onclick="openModal('salon')" role="button" tabindex="0" aria-label="Ingresar a Total Beauty Salón">
         <div class="option-image-wrap">
           <img 
@@ -142,7 +179,7 @@
         </div>
       </div>
 
-      <!-- Opción 2: ACADEMIA (Navega a academia.html) -->
+      <!-- Opción 3: ACADEMIA (Navega a academia.html) -->
       <a href="academia.html" class="option-card" aria-label="Ingresar a Total Beauty Academia">
         <div class="option-image-wrap">
           <img 
@@ -180,7 +217,7 @@
         </div>
       </a>
 
-      <!-- Opción 3: REDES SOCIALES & ENLACES (Navega a enlaces.html) -->
+      <!-- Opción 4: REDES SOCIALES & ENLACES (Navega a enlaces.html) -->
       <a href="enlaces.html" class="option-card" aria-label="Ingresar a Redes Sociales y Enlaces">
         <div class="option-image-wrap">
           <img 

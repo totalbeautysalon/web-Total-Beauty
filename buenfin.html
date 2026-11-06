@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Total Beauty | Paquetes Exclusivos del Buen Fin</title>
+  <meta name="description" content="Paquetes exclusivos de belleza en Total Beauty Salón con motivo del Buen Fin. Descuentos especiales en pestañas, cejas, uñas, manicure y pedicure basados en el catálogo de precios autorizados.">
+  <meta name="theme-color" content="#070709">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Fuentes Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-buenfin">
+
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Contenedor Principal del Sitio -->
+  <div class="site-wrapper">
+    
+    <!-- Barra Superior de Navegación -->
+    <nav class="academia-nav animate-fade-in" aria-label="Navegación del Buen Fin">
+      <a href="index.html" class="btn-back" aria-label="Volver al menú principal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Menú Principal</span>
+      </a>
+
+      <!-- Logotipo Oficial a la Derecha -->
+      <div class="nav-right-group">
+        <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="brand-logo-img"
+            style="max-height: 44px;"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+        </a>
+      </div>
+    </nav>
+
+    <!-- Encabezado Hero de El Buen Fin -->
+    <header class="buenfin-hero animate-fade-in delay-1">
+      <div class="buenfin-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span>Promoción Exclusiva de Temporada</span>
+      </div>
+
+      <h1 class="buenfin-title">
+        El Buen Fin <span>Total Beauty</span>
+      </h1>
+
+      <p class="buenfin-subtitle">
+        Paquetes de belleza seleccionados con precios preferenciales autorizados. Disfruta de la mejor calidad en pestañas, cejas, uñas, manicure y pedicure con cupo limitado.
+      </p>
+
+      <!-- Fila de Beneficios Rápidos -->
+      <div class="buenfin-perks-row" aria-label="Garantías del Buen Fin">
+        <div class="buenfin-perk-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Precios Oficiales Autorizados</span>
+        </div>
+        <div class="buenfin-perk-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Atención 100% Personalizada</span>
+        </div>
+        <div class="buenfin-perk-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Agenda con Anticipo</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Filtros de Categorías -->
+    <section class="buenfin-filter-tabs animate-fade-in delay-2" aria-label="Filtro de paquetes">
+      <button type="button" class="filter-btn active" data-filter="all">Todos los Paquetes</button>
+      <button type="button" class="filter-btn" data-filter="mirada">Mirada &amp; Cejas</button>
+      <button type="button" class="filter-btn" data-filter="manos-pies">Manos &amp; Pies</button>
+      <button type="button" class="filter-btn" data-filter="completo">Paquetes Completos</button>
+    </section>
+
+    <!-- Cuadrícula de Paquetes Autorizados del Buen Fin -->
+    <main class="buenfin-packages-grid animate-fade-in delay-2" role="main">
+
+      <!-- Paquete 1: Mirada Sublime -->
+      <article class="package-card" data-category="mirada">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Dúo Mirada Sublime</h2>
+              <span class="option-subtitle">Pestañas Clásicas &amp; Ceja HD</span>
+            </div>
+            <span class="package-badge">Más Solicitado</span>
+          </div>
+
+          <p class="package-desc">
+            Realza tu mirada con técnica clásica una a una y obtén cejas con diseño anatómico, depilación, laminado y pigmento duradero.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Extensiones de pestañas técnica clásica</span>
+                <span class="package-service-detail">Precio regular individual: $500</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Ceja HD completa</span>
+                <span class="package-service-detail">Laminado + diseño + depilación + pigmento (Regular: $400)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$900</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$699</span>
+              <span class="package-savings-pill">Ahorras $201</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20D%C3%BAo%20Mirada%20Sublime%20($699)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Dúo Mirada Sublime por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Paquete 2: Spa Manos & Pies Deluxe -->
+      <article class="package-card" data-category="manos-pies">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Spa Manos &amp; Pies Deluxe</h2>
+              <span class="option-subtitle">Acrílicas, Pedicure &amp; Gelish</span>
+            </div>
+            <span class="package-badge">Experiencia Spa</span>
+          </div>
+
+          <p class="package-desc">
+            Cuidado integral y relajación profunda. Luce uñas acrílicas impecables con largo ideal y consiente tus pies con exfoliación y gelish.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Uñas acrílicas o tip largo 1-2</span>
+                <span class="package-service-detail">Estructura y sellado profesional (Regular: $380)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Pedicure Spa completo</span>
+                <span class="package-service-detail">Exfoliación, retiro de asperezas e hidratación (Regular: $250)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Pedicure Gelish de 1 a 3 tonos</span>
+                <span class="package-service-detail">Brillo de alta duración para pies (Regular: $200)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$830</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$649</span>
+              <span class="package-savings-pill">Ahorras $181</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20Spa%20Manos%20y%20Pies%20Deluxe%20($649)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Spa Manos y Pies Deluxe por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Paquete 3: Glow Total VIP -->
+      <article class="package-card" data-category="completo">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Glow Total VIP</h2>
+              <span class="option-subtitle">Volumen, Cejas &amp; Uñas de Lujo</span>
+            </div>
+            <span class="package-badge badge-vip">Paquete VIP</span>
+          </div>
+
+          <p class="package-desc">
+            La transformación integral más completa del salón. Combina volumen tecnológico en pestañas, cejas ordenadas y uñas con acabado impecable.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Pestañas volumen tecnológico o efecto rímel</span>
+                <span class="package-service-detail">Técnica avanzada de impacto y ligereza (Regular: $550)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Cejas: laminado + diseño + depilación</span>
+                <span class="package-service-detail">Estructura orgánica y peinado fijador (Regular: $300)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Uñas acrílicas largo 1-2 o Gel Ruber</span>
+                <span class="package-service-detail">Refuerzo y estética de alta gama para manos (Regular: $380)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$1,230</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$899</span>
+              <span class="package-savings-pill">Ahorras $331</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20Glow%20Total%20VIP%20($899)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Glow Total VIP por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Paquete 4: Dúo Pies Impecables -->
+      <article class="package-card" data-category="manos-pies">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Dúo Pies Impecables</h2>
+              <span class="option-subtitle">Pedicure Spa &amp; Acripie</span>
+            </div>
+            <span class="package-badge">Dúo Estelar</span>
+          </div>
+
+          <p class="package-desc">
+            La solución definitiva para pies suaves, limpios y con uñas protegidas mediante acrílico resistente a cualquier actividad.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Pedicure Spa hidratante</span>
+                <span class="package-service-detail">Limpieza profunda, exfoliación y masaje podal (Regular: $250)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Acripie profesional</span>
+                <span class="package-service-detail">Aplicación de acrílico en uñas de los pies y esmaltado (Regular: $300)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$550</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$429</span>
+              <span class="package-savings-pill">Ahorras $121</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20D%C3%BAo%20Pies%20Impecables%20($429)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Dúo Pies Impecables por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Paquete 5: Natural Beauty Express -->
+      <article class="package-card" data-category="mirada">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Natural Beauty Express</h2>
+              <span class="option-subtitle">Lifting, Cejas &amp; Gel Semipermanente</span>
+            </div>
+            <span class="package-badge">Look Natural</span>
+          </div>
+
+          <p class="package-desc">
+            Belleza fresca y sin mantenimiento pesado. Encurvado de tus pestañas naturales, depilación de cejas y color duradero en tus uñas.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Lifting de pestañas con tratamiento</span>
+                <span class="package-service-detail">Curvatura natural y nutrición para tus pestañas (Regular: $300)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Cejas: diseño + depilación perfilada</span>
+                <span class="package-service-detail">Limpieza del arco y proporción armónica (Regular: $200)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Gel semipermanente de 1 a 3 tonos</span>
+                <span class="package-service-detail">Esmaltado en uñas naturales con brillo duradero (Regular: $200)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$700</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$529</span>
+              <span class="package-savings-pill">Ahorras $171</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20Natural%20Beauty%20Express%20($529)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Natural Beauty Express por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Paquete 6: Renovación Facial & Estilo -->
+      <article class="package-card" data-category="completo">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Renovación Facial &amp; Estilo</h2>
+              <span class="option-subtitle">Depilación, Cejas HD &amp; Corte Tradicional</span>
+            </div>
+            <span class="package-badge">Rostro Radiante</span>
+          </div>
+
+          <p class="package-desc">
+            Rostro despejado y libre de vello, cejas definidas con tinte HD y corte de cabello completo con lavado y secado en tocador.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Depilación facial completa</span>
+                <span class="package-service-detail">Técnica con hilo o cera suave para rostro (Regular: $250)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Ceja HD completa</span>
+                <span class="package-service-detail">Laminado, diseño, depilación y pigmento (Regular: $400)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Corte tradicional de cabello</span>
+                <span class="package-service-detail">Incluye diagnóstico, lavado y secado (Regular: $200)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$850</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$649</span>
+              <span class="package-savings-pill">Ahorras $201</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20Renovaci%C3%B3n%20Facial%20y%20Estilo%20($649)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Renovación Facial y Estilo por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Caja de Políticas y Condiciones Oficiales -->
+    <section class="buenfin-policies-card animate-fade-in delay-3" aria-label="Términos y condiciones del Buen Fin">
+      <h3 class="buenfin-policies-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>Condiciones y Políticas de la Promoción</span>
+      </h3>
+
+      <ul class="buenfin-policies-list">
+        <li class="buenfin-policy-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span><strong>Previa Cita:</strong> La atención se realiza exclusivamente con agenda previa vía WhatsApp para garantizar puntualidad y calidad.</span>
+        </li>
+        <li class="buenfin-policy-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span><strong>Anticipo Requerido:</strong> Se solicita un anticipo del 30% para asegurar tu fecha y congelar la tarifa especial del paquete.</span>
+        </li>
+        <li class="buenfin-policy-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span><strong>Precios Autorizados:</strong> Precios calculados en moneda nacional a partir del catálogo oficial autorizado de Total Beauty.</span>
+        </li>
+        <li class="buenfin-policy-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span><strong>Servicios Excluidos:</strong> Los paquetes promocionales no incluyen balayage, tintes, mechas ni tratamientos capilares o alaciados.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="brand-footer animate-fade-in delay-3">
+      <div class="footer-social-links">
+        <a href="https://www.instagram.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram</span>
+        </a>
+
+        <a href="https://www.facebook.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+          <span>Facebook</span>
+        </a>
+      </div>
+
+      <p class="footer-copyright">
+        &copy; Total Beauty Salón &amp; Academia. Todos los derechos reservados.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Script Interactivo de Filtrado de Paquetes -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      'use strict';
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const packageCards = document.querySelectorAll('.package-card');
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.getAttribute('data-filter');
+
+          packageCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
