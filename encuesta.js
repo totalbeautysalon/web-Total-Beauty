@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.copyCouponToClipboard = function () {
     if (!activeCouponData || !activeCouponData.codigo) return;
 
-    const copyText = `TOTAL BEAUTY SALÓN & ACADEMIA\nCupón Oficial de Descuento: ${activeCouponData.codigo}\nClienta: ${activeCouponData.nombre || ''}\nDescuentos aplicables:\n- Hasta $300: 10%\n- $301 a $700: 20%\n- $701 a $1,000: 30%\n- Más de $1,000: 35%\nVálido para una sola utilización. Vence: ${activeCouponData.fechaVencimiento ? new Date(activeCouponData.fechaVencimiento).toLocaleDateString('es-MX') : '30 días'}`;
+    const copyText = `TOTAL BEAUTY SALÓN & ACADEMIA\nCupón Oficial de Descuento: ${activeCouponData.codigo}\nClienta: ${activeCouponData.nombre || ''}\nDescuentos aplicables:\n- Menos de $300: 5%\n- De $301 a $500: 10%\n- De $501 a $700: 15%\n- Más de $701: 20%\nVálido para una sola utilización. Vence: ${activeCouponData.fechaVencimiento ? new Date(activeCouponData.fechaVencimiento).toLocaleDateString('es-MX') : '30 días'}`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(copyText).then(() => {

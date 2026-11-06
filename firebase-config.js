@@ -40,10 +40,10 @@ const TB_FIREBASE = (function () {
   const DEFAULT_CONFIG_CUPONES = {
     vigenciaDias: 30,
     descuentos: [
-      { max: 300, porcentaje: 10, etiqueta: "$300 o menos" },
-      { min: 300, max: 700, porcentaje: 20, etiqueta: "Más de $300 y hasta $700" },
-      { min: 700, max: 1000, porcentaje: 30, etiqueta: "Más de $700 y hasta $1,000" },
-      { min: 1000, porcentaje: 35, etiqueta: "Más de $1,000" }
+      { max: 300, porcentaje: 5, etiqueta: "Menos de $300" },
+      { min: 300, max: 500, porcentaje: 10, etiqueta: "De $301 a $500" },
+      { min: 500, max: 700, porcentaje: 15, etiqueta: "De $501 a $700" },
+      { min: 700, porcentaje: 20, etiqueta: "Más de $701" }
     ]
   };
 
@@ -482,21 +482,21 @@ const TB_FIREBASE = (function () {
     if (isNaN(p) || p <= 0) {
       return { porcentaje: 0, montoDescuento: 0, totalPagar: 0, rango: "Sin importe válido" };
     }
-    let porcentaje = 10;
-    let rango = "$300 o menos (10%)";
+    let porcentaje = 5;
+    let rango = "Menos de $300 (5%)";
 
     if (p <= 300) {
+      porcentaje = 5;
+      rango = "Menos de $300 (5%)";
+    } else if (p <= 500) {
       porcentaje = 10;
-      rango = "$300 o menos (10%)";
+      rango = "De $301 a $500 (10%)";
     } else if (p <= 700) {
-      porcentaje = 20;
-      rango = "Más de $300 y hasta $700 (20%)";
-    } else if (p <= 1000) {
-      porcentaje = 30;
-      rango = "Más de $700 y hasta $1,000 (30%)";
+      porcentaje = 15;
+      rango = "De $501 a $700 (15%)";
     } else {
-      porcentaje = 35;
-      rango = "Más de $1,000 (35%)";
+      porcentaje = 20;
+      rango = "Más de $701 (20%)";
     }
 
     const montoDescuento = Math.round((p * porcentaje) / 100);
@@ -825,3 +825,10 @@ const TB_FIREBASE = (function () {
     checkConnection
   };
 })();
+
+if (typeof window !== 'undefined') {
+  window.TB_FIREBASE = TB_FIREBASE;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = TB_FIREBASE;
+}
