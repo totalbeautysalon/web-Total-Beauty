@@ -22,6 +22,54 @@
 </head>
 <body class="page-mantenimiento">
 
+  <!-- ==============================================
+       PANTALLA DE CARGA (PRELOADER) CON ANIMACIÓN DE LOGO
+       ============================================== -->
+  <div id="salonPreloader" class="salon-preloader" aria-label="Cargando experiencia Total Beauty">
+    <div class="preloader-inner-container">
+      
+      <!-- Halo y Anillos Orbitales Giratorios de Lujo -->
+      <div class="preloader-orbital-wrap">
+        <div class="preloader-orbital-ring ring-outer"></div>
+        <div class="preloader-orbital-ring ring-middle"></div>
+        <div class="preloader-orbital-ring ring-inner"></div>
+
+        <!-- Logotipo Oficial con Animación de Brillo, Pulso y Resplandor -->
+        <div class="preloader-logo-wrap">
+          <img 
+            src="assets/images/logo.png" 
+            alt="Total Beauty Salón &amp; Academia" 
+            class="preloader-logo-img"
+            onerror="this.onerror=null; this.src='assets/images/logoheader.png';"
+          >
+          <div class="preloader-logo-shimmer"></div>
+        </div>
+      </div>
+
+      <!-- Nombre de Marca y Subtítulo Elegante -->
+      <div class="preloader-brand-box">
+        <h2 class="preloader-brand-title">TOTAL BEAUTY</h2>
+        <p class="preloader-brand-tag">Salón &amp; Academia</p>
+      </div>
+
+      <!-- Barra de Progreso de Alta Gama -->
+      <div class="preloader-progress-track">
+        <div class="preloader-progress-fill"></div>
+      </div>
+
+      <!-- Indicador de Texto -->
+      <div class="preloader-status-text">
+        <span>Preparando experiencia exclusiva</span>
+        <span class="preloader-dots">
+          <span class="pdot dot-1">.</span>
+          <span class="pdot dot-2">.</span>
+          <span class="pdot dot-3">.</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Fondos Ambientales -->
   <div class="ambient-glow" aria-hidden="true"></div>
   <div class="ambient-grid" aria-hidden="true"></div>
@@ -59,148 +107,235 @@
         <span>Mantenimiento Programado</span>
       </div>
 
-      <!-- ANIMACIÓN DE SALÓN DE BELLEZA (SVG PURO VECTORIAL DE ALTA GAMA) -->
+      <!-- ANIMACIÓN DE SALÓN DE BELLEZA COLORIDA Y DE ALTA GAMA (SVG PURO VECTORIAL) -->
       <div class="salon-animation-container" aria-hidden="true">
         <svg 
           class="salon-svg-scene" 
-          viewBox="0 0 480 300" 
+          viewBox="0 0 520 330" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="xMidYMid meet"
         >
           <defs>
-            <!-- Gradientes de Oro y Metal -->
+            <!-- 1. Gradientes de Oro y Metales Preciosos -->
             <linearGradient id="goldGradientMain" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#fdf4cf" />
+              <stop offset="0%" stop-color="#fff8db" />
               <stop offset="35%" stop-color="#d4af37" />
-              <stop offset="70%" stop-color="#aa8420" />
-              <stop offset="100%" stop-color="#f4e08c" />
+              <stop offset="70%" stop-color="#9a7418" />
+              <stop offset="100%" stop-color="#fdf4cf" />
             </linearGradient>
 
             <linearGradient id="goldSoft" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#f4e08c" stop-opacity="0.9" />
-              <stop offset="100%" stop-color="#9a7618" stop-opacity="0.8" />
+              <stop offset="0%" stop-color="#f4e08c" stop-opacity="0.95" />
+              <stop offset="100%" stop-color="#8c6a15" stop-opacity="0.85" />
             </linearGradient>
 
-            <radialGradient id="mirrorAura" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#d4af37" stop-opacity="0.22" />
-              <stop offset="65%" stop-color="#d4af37" stop-opacity="0.05" />
+            <!-- 2. Gradientes de Color: Rojo Rubí para Esmalte y Labios -->
+            <linearGradient id="rubyLuxe" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff4d6d" />
+              <stop offset="40%" stop-color="#d90429" />
+              <stop offset="100%" stop-color="#590d22" />
+            </linearGradient>
+
+            <linearGradient id="roseGoldLuxe" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffe5ec" />
+              <stop offset="40%" stop-color="#ff758f" />
+              <stop offset="85%" stop-color="#c9184a" />
+            </linearGradient>
+
+            <!-- 3. Gradiente de Cabello Balayage Sedoso (Caramelo, Miel y Rosa Pastel) -->
+            <linearGradient id="balayageHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#3a1c0d" />
+              <stop offset="28%" stop-color="#935116" />
+              <stop offset="55%" stop-color="#c68642" />
+              <stop offset="78%" stop-color="#e0ac69" />
+              <stop offset="100%" stop-color="#faedcd" />
+            </linearGradient>
+
+            <!-- 4. Gradiente de Flujo de Aire Cálido Multicolor (Oro, Coral, Fucsia, Violeta) -->
+            <linearGradient id="colorfulAirGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stop-color="#d4af37" stop-opacity="0.9" />
+              <stop offset="30%" stop-color="#ff758f" stop-opacity="0.85" />
+              <stop offset="70%" stop-color="#9d4edd" stop-opacity="0.8" />
+              <stop offset="100%" stop-color="#48cae4" stop-opacity="0.75" />
+            </linearGradient>
+
+            <!-- 5. Auras Ambientales de Salón Chic (Violeta + Fucsia + Oro) -->
+            <radialGradient id="chicSalonAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#d4af37" stop-opacity="0.25" />
+              <stop offset="40%" stop-color="#b5179e" stop-opacity="0.18" />
+              <stop offset="75%" stop-color="#3a0ca3" stop-opacity="0.08" />
               <stop offset="100%" stop-color="#070709" stop-opacity="0" />
             </radialGradient>
 
-            <radialGradient id="bulbAura" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#fff8db" stop-opacity="0.9" />
-              <stop offset="40%" stop-color="#d4af37" stop-opacity="0.5" />
+            <radialGradient id="bulbWarmAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff9e6" stop-opacity="0.95" />
+              <stop offset="45%" stop-color="#ffb703" stop-opacity="0.6" />
               <stop offset="100%" stop-color="#070709" stop-opacity="0" />
             </radialGradient>
 
-            <linearGradient id="mirrorGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#14141d" />
-              <stop offset="50%" stop-color="#1d1d28" />
-              <stop offset="100%" stop-color="#0c0c12" />
+            <radialGradient id="bulbRoseAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff0f3" stop-opacity="0.95" />
+              <stop offset="45%" stop-color="#ff758f" stop-opacity="0.6" />
+              <stop offset="100%" stop-color="#070709" stop-opacity="0" />
+            </radialGradient>
+
+            <!-- 6. Cristal del Espejo con Reflejos Tornasol -->
+            <linearGradient id="mirrorGlassMulti" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#141420" />
+              <stop offset="40%" stop-color="#1b172a" />
+              <stop offset="70%" stop-color="#181e28" />
+              <stop offset="100%" stop-color="#0b0b12" />
             </linearGradient>
 
-            <linearGradient id="glassShineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="glassShineTornasol" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
-              <stop offset="50%" stop-color="#ffffff" stop-opacity="0.18" />
+              <stop offset="35%" stop-color="#fdf4cf" stop-opacity="0.22" />
+              <stop offset="65%" stop-color="#ffccd5" stop-opacity="0.22" />
               <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
             </linearGradient>
 
-            <linearGradient id="dysonBody" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#2a2a35" />
-              <stop offset="50%" stop-color="#161620" />
-              <stop offset="100%" stop-color="#0e0e14" />
+            <linearGradient id="dysonBodyMatte" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2c2a38" />
+              <stop offset="50%" stop-color="#171520" />
+              <stop offset="100%" stop-color="#0d0c14" />
             </linearGradient>
 
-            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
+            <!-- Filtros de Brillo Suave -->
+            <filter id="softGlowVibrant" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
 
-          <!-- Halo Ambiental Central -->
-          <ellipse cx="240" cy="145" rx="190" ry="120" fill="url(#mirrorAura)" />
+          <!-- ==============================================
+               FONDO: AURA MULTICOLOR Y ORBES BOKEH DE SALÓN
+               ============================================== -->
+          <ellipse cx="260" cy="155" rx="230" ry="145" fill="url(#chicSalonAura)" />
 
-          <!-- Base / Superficie del Tocador de Mármol Oscuro -->
-          <ellipse cx="240" cy="265" rx="180" ry="18" fill="#111118" stroke="url(#goldGradientMain)" stroke-width="1.2" stroke-opacity="0.4" />
-          <line x1="80" y1="265" x2="400" y2="265" stroke="url(#goldGradientMain)" stroke-width="1.5" stroke-opacity="0.6" />
+          <!-- Orbes Bokeh Difuminados Flotantes (Rosa, Violeta y Oro) -->
+          <circle cx="110" cy="80" r="32" fill="#b5179e" opacity="0.12" class="bokeh-orb bo1" />
+          <circle cx="410" cy="90" r="38" fill="#d4af37" opacity="0.1" class="bokeh-orb bo2" />
+          <circle cx="370" cy="230" r="28" fill="#ff758f" opacity="0.14" class="bokeh-orb bo3" />
+          <circle cx="150" cy="220" r="30" fill="#7209b7" opacity="0.12" class="bokeh-orb bo4" />
+
+          <!-- Base del Tocador de Salón (Mármol Oscuro con Reflejo Dorado) -->
+          <ellipse cx="260" cy="285" rx="210" ry="22" fill="#101018" stroke="url(#goldGradientMain)" stroke-width="1.3" stroke-opacity="0.5" />
+          <line x1="60" y1="285" x2="460" y2="285" stroke="url(#goldGradientMain)" stroke-width="1.6" stroke-opacity="0.7" />
 
           <!-- ==============================================
-               1. ESPEJO DE TOCADOR OVALADO DE ALTA GAMA
+               1. ESPEJO DE TOCADOR OVALADO CON LUCES DUALES
                ============================================== -->
           <g class="vanity-mirror-group">
-            <!-- Marco Exterior Doble -->
-            <ellipse cx="240" cy="140" rx="98" ry="118" fill="none" stroke="url(#goldGradientMain)" stroke-width="3" filter="url(#softGlow)" />
-            <ellipse cx="240" cy="140" rx="90" ry="110" fill="none" stroke="url(#goldSoft)" stroke-width="1.2" stroke-dasharray="3 3" />
+            <!-- Marco Exterior Oro y Resplandor -->
+            <ellipse cx="260" cy="150" rx="104" ry="124" fill="none" stroke="url(#goldGradientMain)" stroke-width="3.2" filter="url(#softGlowVibrant)" />
+            <ellipse cx="260" cy="150" rx="96" ry="116" fill="none" stroke="url(#roseGoldLuxe)" stroke-width="1.3" stroke-dasharray="4 3" />
             
             <!-- Cristal del Espejo -->
-            <ellipse cx="240" cy="140" rx="86" ry="106" fill="url(#mirrorGlass)" />
+            <ellipse cx="260" cy="150" rx="92" ry="112" fill="url(#mirrorGlassMulti)" />
 
-            <!-- Reflejo Dinámico del Cristal (Barra de brillo que cruza) -->
-            <g clip-path="url(#mirrorClip)">
-              <clipPath id="mirrorClip">
-                <ellipse cx="240" cy="140" rx="86" ry="106" />
+            <!-- Reflejo Dinámico del Cristal (Barrido de brillo suave) -->
+            <g clip-path="url(#mirrorClipV2)">
+              <clipPath id="mirrorClipV2">
+                <ellipse cx="260" cy="150" rx="92" ry="112" />
               </clipPath>
-              <rect class="mirror-glass-shine" x="140" y="20" width="45" height="250" fill="url(#glassShineGrad)" transform="rotate(30 240 140)" />
+              <rect class="mirror-glass-shine" x="150" y="25" width="55" height="270" fill="url(#glassShineTornasol)" transform="rotate(32 260 150)" />
             </g>
 
-            <!-- Luces de Tocador Alrededor del Marco (Vanity Bulbs) -->
+            <!-- Luces de Tocador Alrededor del Marco (Alternancia Oro Cálido y Rosa Cuarzo) -->
             <g class="vanity-bulbs">
-              <circle cx="240" cy="22" r="4.5" fill="#fff9e6" class="bulb-pulse b1" />
-              <circle cx="240" cy="22" r="10" fill="url(#bulbAura)" class="bulb-pulse b1" />
+              <!-- Bombilla 1 (Superior) -->
+              <circle cx="260" cy="26" r="4.8" fill="#fff9e6" class="bulb-pulse b1" />
+              <circle cx="260" cy="26" r="11" fill="url(#bulbWarmAura)" class="bulb-pulse b1" />
 
-              <circle cx="318" cy="62" r="4.5" fill="#fff9e6" class="bulb-pulse b2" />
-              <circle cx="318" cy="62" r="10" fill="url(#bulbAura)" class="bulb-pulse b2" />
+              <!-- Bombilla 2 (Superior Derecha) -->
+              <circle cx="342" cy="68" r="4.8" fill="#fff0f3" class="bulb-pulse b2" />
+              <circle cx="342" cy="68" r="11" fill="url(#bulbRoseAura)" class="bulb-pulse b2" />
 
-              <circle cx="338" cy="140" r="4.5" fill="#fff9e6" class="bulb-pulse b3" />
-              <circle cx="338" cy="140" r="10" fill="url(#bulbAura)" class="bulb-pulse b3" />
+              <!-- Bombilla 3 (Derecha Centro) -->
+              <circle cx="364" cy="150" r="4.8" fill="#fff9e6" class="bulb-pulse b3" />
+              <circle cx="364" cy="150" r="11" fill="url(#bulbWarmAura)" class="bulb-pulse b3" />
 
-              <circle cx="318" cy="218" r="4.5" fill="#fff9e6" class="bulb-pulse b4" />
-              <circle cx="318" cy="218" r="10" fill="url(#bulbAura)" class="bulb-pulse b4" />
+              <!-- Bombilla 4 (Inferior Derecha) -->
+              <circle cx="342" cy="232" r="4.8" fill="#fff0f3" class="bulb-pulse b4" />
+              <circle cx="342" cy="232" r="11" fill="url(#bulbRoseAura)" class="bulb-pulse b4" />
 
-              <circle cx="240" cy="258" r="4.5" fill="#fff9e6" class="bulb-pulse b5" />
-              <circle cx="240" cy="258" r="10" fill="url(#bulbAura)" class="bulb-pulse b5" />
+              <!-- Bombilla 5 (Inferior Centro) -->
+              <circle cx="260" cy="274" r="4.8" fill="#fff9e6" class="bulb-pulse b5" />
+              <circle cx="260" cy="274" r="11" fill="url(#bulbWarmAura)" class="bulb-pulse b5" />
 
-              <circle cx="162" cy="218" r="4.5" fill="#fff9e6" class="bulb-pulse b6" />
-              <circle cx="162" cy="218" r="10" fill="url(#bulbAura)" class="bulb-pulse b6" />
+              <!-- Bombilla 6 (Inferior Izquierda) -->
+              <circle cx="178" cy="232" r="4.8" fill="#fff0f3" class="bulb-pulse b6" />
+              <circle cx="178" cy="232" r="11" fill="url(#bulbRoseAura)" class="bulb-pulse b6" />
 
-              <circle cx="142" cy="140" r="4.5" fill="#fff9e6" class="bulb-pulse b7" />
-              <circle cx="142" cy="140" r="10" fill="url(#bulbAura)" class="bulb-pulse b7" />
+              <!-- Bombilla 7 (Izquierda Centro) -->
+              <circle cx="156" cy="150" r="4.8" fill="#fff9e6" class="bulb-pulse b7" />
+              <circle cx="156" cy="150" r="11" fill="url(#bulbWarmAura)" class="bulb-pulse b7" />
 
-              <circle cx="162" cy="62" r="4.5" fill="#fff9e6" class="bulb-pulse b8" />
-              <circle cx="162" cy="62" r="10" fill="url(#bulbAura)" class="bulb-pulse b8" />
+              <!-- Bombilla 8 (Superior Izquierda) -->
+              <circle cx="178" cy="68" r="4.8" fill="#fff0f3" class="bulb-pulse b8" />
+              <circle cx="178" cy="68" r="11" fill="url(#bulbRoseAura)" class="bulb-pulse b8" />
             </g>
           </g>
 
           <!-- ==============================================
-               2. SECADORA DE ESTILISMO PROFESIONAL (IZQUIERDA)
+               2. MECHÓN DE CABELLO BALAYAGE SEDOSO FLOTANTE
                ============================================== -->
-          <g class="salon-dryer-group" transform="translate(65, 140)">
+          <g class="salon-hair-balayage" transform="translate(195, 75)">
+            <!-- Hebra 1 de Fondo -->
+            <path d="M12 0 C-4 45 35 90 14 138 C-2 175 22 205 18 215" fill="none" stroke="url(#balayageHairGrad)" stroke-width="7" stroke-linecap="round" opacity="0.85" class="hair-wave-anim h1" />
+            <!-- Hebra 2 Frontal con Reflejos Miel y Rosa -->
+            <path d="M16 4 C2 52 42 95 20 144 C2 182 28 210 24 218" fill="none" stroke="url(#roseGoldLuxe)" stroke-width="3" stroke-linecap="round" opacity="0.9" class="hair-wave-anim h2" />
+            <path d="M20 8 C8 58 46 100 25 148 C8 186 32 212 28 220" fill="none" stroke="#faedcd" stroke-width="1.8" stroke-linecap="round" opacity="0.95" class="hair-wave-anim h3" />
+          </g>
+
+          <!-- ==============================================
+               3. SECADORA PROFESIONAL + FLUJO MULTICOLOR
+               ============================================== -->
+          <g class="salon-dryer-group" transform="translate(70, 145)">
             <!-- Cuerpo Cilíndrico de Secadora -->
-            <path d="M25 35 L75 35 Q85 35 85 45 L85 55 Q85 65 75 65 L25 65 Z" fill="url(#dysonBody)" stroke="url(#goldGradientMain)" stroke-width="1.5" />
-            <!-- Anillo Dorado Trasero -->
-            <ellipse cx="25" cy="50" rx="5" ry="15" fill="#1b1b24" stroke="url(#goldGradientMain)" stroke-width="1.5" />
-            <circle cx="25" cy="50" r="2.5" fill="#d4af37" />
+            <path d="M25 35 L76 35 Q86 35 86 45 L86 55 Q86 65 76 65 L25 65 Z" fill="url(#dysonBodyMatte)" stroke="url(#goldGradientMain)" stroke-width="1.6" />
+            <!-- Anillo Trasero Fucsia / Oro -->
+            <ellipse cx="25" cy="50" rx="6" ry="16" fill="#1b1b24" stroke="url(#roseGoldLuxe)" stroke-width="1.8" />
+            <circle cx="25" cy="50" r="3" fill="#ff758f" />
             <!-- Boquilla Delantera -->
-            <path d="M85 40 L102 36 L102 64 L85 60 Z" fill="url(#dysonBody)" stroke="url(#goldGradientMain)" stroke-width="1.2" />
-            <!-- Mango Ergonómico -->
-            <path d="M48 65 L44 112 Q44 118 50 118 L56 118 Q62 118 62 112 L58 65 Z" fill="url(#dysonBody)" stroke="url(#goldGradientMain)" stroke-width="1.4" />
-            <line x1="53" y1="80" x2="53" y2="92" stroke="#d4af37" stroke-width="1.5" />
+            <path d="M86 40 L104 36 L104 64 L86 60 Z" fill="url(#dysonBodyMatte)" stroke="url(#goldGradientMain)" stroke-width="1.3" />
+            <!-- Mango Ergonómico con Detalle Rosa Oro -->
+            <path d="M48 65 L44 115 Q44 122 51 122 L57 122 Q64 122 64 115 L60 65 Z" fill="url(#dysonBodyMatte)" stroke="url(#goldGradientMain)" stroke-width="1.5" />
+            <line x1="54" y1="80" x2="54" y2="95" stroke="#ff758f" stroke-width="2" stroke-linecap="round" />
             
-            <!-- Flujo de Viento / Líneas de Aire Cálido Dorado -->
+            <!-- Flujo de Viento / Líneas de Aire Cálido Multicolor -->
             <g class="dryer-wind-stream">
-              <path class="wind-line w1" d="M106 42 Q125 36 148 44 T175 42" stroke="url(#goldGradientMain)" stroke-width="1.4" stroke-linecap="round" fill="none" />
-              <path class="wind-line w2" d="M106 50 Q130 52 155 48 T182 52" stroke="url(#goldGradientMain)" stroke-width="1.8" stroke-linecap="round" fill="none" />
-              <path class="wind-line w3" d="M106 58 Q125 64 148 56 T175 60" stroke="url(#goldGradientMain)" stroke-width="1.4" stroke-linecap="round" fill="none" />
+              <path class="wind-line w1" d="M108 40 Q130 32 158 42 T190 40" stroke="url(#colorfulAirGrad)" stroke-width="2" stroke-linecap="round" fill="none" />
+              <path class="wind-line w2" d="M108 50 Q134 54 165 48 T198 52" stroke="url(#colorfulAirGrad)" stroke-width="2.6" stroke-linecap="round" fill="none" />
+              <path class="wind-line w3" d="M108 60 Q130 68 158 58 T190 62" stroke="url(#colorfulAirGrad)" stroke-width="2" stroke-linecap="round" fill="none" />
             </g>
           </g>
 
           <!-- ==============================================
-               3. PEINE PROFESIONAL DE PRECISIÓN (CENTRO-BASE)
+               4. LABIAL DE LUJO (LIPSTICK) SOBRE EL TOCADOR
                ============================================== -->
-          <g class="salon-comb-group" transform="translate(180, 245) rotate(-6)">
-            <!-- Lomo del Peine -->
-            <rect x="0" y="0" width="115" height="7" rx="3.5" fill="url(#goldGradientMain)" />
+          <g class="salon-lipstick-group" transform="translate(180, 240)">
+            <!-- Tubo Base Dorado -->
+            <rect x="0" y="20" width="16" height="26" rx="2" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
+            <rect x="0" y="20" width="16" height="4" fill="#fdf4cf" opacity="0.6" />
+            <!-- Tubo Superior Biselado -->
+            <rect x="2" y="10" width="12" height="10" fill="#202028" stroke="url(#goldGradientMain)" stroke-width="0.8" />
+            <!-- Barra de Labial Rojo Rubí / Frambuesa -->
+            <path d="M2 10 L2 4 Q2 0 8 0 L14 7 L14 10 Z" fill="url(#rubyLuxe)" />
+            <!-- Reflejo Satinado de la Barra -->
+            <path d="M4 8 L4 4 Q4 2 8 2 L10 5" stroke="#ffffff" stroke-width="0.9" stroke-linecap="round" opacity="0.65" />
+            <!-- Destello de Brillo en la Punta -->
+            <circle cx="8" cy="1" r="1.5" fill="#ffffff" class="lipstick-gleam-dot" />
+          </g>
+
+          <!-- ==============================================
+               5. PEINE PROFESIONAL DE PRECISIÓN (CENTRO-BASE)
+               ============================================== -->
+          <g class="salon-comb-group" transform="translate(210, 266) rotate(-4)">
+            <!-- Lomo del Peine con Destello Oro Rosa -->
+            <rect x="0" y="0" width="118" height="7" rx="3.5" fill="url(#goldGradientMain)" />
+            <line x1="10" y1="2" x2="108" y2="2" stroke="#fff8db" stroke-width="0.8" opacity="0.8" />
             <!-- Dientes del Peine -->
             <g fill="url(#goldSoft)">
               <rect x="10" y="7" width="1.6" height="15" rx="0.8" />
@@ -219,69 +354,89 @@
               <rect x="88" y="7" width="1.6" height="15" rx="0.8" />
               <rect x="94" y="7" width="1.6" height="15" rx="0.8" />
               <rect x="100" y="7" width="1.6" height="15" rx="0.8" />
+              <rect x="106" y="7" width="1.6" height="15" rx="0.8" />
             </g>
           </g>
 
           <!-- ==============================================
-               4. TIJERAS PROFESIONALES DE ESTILISMO (DERECHA)
-               ANIMACIÓN RÍTMICA DE CORTE SUAVE Y ELEGANTE
+               6. ESMALTE DE UÑAS RUBÍ CON GOTA RESPLANDECIENTE
                ============================================== -->
-          <g class="salon-scissors-assembly" transform="translate(345, 155)">
+          <g class="salon-polish-group" transform="translate(325, 235)">
+            <!-- Frasco de Cristal Facetado -->
+            <rect x="0" y="16" width="22" height="26" rx="4" fill="url(#rubyLuxe)" stroke="url(#goldGradientMain)" stroke-width="1.2" />
+            <!-- Reflejo de Vidrio en el Frasco -->
+            <rect x="2" y="18" width="4" height="22" rx="1.5" fill="#ffffff" opacity="0.55" />
+            <rect x="17" y="24" width="2" height="12" rx="1" fill="#ffffff" opacity="0.35" />
+            <!-- Cuello y Tapa Dorada -->
+            <rect x="7" y="12" width="8" height="4" fill="url(#goldGradientMain)" />
+            <path d="M6 12 L7 0 L15 0 L16 12 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
             
+            <!-- Pincel con Gota de Laca Roja Rubí Suspendida -->
+            <g class="polish-drop-anim">
+              <path d="M-6 8 Q-6 2 -12 2" stroke="url(#goldGradientMain)" stroke-width="1.5" fill="none" />
+              <circle cx="-12" cy="14" r="3.2" fill="#d90429" stroke="#ff4d6d" stroke-width="0.8" />
+              <circle cx="-13" cy="13" r="1" fill="#ffffff" />
+            </g>
+          </g>
+
+          <!-- ==============================================
+               7. TIJERAS PROFESIONALES DE ESTILISMO (DERECHA)
+               ============================================== -->
+          <g class="salon-scissors-assembly" transform="translate(365, 160)">
             <!-- Hoja y Mango Superior -->
             <g class="scissor-blade-top">
-              <!-- Hoja Afilada -->
-              <path d="M0 0 L-68 -22 Q-66 -18 0 4 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
-              <!-- Mango y Anillo Superior -->
-              <path d="M0 0 L25 15 Q30 20 40 18 Q48 14 46 4 Q44 -6 34 -6 Q24 -6 20 4 Z" fill="none" stroke="url(#goldGradientMain)" stroke-width="3" stroke-linecap="round" />
-              <!-- Apoya Dedos Ergonómico -->
-              <path d="M44 14 Q52 18 55 24" fill="none" stroke="url(#goldGradientMain)" stroke-width="2.2" stroke-linecap="round" />
+              <path d="M0 0 L-72 -24 Q-70 -20 0 4 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
+              <path d="M0 0 L26 16 Q32 22 42 20 Q50 15 48 4 Q46 -6 35 -6 Q25 -6 21 4 Z" fill="none" stroke="url(#goldGradientMain)" stroke-width="3.2" stroke-linecap="round" />
+              <path d="M46 15 Q54 20 58 26" fill="none" stroke="url(#goldGradientMain)" stroke-width="2.4" stroke-linecap="round" />
             </g>
 
             <!-- Hoja y Mango Inferior -->
             <g class="scissor-blade-bottom">
-              <!-- Hoja Afilada -->
-              <path d="M0 0 L-68 18 Q-66 14 0 -4 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
-              <!-- Mango y Anillo Inferior -->
-              <path d="M0 0 L25 -15 Q30 -20 40 -18 Q48 -14 46 -4 Q44 6 34 6 Q24 6 20 -4 Z" fill="none" stroke="url(#goldGradientMain)" stroke-width="3" stroke-linecap="round" />
+              <path d="M0 0 L-72 20 Q-70 16 0 -4 Z" fill="url(#goldGradientMain)" stroke="#aa8420" stroke-width="0.8" />
+              <path d="M0 0 L26 -16 Q32 -22 42 -20 Q50 -15 48 -4 Q46 6 35 6 Q25 6 21 -4 Z" fill="none" stroke="url(#goldGradientMain)" stroke-width="3.2" stroke-linecap="round" />
             </g>
 
-            <!-- Tornillo Pivote Central Dorado de Precisión -->
-            <circle cx="0" cy="0" r="5" fill="#fdf4cf" stroke="#aa8420" stroke-width="1.2" />
-            <circle cx="0" cy="0" r="2" fill="#070709" />
+            <!-- Tornillo Pivote Central Dorado -->
+            <circle cx="0" cy="0" r="5.5" fill="#fff8db" stroke="#aa8420" stroke-width="1.3" />
+            <circle cx="0" cy="0" r="2.2" fill="#070709" />
           </g>
 
           <!-- ==============================================
-               5. DESTELLOS Y ESTRELLAS DORADAS (SPARKLES)
+               8. DESTELLOS ESTELARES MULTICOLORES (SPARKLES)
                ============================================== -->
-          <!-- Destello 1 (Cerca de las tijeras) -->
-          <g class="sparkle-star s1" transform="translate(275, 135)">
-            <path d="M0 -10 Q0 0 10 0 Q0 0 0 10 Q0 0 -10 0 Q0 0 0 -10 Z" fill="url(#goldGradientMain)" />
+          <!-- Destello 1 (Oro sobre tijeras) -->
+          <g class="sparkle-star s1" transform="translate(290, 140)">
+            <path d="M0 -11 Q0 0 11 0 Q0 0 0 11 Q0 0 -11 0 Q0 0 0 -11 Z" fill="url(#goldGradientMain)" />
           </g>
-          <!-- Destello 2 (Sobre el espejo) -->
-          <g class="sparkle-star s2" transform="translate(235, 38)">
-            <path d="M0 -7 Q0 0 7 0 Q0 0 0 7 Q0 0 -7 0 Q0 0 0 -7 Z" fill="#ffffff" />
+          <!-- Destello 2 (Diamante sobre espejo) -->
+          <g class="sparkle-star s2" transform="translate(255, 42)">
+            <path d="M0 -8 Q0 0 8 0 Q0 0 0 8 Q0 0 -8 0 Q0 0 0 -8 Z" fill="#ffffff" />
           </g>
-          <!-- Destello 3 (Lado izquierdo) -->
-          <g class="sparkle-star s3" transform="translate(130, 85)">
-            <path d="M0 -8 Q0 0 8 0 Q0 0 0 8 Q0 0 -8 0 Q0 0 0 -8 Z" fill="url(#goldGradientMain)" />
+          <!-- Destello 3 (Rosa rubí cerca del labial) -->
+          <g class="sparkle-star s3" transform="translate(140, 90)">
+            <path d="M0 -9 Q0 0 9 0 Q0 0 0 9 Q0 0 -9 0 Q0 0 0 -9 Z" fill="#ff758f" />
           </g>
-          <!-- Destello 4 (Cerca del peine) -->
-          <g class="sparkle-star s4" transform="translate(305, 235)">
-            <path d="M0 -6 Q0 0 6 0 Q0 0 0 6 Q0 0 -6 0 Q0 0 0 -6 Z" fill="#fdf4cf" />
+          <!-- Destello 4 (Oro cerca del esmalte de uñas) -->
+          <g class="sparkle-star s4" transform="translate(345, 230)">
+            <path d="M0 -8 Q0 0 8 0 Q0 0 0 8 Q0 0 -8 0 Q0 0 0 -8 Z" fill="#fdf4cf" />
           </g>
-          <!-- Destello 5 (Brisa de secadora) -->
-          <g class="sparkle-star s5" transform="translate(215, 185)">
-            <path d="M0 -7 Q0 0 7 0 Q0 0 0 7 Q0 0 -7 0 Q0 0 0 -7 Z" fill="url(#goldGradientMain)" />
+          <!-- Destello 5 (Violeta sobre la brisa) -->
+          <g class="sparkle-star s5" transform="translate(225, 190)">
+            <path d="M0 -8 Q0 0 8 0 Q0 0 0 8 Q0 0 -8 0 Q0 0 0 -8 Z" fill="#b5179e" />
+          </g>
+          <!-- Destello 6 (Oro puro superior derecho) -->
+          <g class="sparkle-star s6" transform="translate(390, 110)">
+            <path d="M0 -7 Q0 0 7 0 Q0 0 0 7 Q0 0 -7 0 Q0 0 0 -7 Z" fill="#d4af37" />
           </g>
 
-          <!-- Partículas de Polvo Dorado Flotantes -->
-          <circle cx="170" cy="110" r="1.8" fill="#d4af37" class="dust-particle dp1" />
-          <circle cx="210" cy="70" r="1.3" fill="#f4e08c" class="dust-particle dp2" />
-          <circle cx="290" cy="95" r="1.6" fill="#d4af37" class="dust-particle dp3" />
-          <circle cx="330" cy="190" r="1.4" fill="#f4e08c" class="dust-particle dp4" />
-          <circle cx="150" cy="230" r="1.5" fill="#d4af37" class="dust-particle dp5" />
-          <circle cx="260" cy="210" r="1.8" fill="#fdf4cf" class="dust-particle dp6" />
+          <!-- Partículas de Polvo Dorado y Rosa Flotantes -->
+          <circle cx="170" cy="110" r="2" fill="#d4af37" class="dust-particle dp1" />
+          <circle cx="215" cy="65" r="1.6" fill="#ff758f" class="dust-particle dp2" />
+          <circle cx="300" cy="95" r="1.8" fill="#f4e08c" class="dust-particle dp3" />
+          <circle cx="345" cy="185" r="1.6" fill="#ff4d6d" class="dust-particle dp4" />
+          <circle cx="150" cy="230" r="1.7" fill="#b5179e" class="dust-particle dp5" />
+          <circle cx="270" cy="215" r="2.1" fill="#fff8db" class="dust-particle dp6" />
+          <circle cx="380" cy="250" r="1.5" fill="#d4af37" class="dust-particle dp7" />
 
         </svg>
       </div>
@@ -394,6 +549,24 @@
     document.addEventListener('DOMContentLoaded', async () => {
       'use strict';
 
+      // 1. Control del Preloader con Animación de Logo
+      const preloader = document.getElementById('salonPreloader');
+
+      function dismissPreloader() {
+        if (!preloader || preloader.classList.contains('preloader-hidden')) return;
+        preloader.classList.add('preloader-hidden');
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 650);
+      }
+
+      // Tiempo prudente para mostrar la animación del logo y asegurar carga visual
+      setTimeout(dismissPreloader, 1300);
+      window.addEventListener('load', () => {
+        setTimeout(dismissPreloader, 800);
+      });
+
+      // 2. Elementos de la Página de Mantenimiento
       const titleEl = document.getElementById('mntDisplayTitle');
       const msgEl = document.getElementById('mntDisplayMessage');
       const estimatedBox = document.getElementById('mntEstimatedBox');

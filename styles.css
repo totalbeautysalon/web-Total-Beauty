@@ -5066,6 +5066,206 @@ select,
   }
 }
 /* ==========================================================================
+   PANTALLA DE CARGA (PRELOADER) CON ANIMACIÓN DE LOGOTIPO OFICIAL
+   ========================================================================== */
+.salon-preloader {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 45%, #181824 0%, #0c0c12 55%, #050508 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.65s;
+}
+
+.salon-preloader.preloader-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.06);
+  pointer-events: none;
+}
+
+.preloader-inner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  max-width: 360px;
+  width: 90%;
+  position: relative;
+}
+
+.preloader-orbital-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Anillos Orbitales Giratorios de Oro y Rosa Rubí */
+.preloader-orbital-ring {
+  position: absolute;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.preloader-orbital-ring.ring-outer {
+  inset: 0;
+  border: 1.8px solid transparent;
+  border-top-color: #d4af37;
+  border-bottom-color: #f4e08c;
+  animation: preloaderRingSpin 3s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+}
+
+.preloader-orbital-ring.ring-middle {
+  inset: 10px;
+  border: 1.2px dashed rgba(255, 117, 143, 0.6);
+  animation: preloaderRingRevSpin 4.5s linear infinite;
+}
+
+.preloader-orbital-ring.ring-inner {
+  inset: 20px;
+  border: 1.6px solid transparent;
+  border-left-color: #ff758f;
+  border-right-color: #d4af37;
+  animation: preloaderRingSpin 2s linear infinite;
+}
+
+@keyframes preloaderRingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes preloaderRingRevSpin {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Envoltorio del Logotipo con Respiración y Brillo */
+.preloader-logo-wrap {
+  position: absolute;
+  inset: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #222230 0%, #101016 70%, #08080c 100%);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.25), inset 0 0 15px rgba(0, 0, 0, 0.8);
+  animation: preloaderLogoPulse 2.4s ease-in-out infinite;
+}
+
+.preloader-logo-img {
+  max-height: 48px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+  transition: transform 0.3s ease;
+}
+
+.preloader-logo-shimmer {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-25deg);
+  animation: logoShimmerSweep 2.2s infinite ease-in-out;
+}
+
+@keyframes preloaderLogoPulse {
+  0% { transform: scale(0.97); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+  50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.45); }
+  100% { transform: scale(0.97); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+}
+
+@keyframes logoShimmerSweep {
+  0% { left: -120%; }
+  50% { left: 140%; }
+  100% { left: 140%; }
+}
+
+/* Tipografía de la Pantalla de Carga */
+.preloader-brand-title {
+  font-family: var(--font-cinzel, 'Cinzel', serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.18em;
+  margin: 0 0 0.25rem 0;
+  text-shadow: 0 0 16px rgba(212, 175, 55, 0.45);
+}
+
+.preloader-brand-tag {
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.74rem;
+  color: var(--gold-light, #f4e08c);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 1.35rem 0;
+}
+
+/* Barra de Progreso Oro Líquido */
+.preloader-progress-track {
+  width: 170px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 0.85rem;
+}
+
+.preloader-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #aa8420, #d4af37, #ff758f, #fdf4cf);
+  animation: preloaderBarFlow 1.8s ease-in-out infinite;
+}
+
+@keyframes preloaderBarFlow {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+.preloader-status-text {
+  font-size: 0.76rem;
+  color: #a0a0b0;
+  letter-spacing: 0.04em;
+}
+
+.preloader-dots .pdot {
+  display: inline-block;
+  color: var(--gold-light, #f4e08c);
+  font-weight: 700;
+  animation: dotPulseAnim 1.4s infinite ease-in-out;
+}
+.preloader-dots .dot-1 { animation-delay: 0s; }
+.preloader-dots .dot-2 { animation-delay: 0.25s; }
+.preloader-dots .dot-3 { animation-delay: 0.5s; }
+
+@keyframes dotPulseAnim {
+  0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ==========================================================================
    PÁGINA DE MANTENIMIENTO TEMPORAL CON ANIMACIÓN DE SALÓN DE BELLEZA
    ========================================================================== */
 .page-mantenimiento {
@@ -5077,21 +5277,21 @@ select,
 }
 
 .maintenance-wrapper {
-  max-width: 780px;
+  max-width: 820px;
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
   width: 100%;
 }
 
 .maintenance-card {
-  background: radial-gradient(circle at 50% 0%, #161622 0%, #0e0e14 70%, #070709 100%);
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  border-radius: 20px;
-  padding: 2.25rem 1.75rem;
+  background: radial-gradient(circle at 50% 0%, #1a1628 0%, #100e18 50%, #070709 100%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 22px;
+  padding: 2.5rem 1.85rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(212, 175, 55, 0.12);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.9), 0 0 40px rgba(181, 23, 158, 0.12), 0 0 25px rgba(212, 175, 55, 0.15);
   margin-bottom: 2rem;
 }
 
@@ -5102,23 +5302,24 @@ select,
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #d4af37, #fdf4cf, #d4af37, transparent);
+  background: linear-gradient(90deg, transparent, #ff758f, #d4af37, #fdf4cf, #d4af37, #ff758f, transparent);
 }
 
 .maintenance-status-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.4rem 1rem;
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 0.45rem 1.15rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.4);
   border-radius: 999px;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--gold-light, #f4e08c);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
 }
 
 .gold-pulse-dot {
@@ -5137,10 +5338,12 @@ select,
   100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #d4af37; }
 }
 
-/* Contenedor y Escena SVG del Salón */
+/* ==========================================================================
+   ANIMACIÓN DEL SALÓN DE BELLEZA COLORIDO (SVG PURO VECTORIAL)
+   ========================================================================== */
 .salon-animation-container {
-  max-width: 440px;
-  margin: 0 auto 1.5rem;
+  max-width: 480px;
+  margin: 0 auto 1.75rem;
   position: relative;
   display: flex;
   justify-content: center;
@@ -5150,25 +5353,40 @@ select,
 .salon-svg-scene {
   width: 100%;
   height: auto;
-  max-height: 280px;
-  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.7));
+  max-height: 310px;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.75));
 }
 
-/* Animación de Espejo y Reflejo */
+/* 1. Orbes Bokeh de Salón Flotantes */
+.bokeh-orb {
+  animation: bokehFloating 5s infinite ease-in-out alternate;
+}
+.bokeh-orb.bo1 { animation-delay: 0s; }
+.bokeh-orb.bo2 { animation-delay: 1.2s; }
+.bokeh-orb.bo3 { animation-delay: 2.5s; }
+.bokeh-orb.bo4 { animation-delay: 3.7s; }
+
+@keyframes bokehFloating {
+  0% { transform: translateY(0) scale(1); opacity: 0.1; }
+  50% { transform: translateY(-10px) scale(1.15); opacity: 0.22; }
+  100% { transform: translateY(6px) scale(0.95); opacity: 0.12; }
+}
+
+/* 2. Reflejo del Cristal Tornasol */
 .mirror-glass-shine {
-  animation: mirrorShineSweep 5.5s infinite ease-in-out;
+  animation: mirrorShineSweep 5s infinite ease-in-out;
 }
 
 @keyframes mirrorShineSweep {
-  0% { transform: rotate(30deg) translate(-220px, 0); opacity: 0; }
-  20% { opacity: 0.65; }
-  45% { transform: rotate(30deg) translate(220px, 0); opacity: 0; }
-  100% { transform: rotate(30deg) translate(220px, 0); opacity: 0; }
+  0% { transform: rotate(32deg) translate(-240px, 0); opacity: 0; }
+  25% { opacity: 0.7; }
+  50% { transform: rotate(32deg) translate(240px, 0); opacity: 0; }
+  100% { transform: rotate(32deg) translate(240px, 0); opacity: 0; }
 }
 
-/* Animación de Luces del Tocador (Vanity Bulbs) */
+/* 3. Luces de Tocador Cálidas y Rosa Cuarzo */
 .bulb-pulse {
-  animation: bulbPulsing 2.4s infinite ease-in-out alternate;
+  animation: bulbPulsing 2.2s infinite ease-in-out alternate;
 }
 .bulb-pulse.b1 { animation-delay: 0s; }
 .bulb-pulse.b2 { animation-delay: 0.3s; }
@@ -5181,10 +5399,25 @@ select,
 
 @keyframes bulbPulsing {
   0% { opacity: 0.45; }
-  100% { opacity: 1; }
+  100% { opacity: 1; filter: drop-shadow(0 0 6px rgba(255, 244, 219, 0.8)); }
 }
 
-/* Animación de Tijeras de Salón Doradas */
+/* 4. Mechón de Cabello Balayage Ondulante */
+.hair-wave-anim {
+  transform-origin: 15px 0;
+  animation: hairBalayageFlow 3.8s ease-in-out infinite alternate;
+}
+.hair-wave-anim.h1 { animation-delay: 0s; }
+.hair-wave-anim.h2 { animation-delay: 0.25s; }
+.hair-wave-anim.h3 { animation-delay: 0.5s; }
+
+@keyframes hairBalayageFlow {
+  0% { transform: rotate(0deg) skewX(0deg); }
+  50% { transform: rotate(5deg) skewX(-4deg); }
+  100% { transform: rotate(-3deg) skewX(3deg); }
+}
+
+/* 5. Tijeras Profesionales de Estilismo Doradas */
 .scissor-blade-top {
   transform-origin: 0 0;
   animation: scissorCutTop 1.6s infinite ease-in-out;
@@ -5211,50 +5444,72 @@ select,
   100% { transform: rotate(0deg); }
 }
 
-/* Animación de Flujo de Viento de Secadora */
+/* 6. Flujo de Viento Multicolor de la Secadora */
 .wind-line {
-  stroke-dasharray: 6 3;
+  stroke-dasharray: 8 4;
   animation: windStreamFlow 2s linear infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 117, 143, 0.5));
 }
 .wind-line.w1 { animation-delay: 0s; }
-.wind-line.w2 { animation-delay: 0.3s; }
-.wind-line.w3 { animation-delay: 0.6s; }
+.wind-line.w2 { animation-delay: 0.35s; }
+.wind-line.w3 { animation-delay: 0.7s; }
 
 @keyframes windStreamFlow {
-  0% { stroke-dashoffset: 24; opacity: 0.2; }
-  50% { opacity: 0.95; }
-  100% { stroke-dashoffset: 0; opacity: 0.2; }
+  0% { stroke-dashoffset: 28; opacity: 0.25; }
+  50% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0.25; }
 }
 
-/* Animación de Peine */
+/* 7. Peine Profesional de Dientes Finos */
 .salon-comb-group {
   transform-origin: 50px 3px;
   animation: combGentleSway 3.6s infinite ease-in-out;
 }
 
 @keyframes combGentleSway {
-  0% { transform: translate(180px, 245px) rotate(-6deg); }
-  50% { transform: translate(180px, 242px) rotate(-2deg); }
-  100% { transform: translate(180px, 245px) rotate(-6deg); }
+  0% { transform: translate(210px, 266px) rotate(-4deg); }
+  50% { transform: translate(210px, 263px) rotate(-1deg); }
+  100% { transform: translate(210px, 266px) rotate(-4deg); }
 }
 
-/* Animación de Destellos y Estrellas */
+/* 8. Esmalte de Uñas con Gota Resplandeciente */
+.polish-drop-anim {
+  animation: polishDropPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes polishDropPulse {
+  0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 3px rgba(217, 4, 41, 0.5)); }
+  50% { transform: translateY(4px); filter: drop-shadow(0 0 9px rgba(255, 77, 109, 0.85)); }
+}
+
+/* 9. Brillo Satinado del Labial */
+.lipstick-gleam-dot {
+  animation: gleamPulseAnim 1.8s infinite ease-in-out alternate;
+}
+
+@keyframes gleamPulseAnim {
+  0% { opacity: 0.3; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.6); filter: drop-shadow(0 0 6px #ffffff); }
+}
+
+/* 10. Destellos y Estrellas Multicolores */
 .sparkle-star {
   animation: sparkleTwinkle 2.8s infinite ease-in-out;
 }
 .sparkle-star.s1 { animation-delay: 0s; }
-.sparkle-star.s2 { animation-delay: 0.7s; }
-.sparkle-star.s3 { animation-delay: 1.4s; }
-.sparkle-star.s4 { animation-delay: 2.1s; }
-.sparkle-star.s5 { animation-delay: 1.0s; }
+.sparkle-star.s2 { animation-delay: 0.6s; }
+.sparkle-star.s3 { animation-delay: 1.2s; }
+.sparkle-star.s4 { animation-delay: 1.8s; }
+.sparkle-star.s5 { animation-delay: 2.4s; }
+.sparkle-star.s6 { animation-delay: 1.0s; }
 
 @keyframes sparkleTwinkle {
   0% { transform: scale(0.3) rotate(0deg); opacity: 0.1; }
-  50% { transform: scale(1.15) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 6px #f4e08c); }
+  50% { transform: scale(1.2) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 8px #f4e08c); }
   100% { transform: scale(0.3) rotate(90deg); opacity: 0.1; }
 }
 
-/* Partículas de Polvo Dorado */
+/* 11. Partículas de Polvo Dorado y Rosa */
 .dust-particle {
   animation: dustFloat 3.4s infinite ease-in-out alternate;
 }
@@ -5264,16 +5519,19 @@ select,
 .dust-particle.dp4 { animation-delay: 2.0s; }
 .dust-particle.dp5 { animation-delay: 0.5s; }
 .dust-particle.dp6 { animation-delay: 1.7s; }
+.dust-particle.dp7 { animation-delay: 2.3s; }
 
 @keyframes dustFloat {
-  0% { transform: translateY(0); opacity: 0.3; }
-  100% { transform: translateY(-12px); opacity: 0.9; }
+  0% { transform: translateY(0); opacity: 0.25; }
+  100% { transform: translateY(-14px); opacity: 0.95; }
 }
 
-/* Títulos y Contenido de Mantenimiento */
+/* ==========================================================================
+   TÍTULOS Y CONTENIDO DE MANTENIMIENTO
+   ========================================================================== */
 .maintenance-main-title {
   font-family: var(--font-serif, 'Playfair Display', serif);
-  font-size: 1.95rem;
+  font-size: 2.05rem;
   font-weight: 600;
   color: #ffffff;
   letter-spacing: 0.02em;
@@ -5283,10 +5541,10 @@ select,
 
 .maintenance-main-desc {
   font-family: var(--font-sans, 'Montserrat', sans-serif);
-  font-size: 0.94rem;
-  line-height: 1.68;
+  font-size: 0.95rem;
+  line-height: 1.7;
   color: #b5b5c2;
-  max-width: 620px;
+  max-width: 630px;
   margin: 0 auto 1.75rem;
 }
 
@@ -5294,22 +5552,23 @@ select,
 .maintenance-salon-status-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  background: rgba(212, 175, 55, 0.07);
-  border: 1px solid rgba(212, 175, 55, 0.28);
-  border-radius: 12px;
-  padding: 1.15rem 1.35rem;
+  gap: 1.15rem;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 14px;
+  padding: 1.2rem 1.45rem;
   text-align: left;
-  max-width: 620px;
+  max-width: 630px;
   margin: 0 auto 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .salon-status-icon {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: rgba(212, 175, 55, 0.16);
+  border: 1px solid rgba(212, 175, 55, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5324,7 +5583,7 @@ select,
 .salon-status-title {
   display: block;
   font-family: var(--font-cinzel, 'Cinzel', serif);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--gold-light, #f4e08c);
   letter-spacing: 0.04em;
@@ -5332,7 +5591,7 @@ select,
 }
 
 .salon-status-desc {
-  font-size: 0.82rem;
+  font-size: 0.83rem;
   line-height: 1.45;
   color: #dedede;
   margin: 0;
@@ -5342,12 +5601,12 @@ select,
 .maintenance-time-box {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1.25rem;
+  gap: 0.55rem;
+  padding: 0.65rem 1.35rem;
   background: #111118;
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 8px;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: #b5b5c2;
   margin-bottom: 1.75rem;
 }
@@ -5371,24 +5630,24 @@ select,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.8rem;
   background: linear-gradient(135deg, #1f7a42 0%, #25d366 100%);
   color: #ffffff;
   font-family: var(--font-cinzel, 'Cinzel', serif);
-  font-size: 0.92rem;
+  font-size: 0.94rem;
   font-weight: 600;
   letter-spacing: 0.05em;
-  padding: 1.05rem 2rem;
+  padding: 1.1rem 2.2rem;
   border-radius: 999px;
   text-decoration: none;
-  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.35);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.38);
   transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
   max-width: 90%;
 }
 
 .btn-maintenance-whatsapp:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(37, 211, 102, 0.5);
+  box-shadow: 0 14px 32px rgba(37, 211, 102, 0.55);
   filter: brightness(1.08);
 }
 
@@ -5398,8 +5657,8 @@ select,
 
 /* Canales Secundarios de Contacto */
 .maintenance-secondary-links {
-  border-top: 1px solid rgba(212, 175, 55, 0.15);
-  padding-top: 1.4rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.18);
+  padding-top: 1.5rem;
 }
 
 .secondary-title {
@@ -5408,39 +5667,39 @@ select,
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-muted, #858595);
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.95rem;
 }
 
 .secondary-buttons-row {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .btn-maintenance-sec {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 1.15rem;
+  gap: 0.55rem;
+  padding: 0.6rem 1.25rem;
   background: #121218;
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(212, 175, 55, 0.28);
   border-radius: 8px;
   color: #dedede;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   text-decoration: none;
   transition: all 0.25s ease;
 }
 
 .btn-maintenance-sec:hover {
-  background: rgba(212, 175, 55, 0.12);
+  background: rgba(212, 175, 55, 0.15);
   border-color: var(--gold-primary, #d4af37);
   color: var(--gold-light, #f4e08c);
   transform: translateY(-1px);
 }
 
 .maintenance-admin-link {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--text-muted, #858595);
   text-decoration: none;
   letter-spacing: 0.05em;
@@ -5461,9 +5720,9 @@ select,
   background: #14141d;
   border: 1px solid var(--gold-primary, #d4af37);
   color: #ffffff;
-  padding: 0.85rem 1.6rem;
+  padding: 0.9rem 1.75rem;
   border-radius: 999px;
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   box-shadow: 0 10px 35px rgba(0,0,0,0.9), 0 0 20px rgba(212,175,55,0.3);
   z-index: 999999;
   animation: slideDownToast 0.4s ease-out;
@@ -5616,10 +5875,10 @@ select,
 
 @media (max-width: 600px) {
   .maintenance-card {
-    padding: 1.75rem 1.15rem;
+    padding: 1.85rem 1.15rem;
   }
   .maintenance-main-title {
-    font-size: 1.45rem;
+    font-size: 1.55rem;
   }
   .maintenance-salon-status-card {
     flex-direction: column;
