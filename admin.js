@@ -1,8 +1,8 @@
 /**
  * TOTAL BEAUTY SALÓN & ACADEMIA
- * Script de Gestión Administrativa en Firebase Realtime Database
- * Control de Anuncio Intersticial, Cursos de Capacitación y Alumnas
- * Cero Emojis - Estética Minimalista y de Lujo
+ * Script de Gestión Administrativa Integral en Firebase Realtime Database
+ * Módulos: Dashboard KPIs, Validación de Cupones, Encuestas, Cupones, Estadísticas, Anuncio, Cursos y Alumnas
+ * Cero Emojis - Arquitectura Segura con Respaldo Offline
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,12 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PINS = ["ADMIN2026", "04012021"];
   const SESSION_KEY = "tb_admin_auth_token";
 
+  // Cachés en memoria
   let cachedStudents = {};
   let cachedCourses = {};
+  let cachedSurveys = {};
+  let cachedCoupons = {};
+  let currentValidatorCoupon = null;
+
   let interstitialTimerInterval = null;
   let interstitialCanClose = false;
 
-  // Elementos DOM
+  // Elementos DOM Principales
   const authSection = document.getElementById('adminAuthSection');
   const dashboardSection = document.getElementById('adminDashboardSection');
   const logoutBtn = document.getElementById('adminLogoutBtn');
@@ -32,13 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // PROTECCIÓN: DESHABILITAR COPIA Y SELECCIÓN DE TEXTO
+  // PROTECCIÓN: DESHABILITAR COPIA Y SELECCIÓN DE TEXTO (EXCEPTO CAMPOS)
   // ==========================================
   ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart'].forEach(eventType => {
     document.addEventListener(eventType, (e) => {
       const target = e.target;
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)) {
-        return; // Permitir edición y selección únicamente dentro de campos de formulario
+        return;
       }
       e.preventDefault();
     });
@@ -53,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isConnected = await TB_FIREBASE.checkConnection();
       if (isConnected) {
         firebaseStatusPill.className = 'admin-status-pill online';
-        firebaseStatusText.textContent = 'En línea con Firebase (totalbregis)';
+        firebaseStatusText.textContent = 'En línea con Firebase';
       } else {
         firebaseStatusPill.className = 'admin-status-pill offline';
         firebaseStatusText.textContent = 'Modo Local (Sin conexión Firebase)';
@@ -87,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dashboardSection) dashboardSection.style.display = 'block';
     if (logoutBtn) logoutBtn.style.display = 'inline-flex';
 
+    loadSurveysAndCouponsData();
     loadAnnouncementData();
     loadCoursesData();
     loadStudentsData();
@@ -117,7 +123,891 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================
-  // 3. GESTIÓN DEL ANUNCIO INTERSTICIAL
+  // NAVEGACIÓN ENTRE PESTAÑAS ADMINISTRATIVAS
+  // ==========================================
+  window.switchAdminTab = function (paneId) {
+    const buttons = document.querySelectorAll('.admin-tab-btn');
+    const panes = document.querySelectorAll('.admin-module-pane');
+
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-tab') === paneId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    panes.forEach(pane => {
+      if (pane.id === paneId) {
+        pane.classList.add('active');
+      } else {
+        pane.classList.remove('active');
+      }
+    });
+
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  };
+
+  // ==========================================
+  // 3. MÓDULO DE ENCUESTAS & CUPONES: CARGA Y KPIS
+  // ==========================================
+  window.loadSurveysAndCouponsData = async function (showToastNotice = false) {
+    try {
+      cachedSurveys = await TB_FIREBASE.getEncuestas();
+      cachedCoupons = await TB_FIREBASE.getCupones();
+
+      updateSurveyAndCouponKpis();
+      renderSurveysTable();
+      renderCouponsTable();
+      renderAnalyticsCharts();
+
+      if (showToastNotice) {
+        showToast("Datos de encuestas y cupones sincronizados con Firebase");
+      }
+    } catch (err) {
+      console.error("Error al sincronizar encuestas y cupones:", err);
+      if (showToastNotice) {
+        showToast("Error al conectar con Firebase. Mostrando datos locales.");
+      }
+    }
+  };
+
+  function updateSurveyAndCouponKpis() {
+    const surveysList = Object.values(cachedSurveys || {});
+    const couponsList = Object.values(cachedCoupons || {});
+
+    const totalSurveys = surveysList.length;
+
+    // Calificaciones
+    const ratingValues = {
+      'Excelente': 5,
+      'Muy bueno': 4,
+      'Muy buena': 4,
+      'Bueno': 3,
+      'Buena': 3,
+      'Regular': 2,
+      'Malo': 1,
+      'Mala': 1
+    };
+
+    let totalScore = 0;
+    let scoreCount = 0;
+    let excelenteCount = 0;
+    let recomiendanCount = 0;
+
+    surveysList.forEach(s => {
+      const r = s.calificacionResultado;
+      if (ratingValues[r]) {
+        totalScore += ratingValues[r];
+        scoreCount++;
+      }
+      if (r === 'Excelente') excelenteCount++;
+      if (s.recomendacion === 'Sí') recomiendanCount++;
+    });
+
+    const avgScore = scoreCount > 0 ? (totalScore / scoreCount).toFixed(1) : "5.0";
+    const percentExcelente = totalSurveys > 0 ? Math.round((excelenteCount / totalSurveys) * 100) : 0;
+    const percentRecomiendan = totalSurveys > 0 ? Math.round((recomiendanCount / totalSurveys) * 100) : 0;
+
+    // Cupones
+    const totalCoupons = couponsList.length;
+    let usedCoupons = 0;
+    let availableCoupons = 0;
+
+    couponsList.forEach(c => {
+      if (c.estado === 'utilizado') usedCoupons++;
+      else if (c.estado === 'disponible') availableCoupons++;
+    });
+
+    // Elementos DOM
+    const kpiSurveys = document.getElementById('kpiTotalEncuestas');
+    const kpiAvg = document.getElementById('kpiPromedioCalif');
+    const kpiExc = document.getElementById('kpiTotalExcelente');
+    const kpiRec = document.getElementById('kpiTotalRecomiendan');
+    const kpiGen = document.getElementById('kpiCuponesGenerados');
+    const kpiUsed = document.getElementById('kpiCuponesUtilizados');
+    const kpiPend = document.getElementById('kpiCuponesPendientes');
+
+    if (kpiSurveys) kpiSurveys.textContent = totalSurveys;
+    if (kpiAvg) kpiAvg.textContent = `${avgScore} / 5`;
+    if (kpiExc) kpiExc.textContent = `${excelenteCount} (${percentExcelente}%)`;
+    if (kpiRec) kpiRec.textContent = `${recomiendanCount} (${percentRecomiendan}%)`;
+    if (kpiGen) kpiGen.textContent = totalCoupons;
+    if (kpiUsed) kpiUsed.textContent = usedCoupons;
+    if (kpiPend) kpiPend.textContent = availableCoupons;
+  }
+
+  // ==========================================
+  // 4. HERRAMIENTA DE VALIDACIÓN Y CANJE DE CUPONES
+  // ==========================================
+  window.handleQuickSearchCoupon = function () {
+    const input = document.getElementById('quickCouponInput');
+    const code = (input ? input.value : '').trim().toUpperCase();
+    if (!code) {
+      showToast("Ingresa el código del cupón.");
+      return;
+    }
+    const valInput = document.getElementById('validatorCodeInput');
+    if (valInput) valInput.value = code;
+    window.switchAdminTab('pane-validador');
+    window.handleSearchCoupon(code);
+  };
+
+  window.handleSearchCoupon = async function (explicitCode = null) {
+    const input = document.getElementById('validatorCodeInput');
+    const code = (explicitCode || (input ? input.value : '')).trim().toUpperCase();
+    const resultArea = document.getElementById('validatorResultArea');
+    if (!resultArea) return;
+
+    if (!code || code.length < 5) {
+      showToast("Ingresa un código de cupón válido (ej. TB-XXXXXX).");
+      return;
+    }
+
+    resultArea.style.display = 'block';
+    resultArea.innerHTML = '<div class="table-loading-cell">Consultando cupón en Firebase...</div>';
+
+    const coupon = await TB_FIREBASE.getCupon(code);
+    currentValidatorCoupon = coupon;
+
+    if (!coupon) {
+      resultArea.innerHTML = `
+        <div class="validator-status-alert used">
+          <strong>El cupón ${escapeHtml(code)} no existe en el sistema</strong>. Verifica que el código esté escrito correctamente.
+        </div>
+      `;
+      return;
+    }
+
+    renderValidatorResult(coupon);
+  };
+
+  function renderValidatorResult(c) {
+    const resultArea = document.getElementById('validatorResultArea');
+    if (!resultArea) return;
+
+    const isAvailable = c.estado === 'disponible';
+    const isUsed = c.estado === 'utilizado';
+    const isExpired = c.estado === 'vencido';
+
+    let alertClass = 'available';
+    let alertText = 'CUPÓN VÁLIDO Y DISPONIBLE PARA CANJE';
+    if (isUsed) {
+      alertClass = 'used';
+      alertText = 'ESTE CUPÓN YA FUE UTILIZADO ANTERIORMENTE';
+    } else if (isExpired) {
+      alertClass = 'expired';
+      alertText = 'ESTE CUPÓN ESTÁ VENCIDO';
+    }
+
+    const issuedStr = c.fechaGeneracion ? new Date(c.fechaGeneracion).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : '--';
+    const expiryStr = c.fechaVencimiento ? new Date(c.fechaVencimiento).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : '--';
+
+    let html = `
+      <div class="validator-status-alert ${alertClass}">
+        <strong>${alertText} &bull; CÓDIGO: ${escapeHtml(c.codigo)}</strong>
+      </div>
+
+      <div class="coupon-meta-grid">
+        <div class="coupon-meta-item">
+          <span class="meta-label">Clienta</span>
+          <span class="meta-val">${escapeHtml(c.nombre || 'Clienta')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">WhatsApp</span>
+          <span class="meta-val">${escapeHtml(c.whatsapp || '--')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Fecha de Emisión</span>
+          <span class="meta-val">${issuedStr}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Fecha de Vencimiento</span>
+          <span class="meta-val gold-bold">${expiryStr}</span>
+        </div>
+      </div>
+    `;
+
+    if (isUsed) {
+      const usedDate = c.fechaUtilizacion ? new Date(c.fechaUtilizacion).toLocaleString('es-MX') : '--';
+      html += `
+        <div style="background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; padding: 1.15rem; margin-top: 1rem;">
+          <h4 style="color: #e74c3c; font-size: 0.9rem; margin-bottom: 0.45rem;">Detalles del Canje Registrado</h4>
+          <p style="font-size: 0.82rem; color: #dedede;">Fecha y hora de utilización: <strong>${usedDate}</strong></p>
+          <p style="font-size: 0.82rem; color: #dedede;">Servicio contratado: <strong>${escapeHtml(c.servicioCanje || 'Servicio')}</strong></p>
+          <p style="font-size: 0.82rem; color: #dedede;">Precio original: $${c.precioOriginal || 0} MXN &bull; Descuento: ${c.descuentoPorcentaje || 0}% (-$${c.descuentoImporte || 0})</p>
+          <p style="font-size: 0.95rem; color: var(--gold-light); font-weight: 700; margin-top: 0.35rem;">Total Pagado: $${c.totalPagado || 0} MXN</p>
+          <p style="font-size: 0.74rem; color: var(--text-dim); margin-top: 0.35rem;">Registrado por: ${escapeHtml(c.canjeadoPor || 'Recepción')}</p>
+        </div>
+      `;
+    } else if (isExpired) {
+      html += `
+        <div style="background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.3); border-radius: 8px; padding: 1.15rem; margin-top: 1rem;">
+          <h4 style="color: #f39c12; font-size: 0.9rem; margin-bottom: 0.35rem;">Cupón Fuera de Vigencia</h4>
+          <p style="font-size: 0.82rem; color: #dedede;">Este cupón venció el ${expiryStr}. Las políticas de Total Beauty establecen 30 días naturales de vigencia.</p>
+        </div>
+      `;
+    } else {
+      // Cupón disponible: Mostrar formulario para registrar servicio y cobrar
+      html += `
+        <form id="adminRedemptionForm" onsubmit="handleConfirmRedemption(event)" style="background: rgba(10,10,14,0.75); border: 1px solid rgba(212,175,55,0.25); border-radius: 10px; padding: 1.35rem; margin-top: 1rem;">
+          <h4 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 1rem;">Registrar Servicio y Aplicar Descuento</h4>
+
+          <div class="admin-form-row">
+            <div class="student-form-group">
+              <label class="student-form-label">Servicio Contratado</label>
+              <select id="adminRedeemService" class="student-form-input" required>
+                <option value="Uñas Acrílicas">Uñas Acrílicas / Gel</option>
+                <option value="Extensiones de Pestañas">Extensiones de Pestañas</option>
+                <option value="Laminado y Diseño de Cejas">Laminado y Diseño de Cejas</option>
+                <option value="Pedicure Spa">Pedicure Spa</option>
+                <option value="Corte de Cabello">Corte de Cabello</option>
+                <option value="Maquillaje">Maquillaje</option>
+                <option value="Tratamiento Capilar">Tratamiento Capilar</option>
+                <option value="Otro Servicio">Otro Servicio</option>
+              </select>
+            </div>
+
+            <div class="student-form-group">
+              <label class="student-form-label">Precio Regular del Servicio ($ MXN)</label>
+              <input 
+                type="number" 
+                id="adminRedeemPrice" 
+                class="student-form-input" 
+                placeholder="ej. 500" 
+                min="1" 
+                required 
+                oninput="updateAdminRedeemCalc(this.value)"
+              >
+            </div>
+          </div>
+
+          <!-- Cuadro de Cálculo de Descuento en Tiempo Real -->
+          <div id="adminLiveCalcBox" style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; display: none;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.35rem;">
+              <span style="color: var(--text-muted);">Porcentaje según rango de precio:</span>
+              <span id="adminLiveTier" style="color: var(--gold-light); font-weight: 600;">20%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.35rem;">
+              <span style="color: var(--text-muted);">Monto a descontar:</span>
+              <span id="adminLiveDiscount" style="color: var(--gold-primary); font-weight: 700;">-$100 MXN</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #ffffff; border-top: 1px solid rgba(212,175,55,0.22); padding-top: 0.45rem;">
+              <span>Total a Cobrar a la Clienta:</span>
+              <span id="adminLiveTotal" style="color: var(--gold-light); font-family: var(--font-serif); font-size: 1.25rem;">$400 MXN</span>
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="student-form-group">
+              <label class="student-form-label">Personal Responsable en Recepción</label>
+              <input type="text" id="adminRedeemCashier" class="student-form-input" value="Recepción Total Beauty" required>
+            </div>
+            <div class="student-form-group">
+              <label class="student-form-label">Notas Adicionales (Opcional)</label>
+              <input type="text" id="adminRedeemNotes" class="student-form-input" placeholder="ej. Cita 16:00, clienta conforme">
+            </div>
+          </div>
+
+          <button type="submit" id="btnAdminConfirmRedeem" class="btn-student-submit" style="margin-top: 0.5rem;">
+            <span>Confirmar Canje y Actualizar en Firebase</span>
+          </button>
+        </form>
+      `;
+    }
+
+    resultArea.innerHTML = html;
+  }
+
+  window.updateAdminRedeemCalc = function (val) {
+    const box = document.getElementById('adminLiveCalcBox');
+    const tier = document.getElementById('adminLiveTier');
+    const disc = document.getElementById('adminLiveDiscount');
+    const tot = document.getElementById('adminLiveTotal');
+
+    const p = parseFloat(val);
+    if (isNaN(p) || p <= 0) {
+      if (box) box.style.display = 'none';
+      return;
+    }
+
+    const calc = TB_FIREBASE.calculateDiscount(p);
+    if (box) box.style.display = 'block';
+    if (tier) tier.textContent = `${calc.porcentaje}% (${calc.rango})`;
+    if (disc) disc.textContent = `-$${calc.montoDescuento.toLocaleString('es-MX')} MXN`;
+    if (tot) tot.textContent = `$${calc.totalPagar.toLocaleString('es-MX')} MXN`;
+  };
+
+  window.handleConfirmRedemption = async function (e) {
+    e.preventDefault();
+    if (!currentValidatorCoupon || !currentValidatorCoupon.codigo) return;
+
+    const btn = document.getElementById('btnAdminConfirmRedeem');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>Procesando canje en Firebase...</span>';
+    }
+
+    const service = document.getElementById('adminRedeemService').value;
+    const price = parseFloat(document.getElementById('adminRedeemPrice').value);
+    const cashier = document.getElementById('adminRedeemCashier').value;
+    const notes = document.getElementById('adminRedeemNotes').value;
+
+    const res = await TB_FIREBASE.canjearCupon(currentValidatorCoupon.codigo, {
+      servicio: service,
+      precioOriginal: price,
+      responsable: cashier,
+      notas: notes
+    });
+
+    if (res.success) {
+      showToast(res.message);
+      currentValidatorCoupon = res.cupon;
+      cachedCoupons[res.cupon.codigo] = res.cupon;
+      renderValidatorResult(res.cupon);
+      updateSurveyAndCouponKpis();
+      renderCouponsTable();
+      renderAnalyticsCharts();
+    } else {
+      showToast(res.message);
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Confirmar Canje y Actualizar en Firebase</span>';
+      }
+    }
+  };
+
+  // ==========================================
+  // 5. TABLA DE ENCUESTAS & FILTROS
+  // ==========================================
+  function renderSurveysTable(filteredList = null) {
+    const tbody = document.getElementById('surveysTableBody');
+    if (!tbody) return;
+
+    const list = filteredList !== null ? filteredList : Object.values(cachedSurveys || {});
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" class="table-loading-cell">No se encontraron encuestas registradas.</td></tr>';
+      return;
+    }
+
+    // Ordenar de más reciente a más antigua
+    list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    tbody.innerHTML = list.map(s => {
+      const dateStr = s.timestamp ? new Date(s.timestamp).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : (s.fechaRegistro ? s.fechaRegistro.split('T')[0] : '--');
+      const telClean = (s.whatsapp || '').replace(/\D/g, '');
+      const ratingBadge = `<span class="coupon-status-pill" style="background: rgba(212,175,55,0.15); color: var(--gold-light); border-color: rgba(212,175,55,0.4);">${escapeHtml(s.calificacionResultado || 'N/A')}</span>`;
+
+      return `
+        <tr>
+          <td>${dateStr}</td>
+          <td><strong>${escapeHtml(s.nombre || 'Clienta')}</strong></td>
+          <td>
+            <a href="https://api.whatsapp.com/send?phone=52${telClean}" target="_blank" rel="noopener noreferrer" style="color: var(--gold-light); text-decoration: underline;">
+              ${escapeHtml(s.whatsapp || '--')}
+            </a>
+          </td>
+          <td><span class="table-curso-tag">${escapeHtml(s.servicio || 'General')}</span></td>
+          <td>${escapeHtml(s.fechaServicio || '--')}</td>
+          <td>${ratingBadge}</td>
+          <td>${escapeHtml(s.calificacionAtencion || '--')}</td>
+          <td>${escapeHtml(s.recomendacion || '--')}</td>
+          <td><code>${escapeHtml(s.cuponCodigo || '--')}</code></td>
+          <td style="text-align: right;">
+            <button type="button" class="btn-table-reset" onclick="openSurveyDetail('${s.id}')">
+              <span>Ver Detalle</span>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  window.filterSurveysTable = function () {
+    const query = (document.getElementById('surveySearchInput') ? document.getElementById('surveySearchInput').value : '').toLowerCase().trim();
+    const serviceFilter = document.getElementById('surveyFilterService') ? document.getElementById('surveyFilterService').value : 'all';
+    const ratingFilter = document.getElementById('surveyFilterRating') ? document.getElementById('surveyFilterRating').value : 'all';
+    const dateFrom = document.getElementById('surveyFilterDateFrom') ? document.getElementById('surveyFilterDateFrom').value : '';
+    const dateTo = document.getElementById('surveyFilterDateTo') ? document.getElementById('surveyFilterDateTo').value : '';
+
+    const all = Object.values(cachedSurveys || {});
+    const filtered = all.filter(s => {
+      // Búsqueda texto
+      const name = (s.nombre || '').toLowerCase();
+      const phone = (s.whatsapp || '').toLowerCase();
+      if (query && !name.includes(query) && !phone.includes(query)) {
+        return false;
+      }
+
+      // Filtro Servicio
+      if (serviceFilter !== 'all') {
+        const srv = (s.servicio || '').toLowerCase();
+        if (serviceFilter === 'Otro') {
+          const defaults = ['uñas', 'pestañas', 'cejas', 'maquillaje', 'corte de cabello', 'tratamiento capilar'];
+          if (defaults.includes(srv)) return false;
+        } else if (!srv.includes(serviceFilter.toLowerCase())) {
+          return false;
+        }
+      }
+
+      // Filtro Calificación
+      if (ratingFilter !== 'all' && s.calificacionResultado !== ratingFilter) {
+        return false;
+      }
+
+      // Filtro Fechas
+      const sDate = s.fechaServicio || (s.fechaRegistro ? s.fechaRegistro.split('T')[0] : '');
+      if (dateFrom && sDate && sDate < dateFrom) return false;
+      if (dateTo && sDate && sDate > dateTo) return false;
+
+      return true;
+    });
+
+    renderSurveysTable(filtered);
+  };
+
+  window.openSurveyDetail = function (surveyId) {
+    const survey = cachedSurveys[surveyId];
+    if (!survey) return;
+
+    const modal = document.getElementById('surveyDetailModal');
+    const content = document.getElementById('surveyDetailContent');
+    if (!modal || !content) return;
+
+    const registered = survey.timestamp ? new Date(survey.timestamp).toLocaleString('es-MX') : '--';
+    const associatedCoupon = cachedCoupons[survey.cuponCodigo] || null;
+
+    content.innerHTML = `
+      <div class="coupon-meta-grid" style="margin-bottom: 1rem;">
+        <div class="coupon-meta-item">
+          <span class="meta-label">Clienta</span>
+          <span class="meta-val">${escapeHtml(survey.nombre || 'Clienta')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">WhatsApp</span>
+          <span class="meta-val">${escapeHtml(survey.whatsapp || '--')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Servicio Realizado</span>
+          <span class="meta-val gold-bold">${escapeHtml(survey.servicio || 'General')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Fecha del Servicio</span>
+          <span class="meta-val">${escapeHtml(survey.fechaServicio || '--')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Calificación del Resultado</span>
+          <span class="meta-val gold-bold">${escapeHtml(survey.calificacionResultado || '--')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Atención Recibida</span>
+          <span class="meta-val">${escapeHtml(survey.calificacionAtencion || '--')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">¿Recomendaría?</span>
+          <span class="meta-val">${escapeHtml(survey.recomendacion || '--')}</span>
+        </div>
+        <div class="coupon-meta-item">
+          <span class="meta-label">Fecha y Hora de Registro</span>
+          <span class="meta-val">${registered}</span>
+        </div>
+      </div>
+
+      <div style="background: rgba(10,10,14,0.7); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+        <span class="meta-label" style="margin-bottom: 0.35rem; display: block;">Comentarios o Sugerencias:</span>
+        <p style="font-size: 0.85rem; color: #ffffff; line-height: 1.5; font-style: italic;">
+          ${survey.comentarios ? `&ldquo;${escapeHtml(survey.comentarios)}&rdquo;` : 'Sin comentarios adicionales proporcionados.'}
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px;">
+        <span style="font-size: 0.8rem; color: #dedede;">Cupón asignado: <strong>${escapeHtml(survey.cuponCodigo || '--')}</strong></span>
+        ${associatedCoupon ? `<span class="badge-status-${associatedCoupon.estado}">${associatedCoupon.estado}</span>` : ''}
+      </div>
+    `;
+
+    modal.style.display = 'flex';
+  };
+
+  window.closeSurveyDetailModal = function () {
+    const modal = document.getElementById('surveyDetailModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  // ==========================================
+  // 6. TABLA DE CUPONES & FILTROS
+  // ==========================================
+  function renderCouponsTable(filteredList = null) {
+    const tbody = document.getElementById('couponsTableBody');
+    if (!tbody) return;
+
+    const list = filteredList !== null ? filteredList : Object.values(cachedCoupons || {});
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="table-loading-cell">No se han generado cupones aún.</td></tr>';
+      return;
+    }
+
+    list.sort((a, b) => (b.timestampGeneracion || 0) - (a.timestampGeneracion || 0));
+
+    tbody.innerHTML = list.map(c => {
+      const issued = c.fechaGeneracion ? new Date(c.fechaGeneracion).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : '--';
+      const expiry = c.fechaVencimiento ? new Date(c.fechaVencimiento).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : '--';
+      const statusBadge = `<span class="badge-status-${c.estado}">${c.estado}</span>`;
+
+      let detailCanje = '--';
+      let totalPagadoStr = '--';
+      if (c.estado === 'utilizado') {
+        detailCanje = `${escapeHtml(c.servicioCanje || 'Servicio')} (-${c.descuentoPorcentaje || 0}%)`;
+        totalPagadoStr = `$${c.totalPagado || 0} MXN`;
+      }
+
+      const actionBtn = c.estado === 'disponible'
+        ? `<button type="button" class="btn-table-reset" onclick="triggerRedemption('${c.codigo}')">Canjear</button>`
+        : `<span style="font-size: 0.72rem; color: var(--text-dim);">${c.estado === 'utilizado' ? 'Canjeado' : 'Vencido'}</span>`;
+
+      return `
+        <tr>
+          <td><strong><code>${escapeHtml(c.codigo)}</code></strong></td>
+          <td>${escapeHtml(c.nombre || 'Clienta')}</td>
+          <td>${escapeHtml(c.whatsapp || '--')}</td>
+          <td>${statusBadge}</td>
+          <td>${issued}</td>
+          <td class="gold-bold">${expiry}</td>
+          <td>${detailCanje}</td>
+          <td>${totalPagadoStr}</td>
+          <td style="text-align: right;">${actionBtn}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  window.filterCouponsTable = function () {
+    const query = (document.getElementById('couponSearchInput') ? document.getElementById('couponSearchInput').value : '').toLowerCase().trim();
+    const statusFilter = document.getElementById('couponFilterStatus') ? document.getElementById('couponFilterStatus').value : 'all';
+
+    const all = Object.values(cachedCoupons || {});
+    const filtered = all.filter(c => {
+      const code = (c.codigo || '').toLowerCase();
+      const name = (c.nombre || '').toLowerCase();
+      const phone = (c.whatsapp || '').toLowerCase();
+
+      if (query && !code.includes(query) && !name.includes(query) && !phone.includes(query)) {
+        return false;
+      }
+
+      if (statusFilter !== 'all' && c.estado !== statusFilter) {
+        return false;
+      }
+
+      return true;
+    });
+
+    renderCouponsTable(filtered);
+  };
+
+  window.triggerRedemption = function (code) {
+    const valInput = document.getElementById('validatorCodeInput');
+    if (valInput) valInput.value = code;
+    window.switchAdminTab('pane-validador');
+    window.handleSearchCoupon(code);
+  };
+
+  // ==========================================
+  // 7. GRÁFICAS ESTADÍSTICAS Y RENDIMIENTO
+  // ==========================================
+  function renderAnalyticsCharts() {
+    const surveys = Object.values(cachedSurveys || {});
+    const coupons = Object.values(cachedCoupons || {});
+
+    renderBestServicesChart(surveys);
+    renderFeedbackChart(surveys);
+    renderAvgByServiceChart(surveys);
+    renderRecommendationChart(surveys);
+    renderCouponUsageChart(coupons);
+    renderMonthlyTrendChart(surveys);
+  }
+
+  function renderBestServicesChart(surveys) {
+    const container = document.getElementById('chartBestServices');
+    if (!container) return;
+
+    const ratingWeights = { 'Excelente': 5, 'Muy bueno': 4, 'Bueno': 3, 'Regular': 2, 'Malo': 1 };
+    const serviceScores = {};
+    const serviceCounts = {};
+
+    surveys.forEach(s => {
+      const srv = s.servicio || 'General';
+      const score = ratingWeights[s.calificacionResultado] || 0;
+      if (score > 0) {
+        serviceScores[srv] = (serviceScores[srv] || 0) + score;
+        serviceCounts[srv] = (serviceCounts[srv] || 0) + 1;
+      }
+    });
+
+    const list = Object.keys(serviceScores).map(srv => {
+      const avg = serviceScores[srv] / serviceCounts[srv];
+      return { service: srv, avg: parseFloat(avg.toFixed(1)), count: serviceCounts[srv] };
+    });
+
+    list.sort((a, b) => b.avg - a.avg);
+
+    if (list.length === 0) {
+      container.innerHTML = '<p class="admin-card-desc">Sin respuestas suficientes para graficar.</p>';
+      return;
+    }
+
+    container.innerHTML = list.slice(0, 5).map(item => {
+      const percent = Math.round((item.avg / 5) * 100);
+      return `
+        <div class="chart-bar-item">
+          <div class="chart-bar-header">
+            <span>${escapeHtml(item.service)}</span>
+            <span class="gold-bold">${item.avg} / 5 (${item.count} reseñas)</span>
+          </div>
+          <div class="chart-bar-track">
+            <div class="chart-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderFeedbackChart(surveys) {
+    const container = document.getElementById('chartNegativeServices');
+    if (!container) return;
+
+    const counts = {};
+    surveys.forEach(s => {
+      if (s.comentarios && s.comentarios.trim().length > 0) {
+        const srv = s.servicio || 'General';
+        counts[srv] = (counts[srv] || 0) + 1;
+      }
+    });
+
+    const list = Object.keys(counts).map(k => ({ service: k, count: counts[k] }));
+    list.sort((a, b) => b.count - a.count);
+
+    if (list.length === 0) {
+      container.innerHTML = '<p class="admin-card-desc">No se han registrado sugerencias de mejora aún.</p>';
+      return;
+    }
+
+    const max = Math.max(...list.map(l => l.count), 1);
+    container.innerHTML = list.slice(0, 5).map(item => {
+      const percent = Math.round((item.count / max) * 100);
+      return `
+        <div class="chart-bar-item">
+          <div class="chart-bar-header">
+            <span>${escapeHtml(item.service)}</span>
+            <span>${item.count} comentarios</span>
+          </div>
+          <div class="chart-bar-track">
+            <div class="chart-bar-fill" style="width: ${percent}%; background: linear-gradient(90deg, #d4af37, #f39c12);"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderAvgByServiceChart(surveys) {
+    const container = document.getElementById('chartAvgByService');
+    if (!container) return;
+
+    const map = {};
+    const ratingWeights = { 'Excelente': 5, 'Muy bueno': 4, 'Bueno': 3, 'Regular': 2, 'Malo': 1 };
+
+    surveys.forEach(s => {
+      const srv = s.servicio || 'General';
+      const r = ratingWeights[s.calificacionResultado] || 0;
+      if (r > 0) {
+        if (!map[srv]) map[srv] = { total: 0, count: 0 };
+        map[srv].total += r;
+        map[srv].count++;
+      }
+    });
+
+    const list = Object.keys(map).map(srv => ({
+      service: srv,
+      avg: parseFloat((map[srv].total / map[srv].count).toFixed(1))
+    }));
+
+    if (list.length === 0) {
+      container.innerHTML = '<p class="admin-card-desc">Sin datos disponibles.</p>';
+      return;
+    }
+
+    container.innerHTML = list.map(item => {
+      const percent = Math.round((item.avg / 5) * 100);
+      return `
+        <div class="chart-bar-item">
+          <div class="chart-bar-header">
+            <span>${escapeHtml(item.service)}</span>
+            <span class="gold-bold">${item.avg} / 5</span>
+          </div>
+          <div class="chart-bar-track">
+            <div class="chart-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderRecommendationChart(surveys) {
+    const container = document.getElementById('chartRecommendation');
+    if (!container) return;
+
+    const total = surveys.length;
+    if (total === 0) {
+      container.innerHTML = '<p class="admin-card-desc">Sin datos registrados.</p>';
+      return;
+    }
+
+    let si = 0, no = 0, talVez = 0;
+    surveys.forEach(s => {
+      if (s.recomendacion === 'Sí') si++;
+      else if (s.recomendacion === 'No') no++;
+      else talVez++;
+    });
+
+    const pSi = Math.round((si / total) * 100);
+    const pTalVez = Math.round((talVez / total) * 100);
+    const pNo = Math.round((no / total) * 100);
+
+    container.innerHTML = `
+      <div class="chart-bar-item">
+        <div class="chart-bar-header">
+          <span>Definitivamente Sí</span>
+          <span class="gold-bold">${pSi}% (${si})</span>
+        </div>
+        <div class="chart-bar-track">
+          <div class="chart-bar-fill" style="width: ${pSi}%; background: #2ecc71;"></div>
+        </div>
+      </div>
+
+      <div class="chart-bar-item">
+        <div class="chart-bar-header">
+          <span>Tal vez</span>
+          <span>${pTalVez}% (${talVez})</span>
+        </div>
+        <div class="chart-bar-track">
+          <div class="chart-bar-fill" style="width: ${pTalVez}%; background: #f39c12;"></div>
+        </div>
+      </div>
+
+      <div class="chart-bar-item">
+        <div class="chart-bar-header">
+          <span>No recomendaría</span>
+          <span>${pNo}% (${no})</span>
+        </div>
+        <div class="chart-bar-track">
+          <div class="chart-bar-fill" style="width: ${pNo}%; background: #e74c3c;"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCouponUsageChart(coupons) {
+    const container = document.getElementById('chartCouponUsage');
+    if (!container) return;
+
+    const total = coupons.length;
+    if (total === 0) {
+      container.innerHTML = '<p class="admin-card-desc">No hay cupones generados todavía.</p>';
+      return;
+    }
+
+    let utilizados = 0, disponibles = 0, vencidos = 0;
+    coupons.forEach(c => {
+      if (c.estado === 'utilizado') utilizados++;
+      else if (c.estado === 'disponible') disponibles++;
+      else if (c.estado === 'vencido') vencidos++;
+    });
+
+    const pUtil = Math.round((utilizados / total) * 100);
+    const pDisp = Math.round((disponibles / total) * 100);
+    const pVenc = Math.round((vencidos / total) * 100);
+
+    container.innerHTML = `
+      <div class="chart-bar-item">
+        <div class="chart-bar-header">
+          <span>Cupones Canjeados (Éxito)</span>
+          <span class="gold-bold">${pUtil}% (${utilizados})</span>
+        </div>
+        <div class="chart-bar-track">
+          <div class="chart-bar-fill" style="width: ${pUtil}%; background: #2ecc71;"></div>
+        </div>
+      </div>
+
+      <div class="chart-bar-item">
+        <div class="chart-bar-header">
+          <span>Cupones Pendientes (Activos)</span>
+          <span>${pDisp}% (${disponibles})</span>
+        </div>
+        <div class="chart-bar-track">
+          <div class="chart-bar-fill" style="width: ${pDisp}%; background: var(--gold-primary);"></div>
+        </div>
+      </div>
+
+      <div class="chart-bar-item">
+        <div class="chart-bar-header">
+          <span>Cupones Vencidos</span>
+          <span>${pVenc}% (${vencidos})</span>
+        </div>
+        <div class="chart-bar-track">
+          <div class="chart-bar-fill" style="width: ${pVenc}%; background: #e74c3c;"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMonthlyTrendChart(surveys) {
+    const container = document.getElementById('chartMonthlyEvolution');
+    if (!container) return;
+
+    const ratingWeights = { 'Excelente': 5, 'Muy bueno': 4, 'Bueno': 3, 'Regular': 2, 'Malo': 1 };
+    const monthScores = {};
+    const monthCounts = {};
+
+    surveys.forEach(s => {
+      let key = '2026-11';
+      if (s.fechaServicio && s.fechaServicio.length >= 7) {
+        key = s.fechaServicio.substring(0, 7);
+      } else if (s.fechaRegistro && s.fechaRegistro.length >= 7) {
+        key = s.fechaRegistro.substring(0, 7);
+      }
+
+      const score = ratingWeights[s.calificacionResultado] || 0;
+      if (score > 0) {
+        monthScores[key] = (monthScores[key] || 0) + score;
+        monthCounts[key] = (monthCounts[key] || 0) + 1;
+      }
+    });
+
+    const months = Object.keys(monthScores).sort();
+    if (months.length === 0) {
+      container.innerHTML = '<p class="admin-card-desc">Sin datos mensuales registrados.</p>';
+      return;
+    }
+
+    container.innerHTML = months.map(m => {
+      const avg = (monthScores[m] / monthCounts[m]).toFixed(1);
+      const percent = Math.round((avg / 5) * 100);
+      return `
+        <div class="chart-bar-item">
+          <div class="chart-bar-header">
+            <span>Mes: ${m}</span>
+            <span class="gold-bold">${avg} / 5 (${monthCounts[m]} encuestas)</span>
+          </div>
+          <div class="chart-bar-track">
+            <div class="chart-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ==========================================
+  // 8. GESTIÓN DEL ANUNCIO INTERSTICIAL (EXISTENTE)
   // ==========================================
   async function loadAnnouncementData() {
     try {
@@ -139,166 +1029,125 @@ document.addEventListener('DOMContentLoaded', () => {
 
       updateImagePreview(data.image || "assets/images/academia.jpg");
       updateAnnouncementStatusBadge();
-      updateKpis();
     } catch (e) {
-      console.error("Error cargando anuncio:", e);
+      console.error("Error al cargar anuncio:", e);
     }
   }
+
+  window.updateImagePreview = function (src) {
+    const preview = document.getElementById('adminImgPreview');
+    if (preview) {
+      preview.src = src || "assets/images/academia.jpg";
+    }
+  };
+
+  window.setQuickImg = function (src) {
+    const input = document.getElementById('adminAnnImg');
+    if (input) {
+      input.value = src;
+      updateImagePreview(src);
+    }
+  };
 
   window.updateAnnouncementStatusBadge = function () {
     const toggle = document.getElementById('adminAnnToggle');
     const badge = document.getElementById('announcementBadgeStatus');
-    const kpiAnn = document.getElementById('kpiAnnStatus');
+    const kpi = document.getElementById('kpiAnnStatus');
 
-    const isEnabled = toggle ? toggle.checked : false;
+    if (!toggle || !badge) return;
 
-    if (badge) {
-      if (isEnabled) {
-        badge.className = 'badge-status-active';
-        badge.textContent = 'Activo en la Página';
-      } else {
-        badge.className = 'badge-status-inactive';
-        badge.textContent = 'Pausado / Oculto';
-      }
-    }
-
-    if (kpiAnn) {
-      kpiAnn.textContent = isEnabled ? 'Activo' : 'Pausado';
-      kpiAnn.className = isEnabled ? 'kpi-value success' : 'kpi-value warning';
-    }
-  };
-
-  window.updateImagePreview = function (url) {
-    const previewImg = document.getElementById('adminImgPreview');
-    if (previewImg && url) {
-      previewImg.src = url.trim();
-    }
-  };
-
-  window.setQuickImg = function (path) {
-    const imgInput = document.getElementById('adminAnnImg');
-    if (imgInput) {
-      imgInput.value = path;
-      updateImagePreview(path);
+    if (toggle.checked) {
+      badge.className = "badge-status-active";
+      badge.textContent = "Activo en la Página";
+      if (kpi) kpi.textContent = "Activo";
+    } else {
+      badge.className = "badge-status-paused";
+      badge.textContent = "Pausado / Oculto";
+      if (kpi) kpi.textContent = "Pausado";
     }
   };
 
   window.handleSaveAnnouncement = async function (e) {
     e.preventDefault();
 
-    const toggle = document.getElementById('adminAnnToggle');
-    const title = document.getElementById('adminAnnTitle');
-    const img = document.getElementById('adminAnnImg');
-    const text = document.getElementById('adminAnnText');
-    const link = document.getElementById('adminAnnLink');
-    const btnText = document.getElementById('adminAnnBtnText');
-
     const payload = {
-      enabled: toggle ? toggle.checked : true,
-      title: (title ? title.value : "").trim() || "Aviso Oficial",
-      image: (img ? img.value : "").trim() || "assets/images/academia.jpg",
-      text: (text ? text.value : "").trim(),
-      link: (link ? link.value : "").trim() || "https://api.whatsapp.com/send?phone=525650560824",
-      btnText: (btnText ? btnText.value : "").trim() || "Solicitar Informes"
+      enabled: document.getElementById('adminAnnToggle').checked,
+      title: document.getElementById('adminAnnTitle').value.trim(),
+      image: document.getElementById('adminAnnImg').value.trim() || "assets/images/academia.jpg",
+      text: document.getElementById('adminAnnText').value.trim(),
+      link: document.getElementById('adminAnnLink').value.trim() || "https://api.whatsapp.com/send?phone=525650560824",
+      btnText: document.getElementById('adminAnnBtnText').value.trim() || "Solicitar Informes por WhatsApp"
     };
 
     const saved = await TB_FIREBASE.saveAnnouncement(payload);
     if (saved) {
       showToast("Anuncio intersticial guardado exitosamente en Firebase");
-      updateAnnouncementStatusBadge();
     } else {
       showToast("Guardado en respaldo local (sin respuesta de Firebase)");
     }
   };
 
-  // Previsualización con temporizador real de 5s
   window.previewInterstitialModal = function () {
-    const title = document.getElementById('adminAnnTitle');
-    const img = document.getElementById('adminAnnImg');
-    const text = document.getElementById('adminAnnText');
-    const link = document.getElementById('adminAnnLink');
-    const btnText = document.getElementById('adminAnnBtnText');
-
-    const overlay = document.getElementById('interstitialOverlay');
-    const titleEl = document.getElementById('interstitialTitle');
-    const imgEl = document.getElementById('interstitialImg');
-    const textEl = document.getElementById('interstitialText');
-    const btnEl = document.getElementById('interstitialBtn');
-    const btnTextEl = document.getElementById('interstitialBtnText');
-
-    if (titleEl) titleEl.textContent = (title ? title.value : "") || "Aviso Oficial";
-    if (imgEl) imgEl.src = (img ? img.value : "") || "assets/images/academia.jpg";
-    if (textEl) textEl.textContent = (text ? text.value : "");
-    if (btnEl) {
-      btnEl.href = (link ? link.value : "") || "#";
-      if (btnTextEl) btnTextEl.textContent = (btnText ? btnText.value : "") || "Solicitar Informes";
-    }
-
-    if (overlay) {
-      overlay.style.display = 'flex';
-      overlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      startInterstitialCountdown();
-    }
-  };
-
-  function startInterstitialCountdown() {
-    const countdownEl = document.getElementById('interstitialCountdownText');
+    const modal = document.getElementById('interstitialOverlay');
+    const countdown = document.getElementById('interstitialCountdownText');
     const closeBtn = document.getElementById('interstitialCloseBtn');
-    let secondsLeft = 5;
+    if (!modal) return;
+
+    const title = document.getElementById('adminAnnTitle').value || "Inscripciones Abiertas a Cursos Prácticos";
+    const img = document.getElementById('adminAnnImg').value || "assets/images/academia.jpg";
+    const text = document.getElementById('adminAnnText').value || "Inicia tu formación profesional con metodología 90% práctica en modelos reales.";
+    const link = document.getElementById('adminAnnLink').value || "#";
+    const btnText = document.getElementById('adminAnnBtnText').value || "Solicitar Informes por WhatsApp";
+
+    document.getElementById('interstitialTitle').textContent = title;
+    document.getElementById('interstitialImg').src = img;
+    document.getElementById('interstitialText').textContent = text;
+    document.getElementById('interstitialBtn').href = link;
+    document.getElementById('interstitialBtnText').textContent = btnText;
+
+    let seconds = 5;
     interstitialCanClose = false;
-
-    if (countdownEl) {
-      countdownEl.style.display = 'inline-flex';
-      countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
-    }
-    if (closeBtn) {
-      closeBtn.style.display = 'none';
+    if (closeBtn) closeBtn.style.display = 'none';
+    if (countdown) {
+      countdown.style.display = 'inline-block';
+      countdown.textContent = `Cerrar en ${seconds}s`;
     }
 
-    if (interstitialTimerInterval) clearInterval(interstitialTimerInterval);
+    modal.style.display = 'flex';
+    requestAnimationFrame(() => modal.classList.add('active'));
 
+    clearInterval(interstitialTimerInterval);
     interstitialTimerInterval = setInterval(() => {
-      secondsLeft--;
-      if (secondsLeft > 0) {
-        if (countdownEl) countdownEl.textContent = `Cerrar en ${secondsLeft}s`;
+      seconds--;
+      if (seconds > 0) {
+        if (countdown) countdown.textContent = `Cerrar en ${seconds}s`;
       } else {
         clearInterval(interstitialTimerInterval);
         interstitialCanClose = true;
-        if (countdownEl) countdownEl.style.display = 'none';
-        if (closeBtn) {
-          closeBtn.style.display = 'inline-flex';
-          closeBtn.style.animation = 'fadeIn 0.35s ease forwards';
-        }
+        if (countdown) countdown.style.display = 'none';
+        if (closeBtn) closeBtn.style.display = 'inline-flex';
       }
     }, 1000);
-  }
+  };
 
   window.closeInterstitialPreview = function () {
     if (!interstitialCanClose) return;
-
-    const overlay = document.getElementById('interstitialOverlay');
-    if (overlay) {
-      overlay.classList.remove('active');
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 300);
-      document.body.style.overflow = '';
-    }
-    if (interstitialTimerInterval) clearInterval(interstitialTimerInterval);
+    const modal = document.getElementById('interstitialOverlay');
+    if (!modal) return;
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
   };
 
   // ==========================================
-  // 4. CONFIGURACIÓN DE ACADEMIA: CURSOS DE CAPACITACIÓN
+  // 9. GESTIÓN DE CURSOS DE CAPACITACIÓN (EXISTENTE)
   // ==========================================
   async function loadCoursesData() {
-    const container = document.getElementById('coursesListContainer');
-    if (!container) return;
-
+    const container = document.getElementById('coursesCardsContainer');
     try {
       cachedCourses = await TB_FIREBASE.getCursos();
-      renderCoursesList(cachedCourses);
-      updateKpis();
+      renderCoursesCards(cachedCourses);
     } catch (e) {
       console.error("Error al cargar cursos:", e);
       if (container) {
@@ -307,181 +1156,124 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function renderCoursesList(coursesObj) {
-    const container = document.getElementById('coursesListContainer');
+  function renderCoursesCards(coursesObj) {
+    const container = document.getElementById('coursesCardsContainer');
     if (!container) return;
 
     const list = Object.values(coursesObj || {});
     if (list.length === 0) {
-      container.innerHTML = '<div class="table-loading-cell">No hay cursos configurados aún. Utilice el botón "Agregar Nuevo Curso".</div>';
+      container.innerHTML = '<div class="table-loading-cell">No hay cursos registrados. Use el botón "Agregar Nuevo Curso".</div>';
       return;
     }
 
-    container.innerHTML = list.map(curso => {
-      return `
-        <div class="admin-course-card" data-id="${escapeHtml(curso.id)}">
-          <div class="admin-course-card-top">
-            <span class="course-mode-badge">${escapeHtml(curso.modalidad || '90% Práctico')}</span>
-            <span class="admin-course-format">${escapeHtml(curso.duracion || 'Presencial • Modelos Reales')}</span>
-          </div>
-
-          <div class="admin-course-card-main">
-            <span class="course-category-tag">${escapeHtml(curso.categoria || 'Capacitación')}</span>
-            <h3 class="admin-course-item-title">${escapeHtml(curso.titulo)}</h3>
-            <p class="admin-course-item-desc">${escapeHtml(curso.descripcion || '')}</p>
-
-            <ul class="admin-course-item-topics">
-              ${curso.tema1 ? `<li><span class="dot"></span><span>${escapeHtml(curso.tema1)}</span></li>` : ''}
-              ${curso.tema2 ? `<li><span class="dot"></span><span>${escapeHtml(curso.tema2)}</span></li>` : ''}
-              ${curso.tema3 ? `<li><span class="dot"></span><span>${escapeHtml(curso.tema3)}</span></li>` : ''}
-            </ul>
-          </div>
-
-          <div class="admin-course-card-actions">
-            <button type="button" class="btn-action-small" onclick="editCourse('${escapeHtml(curso.id)}')">
-              <span>Editar</span>
-            </button>
-            <button type="button" class="btn-table-delete" onclick="handleDeleteCourse('${escapeHtml(curso.id)}')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </button>
-          </div>
+    container.innerHTML = list.map(c => `
+      <div class="admin-course-item-card" data-course-id="${escapeHtml(c.id)}">
+        <div class="course-card-top">
+          <span class="course-cat-tag">${escapeHtml(c.categoria || "Especialidad")}</span>
+          <span class="course-active-tag ${c.activo !== false ? 'active' : 'paused'}">
+            ${c.activo !== false ? 'Activo en Portal' : 'Oculto'}
+          </span>
         </div>
-      `;
-    }).join('');
+        <h4 class="course-card-title">${escapeHtml(c.titulo)}</h4>
+        <p class="course-card-meta">${escapeHtml(c.modalidad)} &bull; ${escapeHtml(c.duracion)}</p>
+        <p class="course-card-desc">${escapeHtml(c.descripcion || "Capacitación práctica personalizada.")}</p>
+        <div class="course-card-actions">
+          <button type="button" class="btn-course-action edit" onclick="handleEditCourse('${c.id}')">Editar</button>
+          <button type="button" class="btn-course-action delete" onclick="handleDeleteCourse('${c.id}')">Eliminar</button>
+        </div>
+      </div>
+    `).join('');
   }
 
-  window.toggleNewCourseForm = function (isEdit = false) {
-    const box = document.getElementById('courseCollapseForm');
+  window.toggleNewCourseForm = function () {
+    const formBox = document.getElementById('courseCollapseForm');
     const btnText = document.getElementById('btnToggleCourseFormText');
-    const formTitle = document.getElementById('courseFormTitle');
-    const editIdInput = document.getElementById('courseEditId');
+    const form = document.getElementById('adminCourseForm');
+    if (!formBox) return;
 
-    if (!box) return;
-
-    if (!isEdit) {
-      if (box.style.display === 'none' || !box.style.display) {
-        box.style.display = 'block';
-        if (btnText) btnText.textContent = 'Ocultar Formulario';
-        if (formTitle) formTitle.textContent = 'Registrar Nuevo Curso de Capacitación';
-        if (editIdInput) editIdInput.value = '';
-        document.getElementById('adminCourseForm').reset();
-        document.getElementById('courseModalidadInput').value = '90% Práctico';
-        document.getElementById('courseDuracionInput').value = 'Presencial • Modelos Reales';
-        document.getElementById('courseTema1Input').value = 'Práctica continua en estaciones con modelos reales';
-        document.getElementById('courseTema2Input').value = '10% teoría sobre visagismo capilar y fondos de aclaración';
-        document.getElementById('courseTema3Input').value = 'Entrega de Constancia de Finalización oficial';
-      } else {
-        box.style.display = 'none';
-        if (btnText) btnText.textContent = 'Agregar Nuevo Curso';
-      }
-    } else {
-      box.style.display = 'block';
+    if (formBox.style.display === 'none' || !formBox.style.display) {
+      formBox.style.display = 'block';
       if (btnText) btnText.textContent = 'Ocultar Formulario';
-      if (formTitle) formTitle.textContent = 'Editar Curso de Capacitación';
+      if (form) form.reset();
+      document.getElementById('courseEditId').value = '';
+      document.getElementById('courseFormTitle').textContent = 'Registrar Nuevo Curso de Capacitación';
+      document.getElementById('courseTitleInput').focus();
+    } else {
+      formBox.style.display = 'none';
+      if (btnText) btnText.textContent = 'Agregar Nuevo Curso';
     }
   };
 
-  window.editCourse = function (id) {
-    const curso = cachedCourses[id];
-    if (!curso) return;
+  window.handleEditCourse = function (courseId) {
+    const c = cachedCourses[courseId];
+    if (!c) return;
 
-    const editIdInput = document.getElementById('courseEditId');
-    const titleInput = document.getElementById('courseTitleInput');
-    const catInput = document.getElementById('courseCategoryInput');
-    const modInput = document.getElementById('courseModalidadInput');
-    const durInput = document.getElementById('courseDuracionInput');
-    const descInput = document.getElementById('courseDescInput');
-    const tema1Input = document.getElementById('courseTema1Input');
-    const tema2Input = document.getElementById('courseTema2Input');
-    const tema3Input = document.getElementById('courseTema3Input');
-    const filterInput = document.getElementById('courseFilterKeyInput');
-    const waInput = document.getElementById('courseWhatsappInput');
+    const formBox = document.getElementById('courseCollapseForm');
+    if (formBox) formBox.style.display = 'block';
 
-    if (editIdInput) editIdInput.value = curso.id;
-    if (titleInput) titleInput.value = curso.titulo || '';
-    if (catInput) catInput.value = curso.categoria || '';
-    if (modInput) modInput.value = curso.modalidad || '90% Práctico';
-    if (durInput) durInput.value = curso.duracion || 'Presencial • Modelos Reales';
-    if (descInput) descInput.value = curso.descripcion || '';
-    if (tema1Input) tema1Input.value = curso.tema1 || '';
-    if (tema2Input) tema2Input.value = curso.tema2 || '';
-    if (tema3Input) tema3Input.value = curso.tema3 || '';
-    if (filterInput) filterInput.value = curso.categoriaKey || 'colorimetria';
-    if (waInput) waInput.value = curso.whatsappMsg || '';
+    document.getElementById('courseEditId').value = c.id;
+    document.getElementById('courseFormTitle').textContent = 'Editar Curso: ' + c.titulo;
+    document.getElementById('courseTitleInput').value = c.titulo || '';
+    document.getElementById('courseCategoryInput').value = c.categoria || '';
+    document.getElementById('courseModalidadInput').value = c.modalidad || '90% Práctico';
+    document.getElementById('courseDuracionInput').value = c.duracion || 'Presencial • Modelos Reales';
+    document.getElementById('courseDescInput').value = c.descripcion || '';
+    document.getElementById('courseTema1').value = c.tema1 || '';
+    document.getElementById('courseTema2').value = c.tema2 || '';
+    document.getElementById('courseTema3').value = c.tema3 || '';
+    document.getElementById('courseWhatsappInput').value = c.whatsappMsg || '';
+    document.getElementById('courseActivoInput').value = c.activo !== false ? 'true' : 'false';
 
-    window.toggleNewCourseForm(true);
-    if (titleInput) titleInput.focus();
+    window.scrollTo({ top: formBox.offsetTop - 80, behavior: 'smooth' });
   };
 
   window.handleSaveCourse = async function (e) {
     e.preventDefault();
 
-    const editIdInput = document.getElementById('courseEditId');
-    const titleInput = document.getElementById('courseTitleInput');
-    const catInput = document.getElementById('courseCategoryInput');
-    const modInput = document.getElementById('courseModalidadInput');
-    const durInput = document.getElementById('courseDuracionInput');
-    const descInput = document.getElementById('courseDescInput');
-    const tema1Input = document.getElementById('courseTema1Input');
-    const tema2Input = document.getElementById('courseTema2Input');
-    const tema3Input = document.getElementById('courseTema3Input');
-    const filterInput = document.getElementById('courseFilterKeyInput');
-    const waInput = document.getElementById('courseWhatsappInput');
+    const editId = document.getElementById('courseEditId').value.trim();
+    const titulo = document.getElementById('courseTitleInput').value.trim();
+    const categoria = document.getElementById('courseCategoryInput').value.trim();
+    const modalidad = document.getElementById('courseModalidadInput').value.trim();
+    const duracion = document.getElementById('courseDuracionInput').value.trim();
+    const descripcion = document.getElementById('courseDescInput').value.trim();
+    const tema1 = document.getElementById('courseTema1').value.trim();
+    const tema2 = document.getElementById('courseTema2').value.trim();
+    const tema3 = document.getElementById('courseTema3').value.trim();
+    const whatsappMsg = document.getElementById('courseWhatsappInput').value.trim();
+    const activo = document.getElementById('courseActivoInput').value === 'true';
 
-    const id = (editIdInput && editIdInput.value)
-      ? editIdInput.value.trim()
-      : 'curso-' + Date.now();
-
-    const titulo = (titleInput ? titleInput.value : '').trim();
-    const categoria = (catInput ? catInput.value : '').trim();
-    const modalidad = (modInput ? modInput.value : '').trim() || '90% Práctico';
-    const duracion = (durInput ? durInput.value : '').trim() || 'Presencial • Modelos Reales';
-    const descripcion = (descInput ? descInput.value : '').trim();
-    const tema1 = (tema1Input ? tema1Input.value : '').trim();
-    const tema2 = (tema2Input ? tema2Input.value : '').trim();
-    const tema3 = (tema3Input ? tema3Input.value : '').trim();
-    const categoriaKey = (filterInput ? filterInput.value : 'colorimetria');
-    const whatsappMsg = (waInput ? waInput.value : '').trim() || `Hola Total Beauty Academia, solicito informes detallados del ${titulo}.`;
-
-    if (!titulo || !descripcion) {
-      showToast('Por favor complete los campos obligatorios del curso');
-      return;
-    }
-
+    const id = editId || `curso_${Date.now()}`;
     const payload = {
       id,
       titulo,
       categoria,
+      categoriaKey: categoria.toLowerCase().replace(/[^a-z0-9]/g, ''),
       modalidad,
       duracion,
       descripcion,
       tema1,
       tema2,
       tema3,
-      categoriaKey,
       whatsappMsg,
-      activo: true
+      activo,
+      updatedAt: Date.now()
     };
 
     const ok = await TB_FIREBASE.saveCurso(id, payload);
     if (ok) {
       showToast('Curso guardado exitosamente en Firebase');
-      window.toggleNewCourseForm();
+      toggleNewCourseForm();
       loadCoursesData();
     } else {
       showToast('Error al guardar el curso en Firebase');
     }
   };
 
-  window.handleDeleteCourse = async function (id) {
-    if (!id) return;
-    const confirmed = window.confirm('¿Desea eliminar este curso de capacitación de la oferta académica?');
+  window.handleDeleteCourse = async function (courseId) {
+    const confirmed = window.confirm('¿Está seguro de eliminar este curso del portal de la academia?');
     if (!confirmed) return;
 
-    const ok = await TB_FIREBASE.deleteCurso(id);
+    const ok = await TB_FIREBASE.deleteCurso(courseId);
     if (ok) {
       showToast('Curso eliminado de Firebase');
       loadCoursesData();
@@ -491,18 +1283,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================
-  // 5. GESTIÓN DE ALUMNAS Y RESETEO DE CLAVES
+  // 10. GESTIÓN DE ALUMNAS (EXISTENTE)
   // ==========================================
   window.loadStudentsData = async function (showToastNotice = false) {
     const tbody = document.getElementById('studentsTableBody');
-    if (tbody) {
+    if (tbody && !showToastNotice) {
       tbody.innerHTML = '<tr><td colspan="6" class="table-loading-cell">Cargando registros desde Firebase...</td></tr>';
     }
 
     try {
       cachedStudents = await TB_FIREBASE.getAlumnas();
       renderStudentsTable(cachedStudents);
-      updateKpis();
       if (showToastNotice) {
         showToast("Lista de alumnas sincronizada con Firebase");
       }
@@ -524,7 +1315,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Ordenar por matrícula
     list.sort((a, b) => (a.matricula || '').localeCompare(b.matricula || ''));
 
     tbody.innerHTML = list.map(student => {
@@ -573,31 +1363,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   }
 
-  function updateKpis() {
-    const list = Object.values(cachedStudents || {});
-    const total = list.length;
-    let defaultCount = 0;
-    let customCount = 0;
-
-    list.forEach(s => {
-      if (s.isDefault !== false && s.password === "TB2026") {
-        defaultCount++;
-      } else {
-        customCount++;
-      }
-    });
-
-    const kpiTotal = document.getElementById('kpiTotalAlumnas');
-    const kpiDefault = document.getElementById('kpiDefaultPass');
-    const kpiCustom = document.getElementById('kpiCustomPass');
-    const kpiCursos = document.getElementById('kpiTotalCursos');
-
-    if (kpiTotal) kpiTotal.textContent = total;
-    if (kpiDefault) kpiDefault.textContent = defaultCount;
-    if (kpiCustom) kpiCustom.textContent = customCount;
-    if (kpiCursos) kpiCursos.textContent = Object.keys(cachedCourses || {}).length;
-  }
-
   window.filterStudentsTable = function (keyword) {
     const query = (keyword || '').toLowerCase().trim();
     const rows = document.querySelectorAll('#studentsTableBody tr');
@@ -614,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.toggleNewStudentForm = function () {
     const box = document.getElementById('newStudentCollapseForm');
-    const btnText = document.getElementById('btnToggleFormText');
+    const btnText = document.getElementById('btnToggleStudentFormText');
     if (!box) return;
 
     if (box.style.display === 'none' || !box.style.display) {
@@ -701,7 +1466,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================
-  // 6. UTILIDADES (TOAST Y ESCAPE HTML)
+  // 11. UTILIDADES (TOAST Y ESCAPE HTML)
   // ==========================================
   function showToast(msg) {
     const existing = document.getElementById('tbAdminToast');
@@ -743,10 +1508,10 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g, '&#039;');
   }
 
-  // Tecla Escape para cerrar previsualización si el temporizador concluyó
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (interstitialCanClose) window.closeInterstitialPreview();
+      window.closeSurveyDetailModal();
     }
   });
 });

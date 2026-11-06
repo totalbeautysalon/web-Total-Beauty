@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Encuesta de Satisfacción | Total Beauty Salón &amp; Academia</title>
+  <meta name="description" content="Encuesta de satisfacción oficial de Total Beauty Salón &amp; Academia. Comparte tu experiencia y recibe un cupón de descuento exclusivo de hasta 35% para tu próxima visita.">
+  <meta name="theme-color" content="#070709">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Fuentes Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-encuesta">
+
+  <!-- Fondos Ambientales -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Contenedor Principal del Sitio -->
+  <div class="site-wrapper">
+    
+    <!-- Barra Superior de Navegación -->
+    <nav class="academia-nav animate-fade-in" aria-label="Navegación de Encuesta">
+      <a href="index.html" class="btn-back" aria-label="Volver al menú principal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Menú Principal</span>
+      </a>
+
+      <!-- Logotipo Oficial a la Derecha -->
+      <div class="nav-right-group">
+        <a href="index.html" class="brand-logo-container" aria-label="Total Beauty Inicio">
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="brand-logo-img"
+            style="max-height: 44px;"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+        </a>
+      </div>
+    </nav>
+
+    <!-- Encabezado de la Encuesta -->
+    <header class="encuesta-hero animate-fade-in delay-1">
+      <div class="encuesta-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span>TOTAL BEAUTY &bull; SALÓN Y ACADEMIA</span>
+      </div>
+
+      <h1 class="encuesta-title">
+        ¿Cómo fue tu <span>experiencia</span>?
+      </h1>
+
+      <p class="encuesta-subtitle">
+        Tu opinión es muy importante para nosotros. Ayúdanos a mejorar nuestros servicios. Solo te tomará un minuto y recibirás un cupón de descuento especial para tu próxima visita.
+      </p>
+
+      <!-- Barra de Progreso Interactiva -->
+      <div id="surveyProgressBarWrap" class="survey-progress-wrap">
+        <div class="survey-progress-labels">
+          <span id="surveyStepText" class="survey-step-indicator">Paso 1 de 2: Tus Datos &amp; Servicio</span>
+          <span id="surveyPercentText" class="survey-step-percent">50%</span>
+        </div>
+        <div class="survey-progress-track">
+          <div id="surveyProgressBar" class="survey-progress-bar" style="width: 50%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Notificación / Mensaje Toast -->
+    <div id="surveyToast" class="survey-toast" style="display: none;" role="alert"></div>
+
+    <!-- Formulario Multi-Paso de Encuesta -->
+    <main class="encuesta-card-container animate-fade-in delay-2" role="main">
+
+      <form id="surveyForm" onsubmit="handleSurveySubmit(event)" class="survey-form" novalidate>
+
+        <!-- ==========================================
+             PASO 1: IDENTIFICACIÓN Y SERVICIO
+             ========================================== -->
+        <fieldset id="step1" class="survey-step-pane active" aria-labelledby="step1Legend">
+          <legend id="step1Legend" class="visually-hidden">Datos de contacto y servicio realizado</legend>
+
+          <div class="survey-field-group">
+            <label for="clientNameInput" class="survey-field-label">
+              <span>Nombre Completo</span>
+              <span class="required-star">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="clientNameInput" 
+              name="nombre" 
+              class="survey-input-text" 
+              placeholder="ej. Sofía Ramírez" 
+              required
+              autocomplete="name"
+            >
+            <span id="errorName" class="field-error-msg" style="display: none;">Por favor, ingresa tu nombre completo.</span>
+          </div>
+
+          <div class="survey-field-group">
+            <label for="clientWhatsappInput" class="survey-field-label">
+              <span>Número de WhatsApp (10 dígitos)</span>
+              <span class="required-star">*</span>
+            </label>
+            <input 
+              type="tel" 
+              id="clientWhatsappInput" 
+              name="whatsapp" 
+              class="survey-input-text" 
+              placeholder="ej. 5650560824" 
+              maxlength="10" 
+              required
+              autocomplete="tel"
+              inputmode="numeric"
+            >
+            <span class="survey-field-hint">Tu cupón quedará vinculado a este número para su canje en recepción.</span>
+            <span id="errorWhatsapp" class="field-error-msg" style="display: none;">Ingresa un número de WhatsApp válido de 10 dígitos.</span>
+          </div>
+
+          <!-- Pregunta 1: ¿Qué servicio te realizaste? -->
+          <div class="survey-field-group">
+            <label class="survey-field-label">
+              <span>1. ¿Qué servicio te realizaste?</span>
+              <span class="required-star">*</span>
+            </label>
+            
+            <div class="service-chips-grid" role="radiogroup" aria-label="Selección de servicio">
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Uñas" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Uñas</span>
+              </label>
+
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Pestañas" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Pestañas</span>
+              </label>
+
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Cejas" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Cejas</span>
+              </label>
+
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Maquillaje" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Maquillaje</span>
+              </label>
+
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Corte de cabello" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Corte de cabello</span>
+              </label>
+
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Tratamiento capilar" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Tratamiento capilar</span>
+              </label>
+
+              <label class="service-chip-option">
+                <input type="radio" name="servicio" value="Otro" onchange="handleServiceSelection(this.value)">
+                <span class="chip-content">Otro</span>
+              </label>
+            </div>
+
+            <!-- Campo Condicional para "Otro" -->
+            <div id="otherServiceWrap" class="other-service-wrap" style="display: none;">
+              <label for="otherServiceInput" class="survey-sublabel">Especifica el servicio:</label>
+              <input 
+                type="text" 
+                id="otherServiceInput" 
+                class="survey-input-text" 
+                placeholder="ej. Pedicure Spa, Depilación Facial con Hilo, etc."
+              >
+            </div>
+            <span id="errorService" class="field-error-msg" style="display: none;">Selecciona el servicio que te realizaste.</span>
+          </div>
+
+          <!-- Pregunta 2: ¿Qué día recibiste tu servicio? -->
+          <div class="survey-field-group">
+            <label for="serviceDateInput" class="survey-field-label">
+              <span>2. ¿Qué día recibiste tu servicio?</span>
+              <span class="required-star">*</span>
+            </label>
+            <input 
+              type="date" 
+              id="serviceDateInput" 
+              name="fechaServicio" 
+              class="survey-input-text survey-input-date" 
+              required
+            >
+            <span id="errorDate" class="field-error-msg" style="display: none;">Selecciona la fecha en que recibiste tu servicio.</span>
+          </div>
+
+          <!-- Botón de Siguiente Paso -->
+          <div class="survey-actions-row">
+            <button type="button" class="btn-survey-action btn-survey-next" onclick="goToStep(2)">
+              <span>Continuar a Calificación</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </fieldset>
+
+        <!-- ==========================================
+             PASO 2: CALIFICACIÓN DE LA EXPERIENCIA
+             ========================================== -->
+        <fieldset id="step2" class="survey-step-pane" style="display: none;" aria-labelledby="step2Legend">
+          <legend id="step2Legend" class="visually-hidden">Evaluación del resultado y atención</legend>
+
+          <!-- Pregunta 3: ¿Cómo calificarías el resultado de tu servicio? -->
+          <div class="survey-field-group">
+            <label class="survey-field-label">
+              <span>3. ¿Cómo calificarías el resultado de tu servicio?</span>
+              <span class="required-star">*</span>
+            </label>
+
+            <div class="rating-options-grid" role="radiogroup" aria-label="Calificación del resultado">
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionResultado" value="Excelente" required>
+                <div class="rating-card-box">
+                  <span class="rating-indicator">5/5</span>
+                  <span class="rating-text">Excelente</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionResultado" value="Muy bueno">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">4/5</span>
+                  <span class="rating-text">Muy bueno</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionResultado" value="Bueno">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">3/5</span>
+                  <span class="rating-text">Bueno</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionResultado" value="Regular">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">2/5</span>
+                  <span class="rating-text">Regular</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionResultado" value="Malo">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">1/5</span>
+                  <span class="rating-text">Malo</span>
+                </div>
+              </label>
+            </div>
+            <span id="errorRatingResult" class="field-error-msg" style="display: none;">Por favor, califica el resultado de tu servicio.</span>
+          </div>
+
+          <!-- Pregunta 4: ¿Cómo fue la atención que recibiste? -->
+          <div class="survey-field-group">
+            <label class="survey-field-label">
+              <span>4. ¿Cómo fue la atención que recibiste?</span>
+              <span class="required-star">*</span>
+            </label>
+
+            <div class="rating-options-grid" role="radiogroup" aria-label="Calificación de la atención">
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionAtencion" value="Excelente" required>
+                <div class="rating-card-box">
+                  <span class="rating-indicator">5/5</span>
+                  <span class="rating-text">Excelente</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionAtencion" value="Muy buena">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">4/5</span>
+                  <span class="rating-text">Muy buena</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionAtencion" value="Buena">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">3/5</span>
+                  <span class="rating-text">Buena</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionAtencion" value="Regular">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">2/5</span>
+                  <span class="rating-text">Regular</span>
+                </div>
+              </label>
+
+              <label class="rating-card-option">
+                <input type="radio" name="calificacionAtencion" value="Mala">
+                <div class="rating-card-box">
+                  <span class="rating-indicator">1/5</span>
+                  <span class="rating-text">Mala</span>
+                </div>
+              </label>
+            </div>
+            <span id="errorRatingCare" class="field-error-msg" style="display: none;">Por favor, califica la atención recibida.</span>
+          </div>
+
+          <!-- Pregunta 5: ¿Qué fue lo que más te gustó o qué podríamos mejorar? -->
+          <div class="survey-field-group">
+            <label for="commentsInput" class="survey-field-label">
+              <span>5. ¿Qué fue lo que más te gustó o qué podríamos mejorar?</span>
+              <span class="optional-tag">(Opcional)</span>
+            </label>
+            <textarea 
+              id="commentsInput" 
+              name="comentarios" 
+              class="survey-input-textarea" 
+              rows="3" 
+              placeholder="Cuéntanos tus impresiones, detalles del trabajo o sugerencias..."
+            ></textarea>
+          </div>
+
+          <!-- Pregunta 6: ¿Recomendarías Total Beauty a familiares o amigos? -->
+          <div class="survey-field-group">
+            <label class="survey-field-label">
+              <span>6. ¿Recomendarías Total Beauty a familiares o amigos?</span>
+              <span class="required-star">*</span>
+            </label>
+
+            <div class="recommend-chips-grid" role="radiogroup" aria-label="Recomendación">
+              <label class="recommend-chip-option">
+                <input type="radio" name="recomendacion" value="Sí" required>
+                <span class="chip-content">Sí</span>
+              </label>
+
+              <label class="recommend-chip-option">
+                <input type="radio" name="recomendacion" value="No">
+                <span class="chip-content">No</span>
+              </label>
+
+              <label class="recommend-chip-option">
+                <input type="radio" name="recomendacion" value="Tal vez">
+                <span class="chip-content">Tal vez</span>
+              </label>
+            </div>
+            <span id="errorRecommend" class="field-error-msg" style="display: none;">Por favor, responde si nos recomendarías.</span>
+          </div>
+
+          <!-- Botones de Navegación -->
+          <div class="survey-actions-row">
+            <button type="button" class="btn-survey-action btn-survey-back" onclick="goToStep(1)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Volver</span>
+            </button>
+
+            <button type="submit" id="submitSurveyBtn" class="btn-survey-action btn-survey-submit">
+              <span>Enviar Encuesta &amp; Obtener Cupón</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </button>
+          </div>
+        </fieldset>
+
+      </form>
+
+      <!-- ==========================================
+           PASO 3: PANTALLA ESPECIAL DE AGRADECIMIENTO & CUPÓN
+           ========================================== -->
+      <section id="stepSuccess" class="survey-success-screen" style="display: none;" aria-live="polite">
+
+        <div class="success-header-wrap">
+          <div class="success-icon-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+          </div>
+
+          <h2 class="success-main-title">¡GRACIAS POR ELEGIR TOTAL BEAUTY!</h2>
+          <p class="success-desc">Tu opinión nos ayuda a seguir mejorando.</p>
+          <p class="success-reward-intro">Y tenemos un regalo especial para ti.</p>
+          <div class="success-highlight-pill">
+            <span>¡TU PRÓXIMA VISITA TIENE PREMIO!</span>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Cupón de Lujo -->
+        <article class="luxury-coupon-card" aria-label="Cupón de descuento Total Beauty">
+          <div class="coupon-card-header">
+            <span class="coupon-brand-tag">TOTAL BEAUTY SALÓN &bull; CUPÓN OFICIAL</span>
+            <span id="couponStatusBadge" class="coupon-status-pill">Cupón Activo</span>
+          </div>
+
+          <div class="coupon-code-container">
+            <span class="coupon-code-label">Código Único de Cupón:</span>
+            <div class="coupon-code-box">
+              <span id="displayCouponCode" class="coupon-code-value">TB-XXXXXX</span>
+            </div>
+          </div>
+
+          <!-- Tabla Visual de Descuentos por Rango de Precio -->
+          <div class="coupon-tiers-box">
+            <span class="coupon-tiers-title">Tabla Oficial de Descuentos para tu Próximo Servicio:</span>
+            
+            <table class="coupon-tiers-table">
+              <thead>
+                <tr>
+                  <th>Precio del Servicio</th>
+                  <th style="text-align: right;">Descuento Otorgado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$300 o menos</td>
+                  <td class="tier-val">10% DE DESCUENTO</td>
+                </tr>
+                <tr>
+                  <td>Más de $300 y hasta $700</td>
+                  <td class="tier-val">20% DE DESCUENTO</td>
+                </tr>
+                <tr>
+                  <td>Más de $700 y hasta $1,000</td>
+                  <td class="tier-val">30% DE DESCUENTO</td>
+                </tr>
+                <tr class="tier-highlight-row">
+                  <td><strong>Más de $1,000</strong></td>
+                  <td class="tier-val tier-max"><strong>35% DE DESCUENTO</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Simulador Interactivo de Ahorro para la Clienta -->
+          <div class="coupon-calculator-box">
+            <label for="calcServicePriceInput" class="calc-label">
+              <span>¿Cuánto costará tu próximo servicio? Calcula tu ahorro aquí:</span>
+            </label>
+            <div class="calc-input-row">
+              <span class="calc-currency">$</span>
+              <input 
+                type="number" 
+                id="calcServicePriceInput" 
+                class="calc-price-input" 
+                placeholder="ej. 550" 
+                min="50" 
+                max="5000"
+                oninput="updateSavingsSimulator(this.value)"
+              >
+            </div>
+            <div id="calcResultBox" class="calc-result-box" style="display: none;">
+              <div class="calc-result-row">
+                <span class="calc-res-label">Descuento aplicado:</span>
+                <span id="calcPercentDisplay" class="calc-res-val gold-bold">20%</span>
+              </div>
+              <div class="calc-result-row">
+                <span class="calc-res-label">Monto que te descuentan:</span>
+                <span id="calcDiscountDisplay" class="calc-res-val gold-bold">-$110</span>
+              </div>
+              <div class="calc-result-row calc-total-row">
+                <span class="calc-res-label">Pagarías en total:</span>
+                <span id="calcTotalDisplay" class="calc-res-val calc-final-price">$440</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Datos de la Clienta y Vigencia -->
+          <div class="coupon-meta-grid">
+            <div class="coupon-meta-item">
+              <span class="meta-label">Clienta:</span>
+              <span id="displayClientName" class="meta-val">--</span>
+            </div>
+            <div class="coupon-meta-item">
+              <span class="meta-label">WhatsApp Asociado:</span>
+              <span id="displayClientPhone" class="meta-val">--</span>
+            </div>
+            <div class="coupon-meta-item">
+              <span class="meta-label">Fecha de Emisión:</span>
+              <span id="displayIssuedDate" class="meta-val">--</span>
+            </div>
+            <div class="coupon-meta-item">
+              <span class="meta-label">Fecha de Vencimiento:</span>
+              <span id="displayExpiryDate" class="meta-val gold-bold">--</span>
+            </div>
+          </div>
+
+          <!-- Botones de Acción: Copiar y Compartir -->
+          <div class="coupon-buttons-grid">
+            <button type="button" class="btn-coupon-action btn-coupon-copy" onclick="copyCouponToClipboard()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="btnCopyText">Copiar Mi Cupón</span>
+            </button>
+
+            <a id="btnShareWhatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn-coupon-action btn-coupon-share">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>Guardar en WhatsApp</span>
+            </a>
+          </div>
+
+          <!-- Nota Legal Obligatoria -->
+          <p class="coupon-legal-note">
+            Cupón personal e intransferible. Válido para una sola utilización, sujeto a las condiciones de Total Beauty. No acumulable con otras promociones.
+          </p>
+        </article>
+
+        <!-- Botón para Explorar Servicios o Volver -->
+        <div class="success-footer-actions">
+          <a href="index.html" class="btn-secondary-link">
+            <span>Volver al Menú Principal</span>
+          </a>
+          <a href="buenfin.html" class="btn-secondary-link">
+            <span>Ver Paquetes del Buen Fin</span>
+          </a>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="brand-footer animate-fade-in delay-3">
+      <div class="footer-social-links">
+        <a href="https://www.instagram.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram</span>
+        </a>
+
+        <a href="https://www.facebook.com/totalbeautysalonacademia/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+          <span>Facebook</span>
+        </a>
+      </div>
+
+      <p class="footer-copyright">
+        &copy; Total Beauty Salón &amp; Academia. Todos los derechos reservados.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="firebase-config.js"></script>
+  <script src="encuesta.js"></script>
+</body>
+</html>

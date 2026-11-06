@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Validación de Cupones | Total Beauty Salón</title>
+  
+  <meta name="description" content="Herramienta oficial de validación y canje de cupones de descuento para recepción de Total Beauty Salón.">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  
+  <!-- Tipografías de Alta Gama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <div class="site-wrapper" style="max-width: 680px;">
+    
+    <!-- Encabezado -->
+    <header class="admin-header" style="margin-bottom: 1.5rem;">
+      <div class="admin-header-content" style="justify-content: space-between;">
+        <a href="index.html" class="admin-brand-link" title="Ir al Portal Principal">
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="admin-brand-logo"
+            style="max-height: 40px;"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+        </a>
+
+        <div class="admin-header-titles" style="text-align: right;">
+          <span class="admin-badge-role">Recepción &bull; Salón</span>
+          <h1 class="admin-main-title" style="font-size: 1.15rem;">Validador de Cupones</h1>
+        </div>
+      </div>
+    </header>
+
+    <!-- Notificación Toast -->
+    <div id="validatorToast" class="survey-toast" style="display: none;" role="alert"></div>
+
+    <!-- VISTA 1: PIN DE ACCESO RÁPIDO (SI NO HAY SESIÓN ADMIN) -->
+    <main id="authGate" class="admin-auth-container" style="min-height: auto; margin-bottom: 2rem;">
+      <div class="admin-auth-card" style="padding: 1.75rem 1.5rem;">
+        <h2 class="admin-auth-title" style="font-size: 1.25rem;">Acceso para Recepción</h2>
+        <p class="admin-auth-desc" style="font-size: 0.8rem; margin-bottom: 1rem;">
+          Ingrese el PIN autorizado para activar el validador de cupones.
+        </p>
+
+        <form id="pinForm" onsubmit="handleQuickAuth(event)" class="admin-form">
+          <div class="student-form-group">
+            <input 
+              type="password" 
+              id="pinInput" 
+              class="student-form-input" 
+              placeholder="Ingrese su clave PIN" 
+              required
+              maxlength="20"
+            >
+          </div>
+          <button type="submit" class="btn-student-submit">
+            <span>Desbloquear Validador</span>
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- VISTA 2: HERRAMIENTA DE CANJE ACTIVA -->
+    <main id="validatorTool" style="display: none;">
+      
+      <section class="admin-panel-card">
+        <div class="admin-card-header">
+          <div>
+            <span class="admin-section-tag">Canje en Cabina</span>
+            <h2 class="admin-card-title">Consultar Cupón de Clienta</h2>
+          </div>
+          <a href="admin.html" class="admin-subnav-btn">
+            <span>Panel Completo</span>
+          </a>
+        </div>
+
+        <p class="admin-card-desc">
+          Introduce el código presentado por la clienta (ej. TB-7X9K2M) para verificar su validez y calcular el descuento correspondiente.
+        </p>
+
+        <!-- Barra de Búsqueda de Código -->
+        <div class="validator-search-row">
+          <input 
+            type="text" 
+            id="codeToValidate" 
+            class="validator-input-code" 
+            placeholder="TB-XXXXXX"
+            maxlength="12"
+            onkeypress="if(event.key === 'Enter') checkCouponStatus()"
+          >
+          <button type="button" class="btn-student-submit" onclick="checkCouponStatus()">
+            <span>Buscar</span>
+          </button>
+        </div>
+
+        <!-- Área de Resultados y Canje -->
+        <div id="couponResultBox" style="display: none;">
+          <!-- Inyectado dinámicamente -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Pie de Página -->
+    <footer class="admin-footer" style="margin-top: 2rem;">
+      <div class="admin-footer-content">
+        <p class="admin-footer-copy">
+          &copy; Total Beauty Salón &amp; Academia. Sistema Seguro de Cupones Oficiales.
+        </p>
+        <div class="admin-footer-links">
+          <a href="index.html" class="admin-footer-link">Inicio</a>
+          <span class="link-divider">&bull;</span>
+          <a href="encuesta.html" class="admin-footer-link">Encuesta</a>
+          <span class="link-divider">&bull;</span>
+          <a href="admin.html" class="admin-footer-link">Panel Admin</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="firebase-config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      'use strict';
+      const ADMIN_PINS = ["ADMIN2026", "04012021"];
+      const SESSION_KEY = "tb_admin_auth_token";
+      let currentCheckedCoupon = null;
+
+      const authGate = document.getElementById('authGate');
+      const validatorTool = document.getElementById('validatorTool');
+      const toast = document.getElementById('validatorToast');
+
+      checkAuth();
+
+      function checkAuth() {
+        if (sessionStorage.getItem(SESSION_KEY) === "granted") {
+          authGate.style.display = 'none';
+          validatorTool.style.display = 'block';
+        } else {
+          authGate.style.display = 'block';
+          validatorTool.style.display = 'none';
+        }
+      }
+
+      window.handleQuickAuth = function(e) {
+        e.preventDefault();
+        const pin = (document.getElementById('pinInput').value || '').trim();
+        if (ADMIN_PINS.includes(pin)) {
+          sessionStorage.setItem(SESSION_KEY, "granted");
+          checkAuth();
+          showToast("Validador desbloqueado exitosamente.");
+        } else {
+          showToast("PIN incorrecto.");
+        }
+      };
+
+      window.checkCouponStatus = async function() {
+        const input = document.getElementById('codeToValidate');
+        const code = (input ? input.value : '').trim().toUpperCase();
+        const resultBox = document.getElementById('couponResultBox');
+
+        if (!code || code.length < 5) {
+          showToast("Ingresa un código de cupón válido (ej. TB-XXXXXX).");
+          return;
+        }
+
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = '<div class="table-loading-cell">Consultando cupón en Firebase...</div>';
+
+        const coupon = await TB_FIREBASE.getCupon(code);
+        currentCheckedCoupon = coupon;
+
+        if (!coupon) {
+          resultBox.innerHTML = `
+            <div class="validator-status-alert used">
+              <strong>El código ${code} no existe</strong> en el sistema de Total Beauty. Verifica que haya sido digitado correctamente.
+            </div>
+          `;
+          return;
+        }
+
+        renderCouponDetails(coupon);
+      };
+
+      function renderCouponDetails(c) {
+        const resultBox = document.getElementById('couponResultBox');
+        const isAvailable = c.estado === 'disponible';
+        const isUsed = c.estado === 'utilizado';
+        const isExpired = c.estado === 'vencido';
+
+        let statusClass = 'available';
+        let statusTitle = 'Cupón Disponible para Canjear';
+        if (isUsed) {
+          statusClass = 'used';
+          statusTitle = 'Cupón Ya Utilizado';
+        } else if (isExpired) {
+          statusClass = 'expired';
+          statusTitle = 'Cupón Vencido';
+        }
+
+        const issuedStr = c.fechaGeneracion ? new Date(c.fechaGeneracion).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : '--';
+        const expiryStr = c.fechaVencimiento ? new Date(c.fechaVencimiento).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : '--';
+
+        let html = `
+          <div class="validator-status-alert ${statusClass}">
+            <strong style="text-transform: uppercase;">${statusTitle} &bull; ${c.codigo}</strong>
+          </div>
+
+          <div class="coupon-meta-grid" style="margin-bottom: 1.25rem;">
+            <div class="coupon-meta-item">
+              <span class="meta-label">Clienta</span>
+              <span class="meta-val">${c.nombre || 'Clienta'}</span>
+            </div>
+            <div class="coupon-meta-item">
+              <span class="meta-label">WhatsApp</span>
+              <span class="meta-val">${c.whatsapp || '--'}</span>
+            </div>
+            <div class="coupon-meta-item">
+              <span class="meta-label">Emitido</span>
+              <span class="meta-val">${issuedStr}</span>
+            </div>
+            <div class="coupon-meta-item">
+              <span class="meta-label">Vigencia</span>
+              <span class="meta-val gold-bold">${expiryStr}</span>
+            </div>
+          </div>
+        `;
+
+        if (isUsed) {
+          const usedDate = c.fechaUtilizacion ? new Date(c.fechaUtilizacion).toLocaleString('es-MX') : '--';
+          html += `
+            <div class="admin-img-preview-box" style="padding: 1rem; border-color: rgba(231,76,60,0.4); background: rgba(231,76,60,0.08); margin-bottom: 1rem;">
+              <h4 style="color: #e74c3c; font-size: 0.88rem; margin-bottom: 0.5rem;">Historial de Utilización</h4>
+              <p style="font-size: 0.8rem; color: #dedede; margin-bottom: 0.25rem;">Fecha de canje: <strong>${usedDate}</strong></p>
+              <p style="font-size: 0.8rem; color: #dedede; margin-bottom: 0.25rem;">Servicio: <strong>${c.servicioCanje || 'General'}</strong></p>
+              <p style="font-size: 0.8rem; color: #dedede; margin-bottom: 0.25rem;">Precio original: $${c.precioOriginal || 0} &bull; Descuento: ${c.descuentoPorcentaje || 0}% (-$${c.descuentoImporte || 0})</p>
+              <p style="font-size: 0.84rem; color: var(--gold-light); font-weight: 600;">Total Pagado: $${c.totalPagado || 0} MXN</p>
+              <p style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.35rem;">Atendido por: ${c.canjeadoPor || 'Recepción'}</p>
+            </div>
+          `;
+        } else if (isExpired) {
+          html += `
+            <div class="admin-img-preview-box" style="padding: 1rem; border-color: rgba(243,156,18,0.4); background: rgba(243,156,18,0.08); margin-bottom: 1rem;">
+              <h4 style="color: #f39c12; font-size: 0.88rem; margin-bottom: 0.4rem;">Cupón Fuera de Vigencia</h4>
+              <p style="font-size: 0.8rem; color: #dedede;">Este cupón venció el ${expiryStr}. Los cupones tienen 30 días de vigencia no prorrogables.</p>
+            </div>
+          `;
+        } else {
+          // Formulario interactivo de canje
+          html += `
+            <form onsubmit="handleRedeemSubmit(event)" class="admin-form" style="background: rgba(10,10,14,0.7); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(212,175,55,0.2);">
+              <h4 style="color: var(--gold-light); font-size: 0.92rem; margin-bottom: 0.85rem;">Registrar Servicio y Aplicar Descuento</h4>
+
+              <div class="admin-form-row">
+                <div class="student-form-group">
+                  <label class="student-form-label">Servicio Contratado</label>
+                  <select id="redeemServiceInput" class="student-form-input" required>
+                    <option value="Uñas Acrílicas">Uñas Acrílicas / Gel</option>
+                    <option value="Extensiones de Pestañas">Extensiones de Pestañas</option>
+                    <option value="Laminado y Diseño de Cejas">Laminado y Diseño de Cejas</option>
+                    <option value="Pedicure Spa">Pedicure Spa</option>
+                    <option value="Corte de Cabello">Corte de Cabello</option>
+                    <option value="Maquillaje">Maquillaje</option>
+                    <option value="Tratamiento Capilar">Tratamiento Capilar</option>
+                    <option value="Otro Servicio">Otro Servicio</option>
+                  </select>
+                </div>
+
+                <div class="student-form-group">
+                  <label class="student-form-label">Precio Regular del Servicio ($ MXN)</label>
+                  <input 
+                    type="number" 
+                    id="redeemPriceInput" 
+                    class="student-form-input" 
+                    placeholder="ej. 500" 
+                    min="1" 
+                    required 
+                    oninput="calculateRedemptionTotals(this.value)"
+                  >
+                </div>
+              </div>
+
+              <!-- Cálculo en vivo del descuento -->
+              <div id="liveCalcBox" style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; display: none;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.35rem;">
+                  <span style="color: var(--text-muted);">Porcentaje según rango:</span>
+                  <span id="liveTierDisplay" style="color: var(--gold-light); font-weight: 600;">20%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.35rem;">
+                  <span style="color: var(--text-muted);">Descuento a aplicar:</span>
+                  <span id="liveDiscountDisplay" style="color: var(--gold-primary); font-weight: 700;">-$100 MXN</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 1rem; font-weight: 700; color: #ffffff; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 0.45rem;">
+                  <span>Total Final a Cobrar:</span>
+                  <span id="liveTotalDisplay" style="color: var(--gold-light); font-family: var(--font-serif); font-size: 1.2rem;">$400 MXN</span>
+                </div>
+              </div>
+
+              <div class="student-form-group">
+                <label class="student-form-label">Personal Responsable en Recepción</label>
+                <input type="text" id="redeemCashierInput" class="student-form-input" value="Recepción Total Beauty" required>
+              </div>
+
+              <div class="student-form-group">
+                <label class="student-form-label">Notas Adicionales (Opcional)</label>
+                <input type="text" id="redeemNotesInput" class="student-form-input" placeholder="ej. Clienta satisfecha, cita 16:00 hrs">
+              </div>
+
+              <button type="submit" id="btnConfirmRedeem" class="btn-student-submit" style="margin-top: 0.5rem;">
+                <span>Confirmar Canje y Aplicar Descuento</span>
+              </button>
+            </form>
+          `;
+        }
+
+        resultBox.innerHTML = html;
+      }
+
+      window.calculateRedemptionTotals = function(val) {
+        const box = document.getElementById('liveCalcBox');
+        const tier = document.getElementById('liveTierDisplay');
+        const disc = document.getElementById('liveDiscountDisplay');
+        const tot = document.getElementById('liveTotalDisplay');
+
+        const p = parseFloat(val);
+        if (isNaN(p) || p <= 0) {
+          if (box) box.style.display = 'none';
+          return;
+        }
+
+        const calc = TB_FIREBASE.calculateDiscount(p);
+        if (box) box.style.display = 'block';
+        if (tier) tier.textContent = `${calc.porcentaje}% (${calc.rango})`;
+        if (disc) disc.textContent = `-$${calc.montoDescuento.toLocaleString('es-MX')} MXN`;
+        if (tot) tot.textContent = `$${calc.totalPagar.toLocaleString('es-MX')} MXN`;
+      };
+
+      window.handleRedeemSubmit = async function(e) {
+        e.preventDefault();
+        if (!currentCheckedCoupon || !currentCheckedCoupon.codigo) return;
+
+        const btn = document.getElementById('btnConfirmRedeem');
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<span>Procesando canje en Firebase...</span>';
+        }
+
+        const service = document.getElementById('redeemServiceInput').value;
+        const price = parseFloat(document.getElementById('redeemPriceInput').value);
+        const cashier = document.getElementById('redeemCashierInput').value;
+        const notes = document.getElementById('redeemNotesInput').value;
+
+        const res = await TB_FIREBASE.canjearCupon(currentCheckedCoupon.codigo, {
+          servicio: service,
+          precioOriginal: price,
+          responsable: cashier,
+          notas: notes
+        });
+
+        if (res.success) {
+          showToast(res.message);
+          currentCheckedCoupon = res.cupon;
+          renderCouponDetails(res.cupon);
+        } else {
+          showToast(res.message);
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Confirmar Canje</span>';
+          }
+        }
+      };
+
+      function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        toast.classList.add('visible');
+        setTimeout(() => {
+          toast.classList.remove('visible');
+          setTimeout(() => toast.style.display = 'none', 300);
+        }, 4000);
+      }
+    });
+  </script>
+</body>
+</html>

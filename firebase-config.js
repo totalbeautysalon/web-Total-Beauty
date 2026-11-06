@@ -2,7 +2,8 @@
  * TOTAL BEAUTY SALÓN & ACADEMIA
  * Módulo de Configuración y Servicios Firebase Realtime Database
  * Proyecto: totalbregis (https://totalbregis-default-rtdb.firebaseio.com)
- * Cero Emojis - Arquitectura Segura con Respaldo Offline
+ * Compatible con total-beauty-crm y respaldo offline completo
+ * Cero Emojis - Arquitectura Segura y Confiable
  */
 
 const TB_FIREBASE = (function () {
@@ -21,13 +22,29 @@ const TB_FIREBASE = (function () {
   const PATHS = {
     announcement: "portal_web/anuncio",
     alumnas: "portal_web/alumnas",
-    cursos: "portal_web/cursos"
+    cursos: "portal_web/cursos",
+    encuestas: "encuestas",
+    cupones: "cupones",
+    configCupones: "configuracion_cupones"
   };
 
   const LOCAL_CACHE = {
     announcement: "totalbeauty_announcement_data",
     alumnas: "totalbeauty_alumnas_db",
-    cursos: "totalbeauty_cursos_db"
+    cursos: "totalbeauty_cursos_db",
+    encuestas: "totalbeauty_encuestas_db",
+    cupones: "totalbeauty_cupones_db",
+    configCupones: "totalbeauty_config_cupones"
+  };
+
+  const DEFAULT_CONFIG_CUPONES = {
+    vigenciaDias: 30,
+    descuentos: [
+      { max: 300, porcentaje: 10, etiqueta: "$300 o menos" },
+      { min: 300, max: 700, porcentaje: 20, etiqueta: "Más de $300 y hasta $700" },
+      { min: 700, max: 1000, porcentaje: 30, etiqueta: "Más de $700 y hasta $1,000" },
+      { min: 1000, porcentaje: 35, etiqueta: "Más de $1,000" }
+    ]
   };
 
   const DEFAULT_CURSOS = {
@@ -398,6 +415,374 @@ const TB_FIREBASE = (function () {
     }
   }
 
+  // ==========================================
+  // GESTIÓN DE ENCUESTAS DE SATISFACCIÓN
+  // ==========================================
+  async function getEncuestas() {
+    try {
+      const res = await fetch(getUrl(PATHS.encuestas), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          localStorage.setItem(LOCAL_CACHE.encuestas, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch (err) {
+      console.warn("Conexión a Firebase no disponible para encuestas. Usando caché local.", err);
+    }
+
+    try {
+      const cached = localStorage.getItem(LOCAL_CACHE.encuestas);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.error("Error al leer caché local de encuestas:", e);
+    }
+    return {};
+  }
+
+  async function saveEncuesta(data) {
+    const id = data.id || `enc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const payload = {
+      ...data,
+      id,
+      timestamp: data.timestamp || Date.now(),
+      fechaRegistro: data.fechaRegistro || new Date().toISOString()
+    };
+
+    try {
+      const current = await getEncuestas();
+      current[id] = payload;
+      localStorage.setItem(LOCAL_CACHE.encuestas, JSON.stringify(current));
+    } catch (e) {
+      console.error("Error al actualizar caché local de encuestas:", e);
+    }
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.encuestas}/${encodeURIComponent(id)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return { ok: res.ok, id, data: payload };
+    } catch (err) {
+      console.error("Error al guardar encuesta en Firebase:", err);
+      return { ok: false, id, data: payload };
+    }
+  }
+
+  // ==========================================
+  // LÓGICA DE DESCUENTOS Y CUPONES DE SATISFACCIÓN
+  // ==========================================
+  function calculateDiscount(precio) {
+    const p = parseFloat(precio);
+    if (isNaN(p) || p <= 0) {
+      return { porcentaje: 0, montoDescuento: 0, totalPagar: 0, rango: "Sin importe válido" };
+    }
+    let porcentaje = 10;
+    let rango = "$300 o menos (10%)";
+
+    if (p <= 300) {
+      porcentaje = 10;
+      rango = "$300 o menos (10%)";
+    } else if (p <= 700) {
+      porcentaje = 20;
+      rango = "Más de $300 y hasta $700 (20%)";
+    } else if (p <= 1000) {
+      porcentaje = 30;
+      rango = "Más de $700 y hasta $1,000 (30%)";
+    } else {
+      porcentaje = 35;
+      rango = "Más de $1,000 (35%)";
+    }
+
+    const montoDescuento = Math.round((p * porcentaje) / 100);
+    const totalPagar = Math.max(0, p - montoDescuento);
+
+    return {
+      porcentaje,
+      montoDescuento,
+      totalPagar,
+      rango
+    };
+  }
+
+  function generateCouponCode() {
+    const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return `TB-${code}`;
+  }
+
+  async function getCupones() {
+    let cupones = {};
+    try {
+      const res = await fetch(getUrl(PATHS.cupones), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          cupones = data;
+          localStorage.setItem(LOCAL_CACHE.cupones, JSON.stringify(cupones));
+        }
+      }
+    } catch (err) {
+      console.warn("Conexión a Firebase no disponible para cupones. Usando caché local.", err);
+    }
+
+    if (Object.keys(cupones).length === 0) {
+      try {
+        const cached = localStorage.getItem(LOCAL_CACHE.cupones);
+        if (cached) cupones = JSON.parse(cached);
+      } catch (e) {
+        console.error("Error al leer caché local de cupones:", e);
+      }
+    }
+
+    // Comprobar vencimiento automático de cupones disponibles
+    const now = Date.now();
+    let hasChanges = false;
+    Object.keys(cupones).forEach(codigo => {
+      const item = cupones[codigo];
+      if (item && item.estado === 'disponible' && item.fechaVencimiento) {
+        const expTime = new Date(item.fechaVencimiento).getTime();
+        if (!isNaN(expTime) && now > expTime) {
+          item.estado = 'vencido';
+          item.updatedAt = now;
+          hasChanges = true;
+        }
+      }
+    });
+
+    if (hasChanges) {
+      try {
+        localStorage.setItem(LOCAL_CACHE.cupones, JSON.stringify(cupones));
+      } catch (e) {}
+    }
+
+    return cupones;
+  }
+
+  async function getCupon(codigo) {
+    const cleanCode = (codigo || '').trim().toUpperCase();
+    if (!cleanCode) return null;
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.cupones}/${encodeURIComponent(cleanCode)}`), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data) {
+          if (data.estado === 'disponible' && data.fechaVencimiento) {
+            const expTime = new Date(data.fechaVencimiento).getTime();
+            if (!isNaN(expTime) && Date.now() > expTime) {
+              data.estado = 'vencido';
+              saveCupon(cleanCode, data);
+            }
+          }
+          return data;
+        }
+      }
+    } catch (err) {
+      console.warn("Error consultando cupón en Firebase:", err);
+    }
+
+    const all = await getCupones();
+    return all[cleanCode] || null;
+  }
+
+  async function saveCupon(codigo, data) {
+    const cleanCode = (codigo || '').trim().toUpperCase();
+    if (!cleanCode) return false;
+
+    const payload = {
+      ...data,
+      codigo: cleanCode,
+      updatedAt: Date.now()
+    };
+
+    try {
+      const current = await getCupones();
+      current[cleanCode] = payload;
+      localStorage.setItem(LOCAL_CACHE.cupones, JSON.stringify(current));
+    } catch (e) {
+      console.error("Error al actualizar caché local de cupón:", e);
+    }
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.cupones}/${encodeURIComponent(cleanCode)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return res.ok;
+    } catch (err) {
+      console.error("Error guardando cupón en Firebase:", err);
+      return false;
+    }
+  }
+
+  async function canjearCupon(codigo, canjeData) {
+    const cleanCode = (codigo || '').trim().toUpperCase();
+    if (!cleanCode) {
+      return { success: false, message: "El código de cupón no es válido." };
+    }
+
+    // Consulta fresca
+    const cupon = await getCupon(cleanCode);
+    if (!cupon) {
+      return { success: false, message: `El cupón ${cleanCode} no existe en el sistema.` };
+    }
+
+    if (cupon.estado === 'utilizado') {
+      const fechaUso = cupon.fechaUtilizacion ? new Date(cupon.fechaUtilizacion).toLocaleString('es-MX') : 'previamente';
+      return {
+        success: false,
+        message: `Este cupón ya fue utilizado el ${fechaUso}. No es posible volver a canjearlo.`,
+        cupon
+      };
+    }
+
+    const now = Date.now();
+    const expTime = cupon.fechaVencimiento ? new Date(cupon.fechaVencimiento).getTime() : Infinity;
+    if (cupon.estado === 'vencido' || now > expTime) {
+      const fechaVenc = cupon.fechaVencimiento ? new Date(cupon.fechaVencimiento).toLocaleDateString('es-MX') : '';
+      return {
+        success: false,
+        message: `El cupón venció el ${fechaVenc}. No está disponible para canje.`,
+        cupon
+      };
+    }
+
+    const precio = parseFloat(canjeData.precioOriginal);
+    if (isNaN(precio) || precio <= 0) {
+      return { success: false, message: "Debe ingresar un precio de servicio válido y mayor a $0." };
+    }
+
+    const calc = calculateDiscount(precio);
+
+    const payload = {
+      ...cupon,
+      estado: 'utilizado',
+      fechaUtilizacion: new Date().toISOString(),
+      timestampUtilizacion: now,
+      servicioCanje: (canjeData.servicio || 'Servicio General').trim(),
+      precioOriginal: precio,
+      descuentoPorcentaje: calc.porcentaje,
+      descuentoImporte: calc.montoDescuento,
+      totalPagado: calc.totalPagar,
+      canjeadoPor: (canjeData.responsable || 'Recepción Total Beauty').trim(),
+      notasCanje: (canjeData.notas || '').trim(),
+      updatedAt: now
+    };
+
+    const saved = await saveCupon(cleanCode, payload);
+    return {
+      success: true,
+      message: `¡Cupón ${cleanCode} canjeado con éxito! Se aplicó un ${calc.porcentaje}% de descuento (-$${calc.montoDescuento}).`,
+      cupon: payload,
+      calculo: calc,
+      savedInFirebase: saved
+    };
+  }
+
+  async function checkClientRecentSurvey(whatsapp, servicio) {
+    const cleanTel = (whatsapp || '').replace(/\D/g, '');
+    if (!cleanTel || cleanTel.length < 10) return { hasRecent: false };
+
+    const encuestas = await getEncuestas();
+    const cupones = await getCupones();
+    const now = Date.now();
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+    const list = Object.values(encuestas).filter(e => {
+      const tel = (e.whatsapp || '').replace(/\D/g, '');
+      return tel === cleanTel;
+    });
+
+    if (list.length === 0) return { hasRecent: false };
+
+    // Buscar encuesta reciente (últimas 24 horas o mismo servicio dentro de 48h)
+    const recent = list.find(e => {
+      const elapsed = now - (e.timestamp || 0);
+      const sameService = servicio && e.servicio && e.servicio.toLowerCase() === servicio.toLowerCase();
+      return elapsed < ONE_DAY_MS || (sameService && elapsed < (48 * 60 * 60 * 1000));
+    });
+
+    if (!recent) return { hasRecent: false };
+
+    // Buscar si tiene cupón activo
+    let activeCupon = null;
+    if (recent.cuponCodigo && cupones[recent.cuponCodigo]) {
+      activeCupon = cupones[recent.cuponCodigo];
+    } else {
+      activeCupon = Object.values(cupones).find(c => {
+        const cTel = (c.whatsapp || '').replace(/\D/g, '');
+        return cTel === cleanTel && c.estado === 'disponible';
+      });
+    }
+
+    return {
+      hasRecent: true,
+      survey: recent,
+      cupon: activeCupon
+    };
+  }
+
+  async function getConfigCupones() {
+    try {
+      const res = await fetch(getUrl(PATHS.configCupones), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          localStorage.setItem(LOCAL_CACHE.configCupones, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch (e) {}
+
+    try {
+      const cached = localStorage.getItem(LOCAL_CACHE.configCupones);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {}
+
+    return DEFAULT_CONFIG_CUPONES;
+  }
+
+  async function saveConfigCupones(data) {
+    const payload = {
+      ...DEFAULT_CONFIG_CUPONES,
+      ...data,
+      updatedAt: Date.now()
+    };
+    localStorage.setItem(LOCAL_CACHE.configCupones, JSON.stringify(payload));
+    try {
+      const res = await fetch(getUrl(PATHS.configCupones), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ==========================================
+  // COMPROBACIÓN DE CONEXIÓN
+  // ==========================================
   async function checkConnection() {
     try {
       const res = await fetch(getUrl('portal_web'), {
@@ -413,6 +798,7 @@ const TB_FIREBASE = (function () {
   return {
     config: CONFIG,
     DEFAULT_CURSOS,
+    DEFAULT_CONFIG_CUPONES,
     getAnnouncement,
     saveAnnouncement,
     getAlumnas,
@@ -425,6 +811,17 @@ const TB_FIREBASE = (function () {
     getCurso,
     saveCurso,
     deleteCurso,
+    getEncuestas,
+    saveEncuesta,
+    calculateDiscount,
+    generateCouponCode,
+    getCupones,
+    getCupon,
+    saveCupon,
+    canjearCupon,
+    checkClientRecentSurvey,
+    getConfigCupones,
+    saveConfigCupones,
     checkConnection
   };
 })();
