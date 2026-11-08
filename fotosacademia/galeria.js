@@ -4,7 +4,6 @@ window.TOTAL_BEAUTY_GALERIA = [
     " (3).png",
     " (4).png",
     "1.png",
-    "foto01.jpg",
     "IMG_20261108_103244658_HDR.jpg",
     "IMG_20261108_103314312_HDR.JPG",
     "IMG_9124.JPG",
@@ -14,5 +13,6 @@ window.TOTAL_BEAUTY_GALERIA = [
     "IMG_9129.JPG",
     "IMG_9130.JPG",
     "IMG_9132.JPG",
-    "IMG_9133.JPG"
+    "IMG_9133.JPG",
+    "foto01.jpg"
 ];
