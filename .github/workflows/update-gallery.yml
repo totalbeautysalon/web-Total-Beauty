@@ -1,0 +1,48 @@
+name: Auto-Sync Academia Gallery
+
+on:
+  push:
+    paths:
+      - 'fotosacademia/**'
+      - '!fotosacademia/manifest.json'
+      - '!fotosacademia/galeria.js'
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-gallery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Regenerate gallery catalog
+        run: |
+          python -c "
+          import os, json
+          dir_path = 'fotosacademia'
+          exts = ('.jpg', '.jpeg', '.png', '.webp', '.gif')
+          files = [f for f in os.listdir(dir_path) if f.lower().endswith(exts) and f not in ('manifest.json', 'galeria.js')]
+          files.sort()
+          with open(os.path.join(dir_path, 'manifest.json'), 'w', encoding='utf-8') as f:
+              json.dump(files, f, indent=4)
+          with open(os.path.join(dir_path, 'galeria.js'), 'w', encoding='utf-8') as f:
+              f.write('window.TOTAL_BEAUTY_GALERIA = ' + json.dumps(files, indent=4) + ';\n')
+          print(f'Catalog synced: {len(files)} photos found.')
+          "
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fotosacademia/manifest.json fotosacademia/galeria.js
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-sync academia gallery catalog"
+            git push origin main
+          fi

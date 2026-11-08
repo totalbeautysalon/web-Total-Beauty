@@ -947,92 +947,99 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 6. GALERÍA DE LA ACADEMIA (DETECCIÓN DINÁMICA DE FOTOS Y LIGHTBOX)
+  // 6. GALERIA DE LA ACADEMIA (DETECCION DINAMICA DE FOTOS Y LIGHTBOX)
   // ==========================================
   async function initAcademyGallery() {
     const grid = document.getElementById('phoneGalleryGrid');
     if (!grid) return;
 
-    let photos = [];
+    const photoSet = new Set();
+    const addPhoto = (name) => {
+      if (!name || typeof name !== 'string') return;
+      let clean = name.trim().replace(/\\/g, '/');
+      if (!/\.(jpe?g|png|webp|gif)$/i.test(clean)) return;
+      if (clean === 'manifest.json' || clean === 'galeria.js') return;
+      const path = clean.startsWith('fotosacademia/') ? clean : `fotosacademia/${clean}`;
+      photoSet.add(path);
+    };
 
-    // Prioridad 1: Catálogo precargado de fotosacademia/galeria.js (funciona tanto en web como en apertura local)
-    if (window.TOTAL_BEAUTY_GALERIA && Array.isArray(window.TOTAL_BEAUTY_GALERIA) && window.TOTAL_BEAUTY_GALERIA.length > 0) {
-      photos = window.TOTAL_BEAUTY_GALERIA
-        .filter(item => typeof item === 'string' && /\.(jpe?g|png|webp|gif)$/i.test(item))
-        .map(name => name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`);
-    }
-
-    // Prioridad 2: Cargar catálogo manifest.json en fotosacademia (con limpieza de BOM \uFEFF)
-    if (photos.length === 0) {
-      try {
-        const res = await fetch('fotosacademia/manifest.json?_cb=' + Date.now());
-        if (res.ok) {
-          const text = await res.text();
-          const cleanText = text.replace(/^\uFEFF/, '').trim();
-          const raw = JSON.parse(cleanText);
-          const list = Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-          const valid = list.filter(item => typeof item === 'string' && /\.(jpe?g|png|webp|gif)$/i.test(item));
-          if (valid.length > 0) {
-            photos = valid.map(name => name.startsWith('fotosacademia/') ? name : `fotosacademia/${name}`);
-          }
+    // 1. Deteccion en tiempo real desde la API de GitHub (detecta cualquier foto agregada a la carpeta sin tocar codigo)
+    try {
+      const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia?_t=' + Date.now(), {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (ghRes.ok) {
+        const ghList = await ghRes.json();
+        if (Array.isArray(ghList)) {
+          ghList.forEach(f => {
+            if (f.type === 'file') addPhoto(f.name);
+          });
         }
-      } catch (e) {
-        // Continuar al siguiente método si la lectura directa falla
       }
+    } catch (e) {
+      // Continuar con siguientes fuentes si GitHub API tiene limite o esta offline
     }
 
-    // Prioridad 3: Consulta en tiempo real a la API de GitHub
-    if (photos.length === 0) {
-      try {
-        const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia?_cb=' + Date.now(), {
-          headers: { 'Accept': 'application/vnd.github.v3+json' }
-        });
-        if (ghRes.ok) {
-          const ghList = await ghRes.json();
-          if (Array.isArray(ghList)) {
-            photos = ghList
-              .filter(f => f.type === 'file' && /\.(jpe?g|png|webp|gif)$/i.test(f.name))
-              .map(f => f.path || `fotosacademia/${f.name}`);
-          }
-        }
-      } catch (e) {
-        // Continuar si hay restricción de red
+    // 2. Catalogo manifest.json en fotosacademia (con limpieza de BOM y cache buster)
+    try {
+      const res = await fetch('fotosacademia/manifest.json?_t=' + Date.now());
+      if (res.ok) {
+        const text = await res.text();
+        const cleanText = text.replace(/^\uFEFF/, '').trim();
+        const raw = JSON.parse(cleanText);
+        const list = Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+        list.forEach(addPhoto);
       }
+    } catch (e) {
+      // Continuar si la lectura falla
     }
 
-    // Prioridad 4: Detección activa de archivos reales existentes (solo fotos que realmente carguen)
-    if (photos.length === 0) {
-      photos = await probeExistingPhotos();
+    // 3. Catalogo precargado de fotosacademia/galeria.js (soporte local directo)
+    if (window.TOTAL_BEAUTY_GALERIA && Array.isArray(window.TOTAL_BEAUTY_GALERIA)) {
+      window.TOTAL_BEAUTY_GALERIA.forEach(addPhoto);
     }
+
+    // 4. Deteccion activa por patron de nombres comunes para fotos recien agregadas
+    const candidates = [];
+    // Patrones de camaras y telefonos (ej. IMG_9120 ... IMG_9160)
+    for (let i = 9120; i <= 9160; i++) {
+      candidates.push(`fotosacademia/IMG_${i}.JPG`);
+      candidates.push(`fotosacademia/IMG_${i}.jpg`);
+    }
+    // Patrones genericos numerados
+    for (let i = 1; i <= 50; i++) {
+      const pad = String(i).padStart(2, '0');
+      candidates.push(`fotosacademia/foto${pad}.jpg`);
+      candidates.push(`fotosacademia/foto${i}.jpg`);
+      candidates.push(`fotosacademia/${i}.png`);
+      candidates.push(`fotosacademia/ (${i}).png`);
+    }
+
+    const unprobed = candidates.filter(c => !photoSet.has(c));
+    if (unprobed.length > 0) {
+      const testImg = (src) => new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(src);
+        img.onerror = () => resolve(null);
+        img.src = src;
+      });
+
+      const tested = await Promise.all(unprobed.map(testImg));
+      tested.filter(Boolean).forEach(src => photoSet.add(src));
+    }
+
+    let photos = Array.from(photoSet);
+
+    // Orden inteligente: fotos mas recientes primero
+    photos.sort((a, b) => {
+      const nameA = a.replace('fotosacademia/', '');
+      const nameB = b.replace('fotosacademia/', '');
+      return nameB.localeCompare(nameA, undefined, { numeric: true, sensitivity: 'base' });
+    });
 
     currentGalleryPhotos = photos;
     renderPhoneGallery(photos);
     setupLightboxEvents();
-  }
-
-  async function probeExistingPhotos() {
-    const candidates = [];
-    for (let i = 1; i <= 50; i++) {
-      const pad = String(i).padStart(2, '0');
-      candidates.push(`fotosacademia/foto${pad}.jpg`);
-      candidates.push(`fotosacademia/foto${pad}.png`);
-      candidates.push(`fotosacademia/foto${pad}.webp`);
-      candidates.push(`fotosacademia/foto${i}.jpg`);
-      candidates.push(`fotosacademia/foto${i}.png`);
-      candidates.push(`fotosacademia/foto${i}.webp`);
-      candidates.push(`fotosacademia/${i}.jpg`);
-      candidates.push(`fotosacademia/${i}.png`);
-    }
-
-    const testImg = (src) => new Promise(resolve => {
-      const img = new Image();
-      img.onload = () => resolve(src);
-      img.onerror = () => resolve(null);
-      img.src = src;
-    });
-
-    const results = await Promise.all(candidates.map(testImg));
-    return [...new Set(results.filter(Boolean))];
   }
 
   function renderPhoneGallery(photos) {
@@ -1046,18 +1053,18 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Renderizar puras imágenes: las primeras 10 visibles, las restantes ocultas
+    // Renderizar puras imagenes: las primeras 10 visibles, las restantes ocultas para carga ligera
     grid.innerHTML = photos.map((src, index) => {
       const isHidden = index >= 10;
       const hiddenClass = isHidden ? ' gallery-hidden' : '';
       return `
         <div class="phone-gallery-item${hiddenClass}" onclick="openPhotoLightbox(${index})" role="button" tabindex="0" aria-label="Ver fotografía ${index + 1} en grande">
-          <img src="${escapeHtml(src)}" alt="Total Beauty Academia" class="phone-gallery-img" loading="lazy">
+          <img src="${escapeHtml(src)}" alt="Total Beauty Academia" class="phone-gallery-img" loading="lazy" onerror="this.closest('.phone-gallery-item')?.remove();">
         </div>
       `;
     }).join('');
 
-    // Mostrar botón 'Ver Más' únicamente si hay más de 10 imágenes
+    // Mostrar boton 'Ver Mas' unicamente si hay mas de 10 imagenes
     if (actionWrap) {
       actionWrap.style.display = photos.length > 10 ? 'flex' : 'none';
     }
