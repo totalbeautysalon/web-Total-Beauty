@@ -87,24 +87,40 @@ select,
   user-select: text !important;
 }
 
-/* Fondos Ambientales */
+/* Fondos Ambientales Premium y Efectos de Iluminacion */
+@keyframes ambientBreathe {
+  0%, 100% {
+    opacity: 0.82;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.06);
+  }
+}
+
 .ambient-glow {
   position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: min(900px, 100vw);
-  height: 420px;
-  background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.08) 0%, rgba(7, 7, 9, 0) 70%);
+  width: min(1050px, 100vw);
+  height: 520px;
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.16) 0%, rgba(212, 175, 55, 0.06) 35%, rgba(7, 7, 9, 0) 72%),
+    radial-gradient(ellipse at 50% 30%, rgba(250, 235, 176, 0.08) 0%, rgba(7, 7, 9, 0) 65%);
   pointer-events: none;
   z-index: 0;
+  animation: ambientBreathe 9s ease-in-out infinite;
 }
 
 .ambient-grid {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px);
-  background-size: 36px 36px;
+  background-image: radial-gradient(rgba(212, 175, 55, 0.07) 1.2px, transparent 1.2px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.2) 85%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.2) 85%, transparent 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -521,15 +537,37 @@ select,
   min-height: 100vh;
 }
 
-/* Header de la Página Principal: Logo Elegante y Centrado */
+/* Header de la Pagina Principal: Presencia Corporativa y Lujo */
+@keyframes logoHaloPulse {
+  0%, 100% {
+    filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.32)) drop-shadow(0 0 45px rgba(212, 175, 55, 0.12));
+  }
+  50% {
+    filter: drop-shadow(0 6px 28px rgba(212, 175, 55, 0.48)) drop-shadow(0 0 65px rgba(212, 175, 55, 0.24));
+  }
+}
+
 .brand-header {
   text-align: center;
   margin-bottom: 2.25rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.65rem;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.brand-header::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, rgba(7, 7, 9, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .brand-header::after {
@@ -538,9 +576,10 @@ select,
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+  width: 140px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), var(--gold-primary), rgba(212, 175, 55, 0.3), transparent);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 
 .brand-logo-container {
@@ -549,20 +588,23 @@ select,
   align-items: center;
   text-decoration: none;
   color: inherit;
-  transition: var(--transition-smooth);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 1;
 }
 
 .brand-logo-img {
-  max-height: 205px;
+  max-height: 215px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 2px 12px rgba(212, 175, 55, 0.28));
-  transition: var(--transition-smooth);
+  filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.32)) drop-shadow(0 0 45px rgba(212, 175, 55, 0.12));
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
+  animation: logoHaloPulse 7s ease-in-out infinite;
 }
 
 .brand-logo-container:hover .brand-logo-img {
-  transform: scale(1.03);
-  filter: drop-shadow(0 4px 18px rgba(212, 175, 55, 0.45));
+  transform: scale(1.035);
+  filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 75px rgba(212, 175, 55, 0.35));
 }
 
 .brand-title {
@@ -583,13 +625,31 @@ select,
 }
 
 .brand-tagline {
-  font-size: 0.74rem;
-  letter-spacing: 0.35em;
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--gold-light);
-  margin-top: 0.35rem;
-  font-weight: 400;
-  opacity: 0.88;
+  background: linear-gradient(135deg, #fcedb0 0%, #d4af37 50%, #ecd48d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-tagline::before,
+.brand-tagline::after {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7));
+}
+
+.brand-tagline::after {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.7), transparent);
 }
 
 /* Botón Soy Alumna en Barra de Academia */
@@ -644,27 +704,31 @@ select,
   font-weight: 600;
 }
 
-/* Sección de Bienvenida */
+/* Seccion de Bienvenida Corporativa */
 .welcome-section {
   text-align: center;
-  max-width: 650px;
-  margin: 0 auto 2.5rem;
+  max-width: 720px;
+  margin: 0 auto 2.75rem;
   padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .welcome-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.3rem 0.95rem;
+  padding: 0.32rem 1rem;
   border-radius: 999px;
-  border: 1px solid var(--gold-border);
-  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.06);
   font-size: 0.68rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold-light);
   margin-bottom: 0.85rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .welcome-badge .gold-dot {
@@ -676,55 +740,145 @@ select,
 }
 
 .welcome-description {
-  font-size: 0.93rem;
-  color: var(--text-muted);
-  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #cfcfe0;
+  line-height: 1.65;
   font-weight: 300;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+  padding: 0.75rem 1.6rem;
+  background: rgba(18, 18, 25, 0.55);
+  border: 1px solid rgba(212, 175, 55, 0.16);
+  border-radius: 999px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 15px rgba(212, 175, 55, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: inline-block;
+}
+
+@media (max-width: 640px) {
+  .welcome-description {
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+  }
 }
 
 /* ==========================================================================
-   MENÚ PRINCIPAL - TARJETAS COMPACTAS Y RESPONSIVAS
+   MENU PRINCIPAL - TARJETAS CORPORATIVAS DE ALTO IMPACTO (index.html)
    ========================================================================== */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .menu-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 1.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.85rem;
   max-width: 1040px;
-  margin: 0 auto 3rem;
+  margin: 0 auto 3.5rem;
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .menu-container {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Tarjetas VIP del Menu */
 .option-card {
   position: relative;
-  background: var(--bg-card);
-  border: 1px solid var(--gold-border);
-  border-radius: 12px;
+  background: linear-gradient(165deg, rgba(20, 20, 28, 0.88) 0%, rgba(11, 11, 16, 0.96) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: var(--transition-smooth);
-  box-shadow: 0 8px 25px -10px rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.45s ease,
+              background 0.45s ease;
+  box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.85), 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  animation: cardEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.option-card:nth-child(1) { animation-delay: 0.06s; }
+.option-card:nth-child(2) { animation-delay: 0.14s; }
+.option-card:nth-child(3) { animation-delay: 0.22s; }
+.option-card:nth-child(4) { animation-delay: 0.30s; }
+
+/* Borde superior metalico brillante */
+.option-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7), transparent);
+  opacity: 0.8;
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* Rayo de luz diagonal (shimmer) al pasar el cursor */
+.option-card::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -70%;
+  width: 240%;
+  height: 220%;
+  background: linear-gradient(60deg, transparent 42%, rgba(255, 240, 190, 0.13) 50%, transparent 58%);
+  transform: translateX(-100%) rotate(25deg);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 6;
 }
 
 .option-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--gold-border-hover);
-  background: var(--bg-card-hover);
-  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.85), 0 0 22px var(--gold-glow);
+  transform: translateY(-7px);
+  border-color: rgba(212, 175, 55, 0.58);
+  background: linear-gradient(165deg, rgba(26, 26, 36, 0.92) 0%, rgba(14, 14, 20, 0.98) 100%);
+  box-shadow: 0 22px 50px -10px rgba(0, 0, 0, 0.95), 0 0 32px rgba(212, 175, 55, 0.24), 0 0 2px rgba(255, 255, 255, 0.25) inset;
 }
 
+.option-card:hover::before {
+  opacity: 1;
+}
+
+.option-card:hover::after {
+  transform: translateX(100%) rotate(25deg);
+}
+
+/* Envoltura y Visual de Imagen */
 .option-image-wrap {
   position: relative;
   width: 100%;
-  height: 165px;
+  height: 180px;
   overflow: hidden;
-  background-color: #121216;
+  background-color: #0d0d12;
+}
+
+@media (max-width: 640px) {
+  .option-image-wrap {
+    height: 155px;
+  }
 }
 
 .option-image {
@@ -732,13 +886,13 @@ select,
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
-  filter: brightness(0.9) contrast(1.05);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  filter: brightness(0.92) contrast(1.06);
 }
 
 .option-card:hover .option-image {
-  transform: scale(1.05);
-  filter: brightness(1) contrast(1.08);
+  transform: scale(1.07);
+  filter: brightness(1.02) contrast(1.1);
 }
 
 .image-overlay {
@@ -746,66 +900,111 @@ select,
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(7, 7, 9, 0.1) 0%,
-    rgba(7, 7, 9, 0.45) 60%,
-    #070709 100%
+    rgba(7, 7, 9, 0.05) 0%,
+    rgba(7, 7, 9, 0.35) 45%,
+    rgba(12, 12, 17, 0.92) 90%,
+    #0c0c12 100%
   );
   pointer-events: none;
+  z-index: 2;
+}
+
+/* Insignia de Categoria Premium */
+@keyframes badgeDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
 }
 
 .option-category-badge {
   position: absolute;
-  top: 0.85rem;
-  left: 0.85rem;
-  background: rgba(7, 7, 9, 0.85);
-  border: 1px solid var(--gold-border);
-  backdrop-filter: blur(6px);
-  padding: 0.25rem 0.65rem;
-  border-radius: 4px;
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
+  top: 0.95rem;
+  left: 0.95rem;
+  background: rgba(10, 10, 15, 0.88);
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.32rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold-light);
-  font-weight: 500;
-  z-index: 2;
+  font-weight: 600;
+  z-index: 4;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
+.option-category-badge::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--gold-primary);
+  box-shadow: 0 0 6px var(--gold-primary);
+  animation: badgeDotPulse 2.5s infinite ease-in-out;
+}
+
+/* Cuerpo de la Tarjeta */
 .option-content {
-  padding: 1.35rem 1.4rem 1.4rem;
+  padding: 1.45rem 1.55rem 1.6rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .option-subtitle {
-  font-size: 0.66rem;
-  letter-spacing: 0.22em;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-bottom: 0.25rem;
-  font-weight: 400;
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+  opacity: 0.92;
 }
 
 .option-title {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: 1.42rem;
   color: #ffffff;
-  margin-bottom: 0.55rem;
-  letter-spacing: 0.04em;
-  font-weight: 500;
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.03em;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  line-height: 1.25;
+  transition: color 0.3s ease;
+}
+
+.option-title svg {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
+  flex-shrink: 0;
+}
+
+.option-card:hover .option-title svg {
+  transform: scale(1.18) rotate(5deg);
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.75));
 }
 
 .option-description {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  line-height: 1.55;
-  margin-bottom: 1.1rem;
+  font-size: 0.85rem;
+  color: #a7a7b5;
+  line-height: 1.62;
+  margin-bottom: 1.45rem;
   font-weight: 300;
+  letter-spacing: 0.01em;
 }
 
 .option-highlights {
@@ -836,64 +1035,86 @@ select,
   opacity: 0.75;
 }
 
-/* Botones de Acción */
+/* Botones de Accion de Lujo */
 .btn-action {
   margin-top: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
   width: 100%;
-  padding: 0.8rem 1.25rem;
-  border-radius: 6px;
+  padding: 0.88rem 1.35rem;
+  border-radius: 8px;
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.76rem;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-action::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 220%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 40%, rgba(255, 255, 255, 0.28) 50%, transparent 60%);
+  transform: translateX(-100%) rotate(25deg);
+  transition: transform 0.65s ease;
+  pointer-events: none;
+}
+
+.option-card:hover .btn-action::after {
+  transform: translateX(100%) rotate(25deg);
 }
 
 .btn-salon {
   background: linear-gradient(135deg, #c5a059 0%, #ecd48d 50%, #b38838 100%);
   color: #070709;
-  border: 1px solid #d4af37;
-  box-shadow: 0 3px 12px rgba(212, 175, 55, 0.2);
+  border: 1px solid #ebd084;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
   font-weight: 600;
 }
 
+.option-card:hover .btn-salon,
 .btn-salon:hover {
   background: linear-gradient(135deg, #ecd48d 0%, #ffffff 50%, #d4af37 100%);
   color: #000000;
-  box-shadow: 0 5px 18px rgba(212, 175, 55, 0.45);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.55);
   transform: translateY(-2px);
 }
 
 .btn-academia {
-  background: transparent;
-  color: var(--gold-light);
-  border: 1px solid var(--gold-border-hover);
+  background: rgba(212, 175, 55, 0.08);
+  color: #f7e6a7;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
 
+.option-card:hover .btn-academia,
 .btn-academia:hover {
-  background: rgba(212, 175, 55, 0.12);
-  color: #ffffff;
-  border-color: var(--gold-light);
-  box-shadow: 0 5px 18px rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, #c5a059 0%, #ecd48d 50%, #b38838 100%);
+  color: #070709;
+  border-color: #ffd875;
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.48);
   transform: translateY(-2px);
 }
 
 .btn-icon-arrow {
   width: 14px;
   height: 14px;
-  transition: transform 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .option-card:hover .btn-icon-arrow,
 .interstitial-card:hover .btn-icon-arrow {
-  transform: translateX(4px);
+  transform: translateX(6px);
 }
 
 /* Separador Elegante */
@@ -901,23 +1122,24 @@ select,
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin: 0.5rem 0 2.5rem;
-  opacity: 0.5;
+  gap: 1.25rem;
+  margin: 1rem 0 2.75rem;
+  opacity: 0.85;
 }
 
 .luxury-divider-line {
   flex: 1;
-  max-width: 100px;
+  max-width: 120px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-border), transparent);
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
 }
 
 .luxury-divider-diamond {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: var(--gold-primary);
   transform: rotate(45deg);
+  box-shadow: 0 0 8px var(--gold-primary);
 }
 
 /* ==========================================================================
@@ -1703,11 +1925,11 @@ select,
   color: #ffffff;
 }
 
-/* Footer y Enlace de Administración */
+/* Footer y Enlace de Administracion */
 .brand-footer {
   margin-top: auto;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.12);
+  padding-top: 2.25rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
   text-align: center;
   position: relative;
 }
@@ -1716,37 +1938,51 @@ select,
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
-  margin-bottom: 1.1rem;
+  gap: 1.35rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .social-link {
-  color: var(--text-muted);
+  color: #b5b5c4;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.74rem;
-  letter-spacing: 0.15em;
+  gap: 0.55rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  transition: var(--transition-smooth);
-  padding: 0.35rem 0.65rem;
-  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  background: rgba(18, 18, 25, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .social-link svg {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
+  color: var(--gold-primary);
+  transition: transform 0.3s ease;
 }
 
 .social-link:hover {
-  color: var(--gold-light);
-  background: rgba(212, 175, 55, 0.06);
+  color: #ffffff;
+  border-color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.14);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 16px rgba(212, 175, 55, 0.25);
+  transform: translateY(-2px);
+}
+
+.social-link:hover svg {
+  transform: scale(1.15);
 }
 
 .footer-copyright {
-  font-size: 0.74rem;
-  color: var(--text-dim);
+  font-size: 0.75rem;
+  color: #7a7a8c;
   letter-spacing: 0.08em;
   margin-bottom: 0.4rem;
 }
@@ -3467,37 +3703,65 @@ select,
    ESTILOS DE EL BUEN FIN TOTAL BEAUTY
    ========================================================================== */
 
-/* Tarjeta en el Menú Principal (index.html) */
+/* Tarjeta en el Menú Principal (index.html) - Edicion Especial Buen Fin */
 .option-card-buenfin {
-  border-color: rgba(212, 175, 55, 0.45);
-  box-shadow: 0 8px 25px -10px rgba(0, 0, 0, 0.7), 0 0 18px rgba(212, 175, 55, 0.16);
+  background: linear-gradient(165deg, rgba(28, 21, 16, 0.9) 0%, rgba(14, 11, 10, 0.98) 100%);
+  border-color: rgba(212, 175, 55, 0.48);
+  box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.85), 0 0 24px rgba(212, 175, 55, 0.2);
 }
 
 .option-card-buenfin:hover {
-  border-color: var(--gold-light);
-  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.85), 0 0 32px rgba(212, 175, 55, 0.38);
+  border-color: #ffd875;
+  background: linear-gradient(165deg, rgba(34, 25, 18, 0.94) 0%, rgba(18, 13, 10, 0.98) 100%);
+  box-shadow: 0 22px 52px -8px rgba(0, 0, 0, 0.95), 0 0 42px rgba(212, 175, 55, 0.42), 0 0 2px rgba(255, 235, 170, 0.35) inset;
+}
+
+.option-card-buenfin .option-image-wrap {
+  background: radial-gradient(circle at center, rgba(46, 32, 16, 0.92) 0%, rgba(14, 10, 8, 1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-card-buenfin .option-image {
+  object-fit: contain;
+  max-height: 86%;
+  width: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 4px 18px rgba(212, 175, 55, 0.45));
+}
+
+.option-card-buenfin:hover .option-image {
+  transform: scale(1.08);
+  filter: drop-shadow(0 6px 26px rgba(212, 175, 55, 0.75));
 }
 
 .badge-buenfin {
-  background: linear-gradient(135deg, #d4af37 0%, #ecd48d 50%, #997a24 100%);
+  background: linear-gradient(135deg, #d4af37 0%, #faebb0 45%, #c5a059 80%, #997a24 100%);
   color: #070709;
   font-weight: 700;
-  border: 1px solid #fff2b2;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid #fff5cc;
+  box-shadow: 0 3px 14px rgba(212, 175, 55, 0.5);
+}
+
+.badge-buenfin::before {
+  background-color: #070709;
+  box-shadow: none;
 }
 
 .btn-buenfin {
-  background: linear-gradient(135deg, #c5a059 0%, #f7e6a7 45%, #d4af37 75%, #8f691e 100%);
+  background: linear-gradient(135deg, #c5a059 0%, #faebb0 45%, #d4af37 75%, #8f691e 100%);
   color: #070709;
-  border: 1px solid #ffe899;
-  font-weight: 600;
-  box-shadow: 0 3px 15px rgba(212, 175, 55, 0.3);
+  border: 1px solid #fff2ba;
+  font-weight: 700;
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.35);
 }
 
+.option-card-buenfin:hover .btn-buenfin,
 .btn-buenfin:hover {
-  background: linear-gradient(135deg, #ecd48d 0%, #ffffff 50%, #d4af37 100%);
+  background: linear-gradient(135deg, #faebb0 0%, #ffffff 40%, #e0bd4f 80%, #b88e28 100%);
   color: #000000;
-  box-shadow: 0 5px 22px rgba(212, 175, 55, 0.55);
+  box-shadow: 0 6px 26px rgba(212, 175, 55, 0.65);
   transform: translateY(-2px);
 }
 
@@ -3794,7 +4058,7 @@ select,
 .package-price-promo {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .package-promo-label {

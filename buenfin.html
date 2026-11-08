@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   
   <title>Total Beauty | Paquetes Exclusivos del Buen Fin</title>
-  <meta name="description" content="Paquetes exclusivos de belleza en Total Beauty Salón con motivo del Buen Fin. Descuentos especiales en pestañas, cejas, uñas, manicure y pedicure basados en el catálogo de precios autorizados.">
+  <meta name="description" content="Paquetes exclusivos de belleza en Total Beauty Salón con motivo del Buen Fin. Descuentos especiales en pestañas, cejas, uñas, manicure y Pedicura basados en el catálogo de precios autorizados.">
   <meta name="theme-color" content="#070709">
 
   <!-- Favicon -->
@@ -19,6 +19,224 @@
 
   <!-- Hoja de Estilos Principal -->
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .item {
+  display: none; 
+}
+
+/* Muestra los elementos cuando están activos */
+.item.show {
+  display: block; /* o 'flex' dependiendo de cómo diseñes tus tarjetas */
+}
+
+/* Estilo visual rápido para el botón activo */
+.btn-filtro.active {
+  background-color: #000;
+  color: #fff;
+}
+
+
+
+/* Contenedor general y tipografía de la tarjeta capilar */
+.hair-card-interactive {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  border: 1px solid #eaeaea;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hair-section-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #555;
+  margin: 16px 0 8px 0;
+}
+
+/* Contenedor general de la tarjeta con fondo negro */
+.hair-card-interactive {
+  background: #000000;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 1px solid #222222;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+}
+
+/* Textos principales adaptados para fondo negro */
+.hair-card-interactive .package-title {
+  color: #ffffff;
+}
+
+.hair-card-interactive .option-subtitle {
+  color: #aaaaaa;
+}
+
+.hair-card-interactive .package-desc {
+  color: #cccccc;
+}
+
+.hair-section-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #aaaaaa;
+  margin: 16px 0 8px 0;
+}
+
+/* Tarjetas de Tratamiento */
+.treatment-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.treatment-option-card {
+  border: 1.5px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  background: #111111;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.treatment-option-card input {
+  display: none;
+}
+
+.treatment-icon {
+  font-size: 1.4rem;
+}
+
+.treatment-info strong {
+  display: block;
+  font-size: 0.8rem;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.treatment-info span {
+  display: block;
+  font-size: 0.7rem;
+  color: #888888;
+}
+
+/* Estado activo: Resalta en blanco sobre negro para máxima elegancia */
+.treatment-option-card.active {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.15);
+}
+
+.treatment-option-card.active .treatment-info strong,
+.treatment-option-card.active .treatment-info span {
+  color: #000000;
+}
+
+/* Selector de Largo en Píldoras */
+.hair-length-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.length-pill {
+  border: 1.5px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  background: #111111;
+  transition: all 0.2s ease;
+}
+
+.length-pill input {
+  display: none;
+}
+
+.pill-icon {
+  font-size: 1.2rem;
+}
+
+.pill-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.pill-text strong {
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.pill-text small {
+  font-size: 0.72rem;
+  color: #888888;
+}
+
+.length-pill.active {
+  border-color: #ffffff;
+  background: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Caja de Precios y Disclaimer */
+.hair-pricing-box {
+  text-align: center;
+  background: #111111;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 15px;
+  border: 1px solid #222222;
+}
+
+.hair-pricing-box .package-promo-label {
+  color: #aaaaaa;
+}
+
+.hair-pricing-box .package-promo-amount {
+  color: #ffffff;
+}
+
+.animate-price {
+  transition: transform 0.2s ease;
+  display: contents;
+}
+
+.hair-disclaimer {
+  font-size: 0.75rem;
+  color: #999999;
+  margin-left: 39px;
+    text-align: center;
+  margin-top: 6px;
+  line-height: 1.3;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 480px) {
+  .treatment-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .hair-length-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
 </head>
 <body class="page-buenfin">
 
@@ -59,15 +277,23 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
         </svg>
-        <span>Promoción Exclusiva de Temporada</span>
+        <span>Precios Exclusivos de Temporada</span>
       </div>
 
       <h1 class="buenfin-title">
-        El Buen Fin <span>Total Beauty</span>
+        El Buen Fin  llego a <span><br>
+          <img 
+            src="assets/images/logoheader.png" 
+            alt="Total Beauty Logo" 
+            class="brand-logo-img"
+            style="max-height: 80px;"
+            onerror="this.onerror=null; this.src='assets/images/logo.png';"
+          >
+          </span>
       </h1>
 
       <p class="buenfin-subtitle">
-        Paquetes de belleza seleccionados con precios preferenciales autorizados. Disfruta de la mejor calidad en pestañas, cejas, uñas, manicure y pedicure con cupo limitado.
+        Paquetes de belleza seleccionados con precios preferenciales. Disfruta de la mejor calidad en pestañas, cejas, uñas, manicure, Pedicura y mas con cupo limitado.
       </p>
 
       <!-- Fila de Beneficios Rápidos -->
@@ -76,7 +302,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <span>Precios Oficiales Autorizados</span>
+          <span>Hasta 40% OFF</span>
         </div>
         <div class="buenfin-perk-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -94,26 +320,25 @@
       </div>
     </header>
 
-    <!-- Filtros de Categorías -->
-    <section class="buenfin-filter-tabs animate-fade-in delay-2" aria-label="Filtro de paquetes">
-      <button type="button" class="filter-btn active" data-filter="all">Todos los Paquetes</button>
-      <button type="button" class="filter-btn" data-filter="mirada">Mirada &amp; Cejas</button>
-      <button type="button" class="filter-btn" data-filter="manos-pies">Manos &amp; Pies</button>
-      <button type="button" class="filter-btn" data-filter="completo">Paquetes Completos</button>
-    </section>
+<div class="filter-container" style="justify-content: center;align-items: center; text-align: center;">
+  <button class="filter-btn active" data-filter="all">Todos</button>
+  <button class="filter-btn" data-filter="paquete">Paquetes</button>
+  <button class="filter-btn" data-filter="servicios">Servicios</button>
+</div>
 
+<br>
     <!-- Cuadrícula de Paquetes Autorizados del Buen Fin -->
     <main class="buenfin-packages-grid animate-fade-in delay-2" role="main">
 
       <!-- Paquete 1: Mirada Sublime -->
-      <article class="package-card" data-category="mirada">
+      <article class="package-card" data-category="paquete">
         <div>
           <div class="package-header">
             <div>
               <h2 class="package-title">Dúo Mirada Sublime</h2>
               <span class="option-subtitle">Pestañas Clásicas &amp; Ceja HD</span>
             </div>
-            <span class="package-badge">Más Solicitado</span>
+            <span class="package-badge">Paquete</span>
           </div>
 
           <p class="package-desc">
@@ -127,7 +352,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Extensiones de pestañas técnica clásica</span>
-                <span class="package-service-detail">Precio regular individual: $500</span>
+                <span class="package-service-detail">Precio regular individual: $650</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -136,7 +361,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Ceja HD completa</span>
-                <span class="package-service-detail">Laminado + diseño + depilación + pigmento (Regular: $400)</span>
+                <span class="package-service-detail">Laminado + diseño + depilación + pigmento (Regular: $550)</span>
               </div>
             </li>
           </ul>
@@ -146,12 +371,12 @@
           <div class="package-pricing-wrap">
             <div class="package-price-regular">
               <span class="package-regular-label">Precio Regular</span>
-              <span class="package-regular-amount">$900</span>
+              <span class="package-regular-amount">$1,200</span>
             </div>
             <div class="package-price-promo">
               <span class="package-promo-label">Precio Buen Fin</span>
-              <span class="package-promo-amount">$699</span>
-              <span class="package-savings-pill">Ahorras $201</span>
+              <span class="package-promo-amount">$799</span>
+              <span class="package-savings-pill">Ahorras $401</span>
             </div>
           </div>
 
@@ -166,18 +391,18 @@
       </article>
 
       <!-- Paquete 2: Spa Manos & Pies Deluxe -->
-      <article class="package-card" data-category="manos-pies">
+      <article class="package-card" data-category="paquete">
         <div>
           <div class="package-header">
             <div>
               <h2 class="package-title">Spa Manos &amp; Pies Deluxe</h2>
-              <span class="option-subtitle">Acrílicas, Pedicure &amp; Gelish</span>
+              <span class="option-subtitle">Acrílicas, Pedicura &amp; Gelish</span>
             </div>
-            <span class="package-badge">Experiencia Spa</span>
+            <span class="package-badge">Paquete</span>
           </div>
 
           <p class="package-desc">
-            Cuidado integral y relajación profunda. Luce uñas acrílicas impecables con largo ideal y consiente tus pies con exfoliación y gelish.
+            Cuidado integral y relajación profunda. Luce uñas acrílicas impecables con largo ideal y consiente tus pies con Pedicura spa + gelish.
           </p>
 
           <ul class="package-services-list">
@@ -187,7 +412,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Uñas acrílicas o tip largo 1-2</span>
-                <span class="package-service-detail">Estructura y sellado profesional (Regular: $380)</span>
+                <span class="package-service-detail">Estructura y sellado profesional (Regular: $450)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -195,8 +420,8 @@
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
               <div>
-                <span class="package-service-name">Pedicure Spa completo</span>
-                <span class="package-service-detail">Exfoliación, retiro de asperezas e hidratación (Regular: $250)</span>
+                <span class="package-service-name">Pedicura Spa</span>
+                <span class="package-service-detail">Exfoliación, retiro de asperezas e hidratación (Regular: $350)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -204,8 +429,8 @@
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
               <div>
-                <span class="package-service-name">Pedicure Gelish de 1 a 3 tonos</span>
-                <span class="package-service-detail">Brillo de alta duración para pies (Regular: $200)</span>
+                <span class="package-service-name">Pedicura Gelish de 1 a 3 tonos</span>
+                <span class="package-service-detail">Brillo de alta duración para pies (Regular: $300)</span>
               </div>
             </li>
           </ul>
@@ -215,12 +440,12 @@
           <div class="package-pricing-wrap">
             <div class="package-price-regular">
               <span class="package-regular-label">Precio Regular</span>
-              <span class="package-regular-amount">$830</span>
+              <span class="package-regular-amount">$1100</span>
             </div>
             <div class="package-price-promo">
               <span class="package-promo-label">Precio Buen Fin</span>
-              <span class="package-promo-amount">$649</span>
-              <span class="package-savings-pill">Ahorras $181</span>
+              <span class="package-promo-amount">$849</span>
+              <span class="package-savings-pill">Ahorras $251</span>
             </div>
           </div>
 
@@ -235,14 +460,14 @@
       </article>
 
       <!-- Paquete 3: Glow Total VIP -->
-      <article class="package-card" data-category="completo">
+      <article class="package-card" data-category="paquete">
         <div>
           <div class="package-header">
             <div>
               <h2 class="package-title">Glow Total VIP</h2>
               <span class="option-subtitle">Volumen, Cejas &amp; Uñas de Lujo</span>
             </div>
-            <span class="package-badge badge-vip">Paquete VIP</span>
+            <span class="package-badge">Paquete</span>
           </div>
 
           <p class="package-desc">
@@ -256,7 +481,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Pestañas volumen tecnológico o efecto rímel</span>
-                <span class="package-service-detail">Técnica avanzada de impacto y ligereza (Regular: $550)</span>
+                <span class="package-service-detail">Técnica avanzada de impacto y ligereza (Regular: $650)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -265,7 +490,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Cejas: laminado + diseño + depilación</span>
-                <span class="package-service-detail">Estructura orgánica y peinado fijador (Regular: $300)</span>
+                <span class="package-service-detail">Estructura orgánica y peinado fijador (Regular: $450)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -273,8 +498,8 @@
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
               <div>
-                <span class="package-service-name">Uñas acrílicas largo 1-2 o Gel Ruber</span>
-                <span class="package-service-detail">Refuerzo y estética de alta gama para manos (Regular: $380)</span>
+                <span class="package-service-name">Uñas acrílicas largo 1-2</span>
+                <span class="package-service-detail">Refuerzo y estética de alta gama para manos (Regular: $450)</span>
               </div>
             </li>
           </ul>
@@ -288,8 +513,8 @@
             </div>
             <div class="package-price-promo">
               <span class="package-promo-label">Precio Buen Fin</span>
-              <span class="package-promo-amount">$899</span>
-              <span class="package-savings-pill">Ahorras $331</span>
+              <span class="package-promo-amount">$1,550</span>
+              <span class="package-savings-pill">Ahorras $320</span>
             </div>
           </div>
 
@@ -304,14 +529,14 @@
       </article>
 
       <!-- Paquete 4: Dúo Pies Impecables -->
-      <article class="package-card" data-category="manos-pies">
+      <article class="package-card" data-category="paquete">
         <div>
           <div class="package-header">
             <div>
               <h2 class="package-title">Dúo Pies Impecables</h2>
-              <span class="option-subtitle">Pedicure Spa &amp; Acripie</span>
+              <span class="option-subtitle">Pedicura Spa &amp; Acripie</span>
             </div>
-            <span class="package-badge">Dúo Estelar</span>
+            <span class="package-badge">Paquete</span>
           </div>
 
           <p class="package-desc">
@@ -324,8 +549,8 @@
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
               <div>
-                <span class="package-service-name">Pedicure Spa hidratante</span>
-                <span class="package-service-detail">Limpieza profunda, exfoliación y masaje podal (Regular: $250)</span>
+                <span class="package-service-name">Pedicura Spa hidratante</span>
+                <span class="package-service-detail">Limpieza profunda, exfoliación y masaje podal (Regular: $350)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -334,7 +559,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Acripie profesional</span>
-                <span class="package-service-detail">Aplicación de acrílico en uñas de los pies y esmaltado (Regular: $300)</span>
+                <span class="package-service-detail">Aplicación de acrílico en uñas de los pies y esmaltado (Regular: $450)</span>
               </div>
             </li>
           </ul>
@@ -344,12 +569,12 @@
           <div class="package-pricing-wrap">
             <div class="package-price-regular">
               <span class="package-regular-label">Precio Regular</span>
-              <span class="package-regular-amount">$550</span>
+              <span class="package-regular-amount">$800</span>
             </div>
             <div class="package-price-promo">
               <span class="package-promo-label">Precio Buen Fin</span>
-              <span class="package-promo-amount">$429</span>
-              <span class="package-savings-pill">Ahorras $121</span>
+              <span class="package-promo-amount">$550</span>
+              <span class="package-savings-pill">Ahorras $250</span>
             </div>
           </div>
 
@@ -364,14 +589,14 @@
       </article>
 
       <!-- Paquete 5: Natural Beauty Express -->
-      <article class="package-card" data-category="mirada">
+      <article class="package-card" data-category="paquete">
         <div>
           <div class="package-header">
             <div>
               <h2 class="package-title">Natural Beauty Express</h2>
               <span class="option-subtitle">Lifting, Cejas &amp; Gel Semipermanente</span>
             </div>
-            <span class="package-badge">Look Natural</span>
+            <span class="package-badge">Paquete</span>
           </div>
 
           <p class="package-desc">
@@ -385,7 +610,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Lifting de pestañas con tratamiento</span>
-                <span class="package-service-detail">Curvatura natural y nutrición para tus pestañas (Regular: $300)</span>
+                <span class="package-service-detail">Curvatura natural y nutrición para tus pestañas (Regular: $450)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -394,7 +619,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Cejas: diseño + depilación perfilada</span>
-                <span class="package-service-detail">Limpieza del arco y proporción armónica (Regular: $200)</span>
+                <span class="package-service-detail">Limpieza del arco y proporción armónica (Regular: $300)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -403,7 +628,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Gel semipermanente de 1 a 3 tonos</span>
-                <span class="package-service-detail">Esmaltado en uñas naturales con brillo duradero (Regular: $200)</span>
+                <span class="package-service-detail">Esmaltado en uñas naturales con brillo duradero (Regular: $300)</span>
               </div>
             </li>
           </ul>
@@ -413,12 +638,12 @@
           <div class="package-pricing-wrap">
             <div class="package-price-regular">
               <span class="package-regular-label">Precio Regular</span>
-              <span class="package-regular-amount">$700</span>
+              <span class="package-regular-amount">$1050</span>
             </div>
             <div class="package-price-promo">
               <span class="package-promo-label">Precio Buen Fin</span>
-              <span class="package-promo-amount">$529</span>
-              <span class="package-savings-pill">Ahorras $171</span>
+              <span class="package-promo-amount">$699</span>
+              <span class="package-savings-pill">Ahorras $351</span>
             </div>
           </div>
 
@@ -432,15 +657,77 @@
         </div>
       </article>
 
+
+        <!-- Paquete nuevo: Uñas y Pestañas -->
+      <article class="package-card" data-category="paquete">
+        <div>
+          <div class="package-header">
+            <div>
+              <h2 class="package-title">Uñas &amp; Pestañas </h2>
+              <span class="option-subtitle">Uñas acrílicas estilizadas y mirada con volumen tecnológico.</span>
+            </div>
+            <span class="package-badge">Paquete</span>
+          </div>
+
+          <p class="package-desc">
+            Renueva tu estilo con este paquete ideal. Incluye aplicación de uñas acrílicas en largo práctico (1 al 2) con estructura firme, combinadas con extensiones de pestañas con técnica de volumen tecnológico para una mirada ligera, tupida y de alto impacto.
+          </p>
+
+          <ul class="package-services-list">
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Uñas acrilicas largo 1-2</span>
+                <span class="package-service-detail">Alta resistencia y acabado impecable (Regular: $450)</span>
+              </div>
+            </li>
+            <li class="package-service-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <div>
+                <span class="package-service-name">Extensiones de pestañas volumen Tecnológico</span>
+                <span class="package-service-detail">Limpieza del arco y proporción armónica (Regular: $650)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="package-pricing-wrap">
+            <div class="package-price-regular">
+              <span class="package-regular-label">Precio Regular</span>
+              <span class="package-regular-amount">$1,100</span>
+            </div>
+            <div class="package-price-promo">
+              <span class="package-promo-label">Precio Buen Fin</span>
+              <span class="package-promo-amount">$799</span>
+              <span class="package-savings-pill">Ahorras $301</span>
+            </div>
+          </div>
+
+          <a href="https://api.whatsapp.com/send?phone=525650560824&text=Hola%20Total%20Beauty,%20deseo%20reservar%20el%20Paquete%20Natural%20Beauty%20Express%20($529)%20de%20la%20promoci%C3%B3n%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar Paquete Natural Beauty Express por WhatsApp">
+            <span>Reservar por WhatsApp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+
       <!-- Paquete 6: Renovación Facial & Estilo -->
-      <article class="package-card" data-category="completo">
+      <article class="package-card" data-category="paquete">
         <div>
           <div class="package-header">
             <div>
               <h2 class="package-title">Renovación Facial &amp; Estilo</h2>
               <span class="option-subtitle">Depilación, Cejas HD &amp; Corte Tradicional</span>
             </div>
-            <span class="package-badge">Rostro Radiante</span>
+            <span class="package-badge">Paquete</span>
           </div>
 
           <p class="package-desc">
@@ -454,7 +741,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Depilación facial completa</span>
-                <span class="package-service-detail">Técnica con hilo o cera suave para rostro (Regular: $250)</span>
+                <span class="package-service-detail">Técnica con hilo, cera, perfilador o pinzas para rostro (Regular: $350)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -463,7 +750,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Ceja HD completa</span>
-                <span class="package-service-detail">Laminado, diseño, depilación y pigmento (Regular: $400)</span>
+                <span class="package-service-detail">Laminado, diseño, depilación y pigmento (Regular: $550)</span>
               </div>
             </li>
             <li class="package-service-item">
@@ -472,7 +759,7 @@
               </svg>
               <div>
                 <span class="package-service-name">Corte tradicional de cabello</span>
-                <span class="package-service-detail">Incluye diagnóstico, lavado y secado (Regular: $200)</span>
+                <span class="package-service-detail">Incluye diagnóstico, lavado y secado (Regular: $300)</span>
               </div>
             </li>
           </ul>
@@ -482,12 +769,12 @@
           <div class="package-pricing-wrap">
             <div class="package-price-regular">
               <span class="package-regular-label">Precio Regular</span>
-              <span class="package-regular-amount">$850</span>
+              <span class="package-regular-amount">$1,200</span>
             </div>
             <div class="package-price-promo">
               <span class="package-promo-label">Precio Buen Fin</span>
-              <span class="package-promo-amount">$649</span>
-              <span class="package-savings-pill">Ahorras $201</span>
+              <span class="package-promo-amount">$849</span>
+              <span class="package-savings-pill">Ahorras $351</span>
             </div>
           </div>
 
@@ -500,6 +787,480 @@
           </a>
         </div>
       </article>
+
+
+
+
+<!-- Servicio 1: Lifting de pestañas -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Lifting de Pestañas</h2>
+<span class="option-subtitle"> Realza tu mirada de forma natural</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">
+Curvatura, tinte y nutrición para tus pestañas naturales. Olvídate del rizador y luce una mirada definida y de aspecto más largo durante semanas.
+</p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$450</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$320</span>
+<span class="package-savings-pill">Ahorras $130</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20lifting%20de%20pesta%C3%B1as%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 2: Extensiones de pestañas Tecnica Clasica -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Extensiones de Pestañas Técnica Clásica</h2>
+<span class="option-subtitle"> Elegancia diaria</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">
+El equilibrio perfecto entre volumen, discreción y definición.
+</p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$650</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$520</span>
+<span class="package-savings-pill">Ahorras $130</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20Extensiones%20de%20pesta%C3%B1as%20T%C3%A9cnica%20Cl%C3%A1sica%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 3: Laminado + Diseño + depiación de Cejas -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Laminado + Diseño + depilación de Cejas</h2>
+<span class="option-subtitle"> El combo ideal para lograr un efecto peinado, tupido y de máxima definición</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">
+Tratamiento integral que alinea y fija el vello rebelde mediante el laminado, complementado con un visajismo según la forma de tu rostro y una depilación precisa.
+</p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$450</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$320</span>
+<span class="package-savings-pill">Ahorras $130</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20Laminado%20+%20Dise%C3%B1o%20+%20depilaci%C3%B3n%20de%20Cejas%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 4: Ceja HD -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Ceja HD</h2>
+<span class="option-subtitle"> Fija, perfila y dale color intenso a tus cejas.</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">
+Alinea el vello, define la forma de tu rostro, limpia el contorno y aporta pigmento de alta definición. El resultado: cejas pobladas, peinadas y con efecto maquillaje duradero.
+</p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$550</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$415</span>
+<span class="package-savings-pill">Ahorras $135</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20Ceja%20HD%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 5: Gel Semipermanente de 1 a 3 tonos-->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Gel Semipermanente de 1 a 3 tonos </h2>
+<span class="option-subtitle"> Color duradero, brillo impecable y acabado profesional</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">Esmaltado de larga duración a elegir de 1 a 3 tonos. Incluye preparación de la uña natural para un acabado uniforme, resistente al astillado y con brillo perfecto por semanas</p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$250</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$215</span>
+<span class="package-savings-pill">Ahorras $35</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20Gel%20Semipermanente%20de%201%20a%203%20tonos%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 6: Uñas Tip largo 1-2 -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title"> Uñas Tip largo 1-2 </h2>
+<span class="option-subtitle"> Longitud ideal, resistencia y elegancia al instante</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc"> Extensión de uña con tip en largo comercial (números 1 al 2). Incluye limado de estructura, sellado y esmaltado en gel para un acabado estilizado, duradero y muy natural. </p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">450</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$350</span>
+<span class="package-savings-pill">Ahorras $100</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20U%C3%B1as%20Tip%20largo%201-2%20%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 7: Uñas Tip largo 3-4 -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title"> Uñas Tip largo 3-4 </h2>
+<span class="option-subtitle"> Longitud notable, diseño imponente y máxima resistencia</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">Colocación de tips en largo medio-largo (números 3 y 4). Estructura reforzada, limado profesional y acabado elegante para destacar tus manos.</p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">500</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$379</span>
+<span class="package-savings-pill">Ahorras $121</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20U%C3%B1as%20Tip%20largo%203-4%20%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 8: Uñas Acrílicas largo 1-2 -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Uñas Acrílicas largo 1-2 </h2>
+<span class="option-subtitle"> Estructura esculpida, resistencia superior y longitud práctica</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">Aplicación de acrílico profesional sobre uña natural o molde en largo corto-mediano (números 1 al 2). Brinda máxima fuerza, sellado perfecto y acabado estilizado de larga duración. </p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$450</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$379</span>
+<span class="package-savings-pill">Ahorras $71</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20U%C3%B1as%20Acr%C3%ADlicas%20largo%201-2%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 9: Uñas Acrílicas largo 3-4 -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Uñas Acrílicas largo 3-4 </h2>
+<span class="option-subtitle"> Estructura esculpida, resistencia superior y longitud práctica</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">Aplicación de acrílico profesional sobre uña natural o molde en largo corto-mediano (números 1 al 2). Brinda máxima fuerza, sellado perfecto y acabado estilizado de larga duración. </p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$550</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$399</span>
+<span class="package-savings-pill">Ahorras $71</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20U%C3%B1as%20Acr%C3%ADlicas%20largo%203-4%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+<!-- Servicio 10: Pedicura Spa -->
+<article class="package-card" data-category="servicios">
+<div>
+<div class="package-header">
+<div>
+<h2 class="package-title">Pedicura Spa </h2>
+<span class="option-subtitle"> Relajación para tus pies</span>
+</div>
+<span class="package-badge">Servicio</span>
+</div>
+
+<p class="package-desc">Consiente tus pies con un ritual completo de bienestar. Incluye corte, limado, pulido, exfoliación profunda, hidratación y esmaltado en gel semipermanente o tradicional. </p>
+
+</div>
+
+<div>
+<div class="package-pricing-wrap">
+<div class="package-price-regular">
+<span class="package-regular-label">Precio Regular</span>
+<span class="package-regular-amount">$350</span>
+</div>
+<div class="package-price-promo">
+<span class="package-promo-label">Precio Buen Fin</span>
+<span class="package-promo-amount">$250</span>
+<span class="package-savings-pill">Ahorras $100</span>
+</div>
+</div>
+
+<a href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Deseo%20agendar%20el%20servicio%20de%20Pedicura%20Spa%20con%20descuento%20del%20Buen%20Fin." target="_blank" rel="noopener noreferrer" class="btn-package-book" aria-label="Reservar servicio por WhatsApp">
+<span>Reservar por WhatsApp</span>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="5" y1="12" x2="19" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+</a>
+</div>
+</article>
+
+
+
+<!-- Servicio 10: Tratamientos Capilares (Versión Interactiva) -->
+<article class="package-card hair-card-interactive" data-category="servicios">
+  <div>
+    <div class="package-header">
+      <div>
+        <h2 class="package-title">Tratamientos Capilares</h2>
+        <span class="option-subtitle">Nutrición, alaciado y restauración a la medida</span>
+      </div>
+      <span class="package-badge">Especial</span>
+    </div>
+
+    <p class="package-desc">Selecciona tu tratamiento ideal y el largo de tu cabello para calcular tu presupuesto estimado al instante.</p>
+
+    <!-- Selector de Tratamientos por Tarjetas Visuales -->
+    <div class="hair-section-title">1. Elige tu tratamiento:</div>
+    <div class="treatment-cards-grid">
+      <label class="treatment-option-card" onclick="seleccionarTratamiento(this, 'gbaja')">
+        <input type="radio" name="hair-treatment" value="Alaciado de Keratina" checked>
+        <div class="treatment-icon">✨</div>
+        <div class="treatment-info">
+          <strong>Gama Baja</strong>
+        </div>
+      </label>
+
+      <label class="treatment-option-card" onclick="seleccionarTratamiento(this, 'galta')">
+        <input type="radio" name="hair-treatment" value="Botox Capilar Restructurante">
+        <div class="treatment-icon">💧</div>
+        <div class="treatment-info">
+          <strong>Gama Alta</strong>
+        </div>
+      </label>
+
+    </div>
+
+    <!-- Selector de Longitud con Iconos de Largo de Cabello -->
+    <div class="hair-section-title">2. ¿Qué tan largo tienes el cabello?</div>
+    <div class="hair-length-grid">
+      <label class="length-pill" onclick="actualizarLargo(this, 'corto', 'Corto (Hombros)')">
+        <input type="radio" name="hair-length" checked>
+        <span class="pill-icon">💇‍♀️</span>
+        <span class="pill-text"><strong>Corto</strong><small>Hombros</small></span>
+      </label>
+
+      <label class="length-pill" onclick="actualizarLargo(this, 'mediano', 'Mediano (Espalda alta)')">
+        <input type="radio" name="hair-length">
+        <span class="pill-icon">👩‍🦰</span>
+        <span class="pill-text"><strong>Mediano</strong><small>Espalda media</small></span>
+      </label>
+
+      <label class="length-pill" onclick="actualizarLargo(this, 'largo', 'Largo (Espalda media)')">
+        <input type="radio" name="hair-length">
+        <span class="pill-icon">✨</span>
+        <span class="pill-text"><strong>Largo</strong><small>A la cadera</small></span>
+      </label>
+
+    </div>
+  </div>
+
+  <div>
+    <!-- Precios y Nota de Valoración -->
+    <div class="package-pricing-wrap hair-pricing-box">
+      <div class="package-price-promo">
+        <span class="package-promo-label">Costo Aproximado Estimado</span>
+        <span class="package-promo-amount animate-price" id="hair-estimated-price">$</span>
+      </div>
+      <p class="hair-disclaimer">
+        ⚠️ <em>Precio sujeto a valoración presencial según abundancia y grosor.</em>
+      </p>
+    </div>
+
+    <!-- Botón Dinámico de WhatsApp -->
+    <a id="hair-whatsapp-btn" href="https://api.whatsapp.com/send?phone=5650560824&text=Hola%20Total%20Beauty.%20Me%20interesa%20el%20Alaciado%20de%20Keratina%20para%20cabello%20Corto%20(Hombros)%20con%20estimado%20de%20$700.%20Quiero%20agendar%20mi%20valoración." target="_blank" rel="noopener noreferrer" class="btn-package-book btn-pulse" aria-label="Agendar valoración por WhatsApp">
+      <span>Agendar Valoración por WhatsApp</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </div>
+</article>
 
     </main>
 
@@ -531,13 +1292,13 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <span><strong>Precios Autorizados:</strong> Precios calculados en moneda nacional a partir del catálogo oficial autorizado de Total Beauty.</span>
+          <span><strong>Precios:</strong> Precios calculados en moneda nacional a partir del catálogo oficial autorizado de Total Beauty.</span>
         </li>
         <li class="buenfin-policy-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <span><strong>Servicios Excluidos:</strong> Los paquetes promocionales no incluyen balayage, tintes, mechas ni tratamientos capilares o alaciados.</span>
+          <span><strong>Servicios:</strong> Los paquetes promocionales no pueden ser cambiados por otros servicios.</span>
         </li>
       </ul>
     </section>
@@ -579,28 +1340,64 @@
   <!-- Script Interactivo de Filtrado de Paquetes -->
   <script src="firebase-config.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      'use strict';
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const packageCards = document.querySelectorAll('.package-card');
+// Estado global para guardar la selección actual
+let estadoCapilar = {
+  tratamientoNombre: "Alaciado de Keratina",
+  tratamientoKey: "keratina",
+  largoTexto: "Corto (Hombros)",
+  precios: { corto: "Select" , mediano: "Select", largo: "Select" },
+  largoActualKey: " "
+};
 
-      filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+function seleccionarTratamiento(elementoCard, keyTratamiento) {
+  // Quitar clase activa de todas las tarjetas de tratamiento y ponerla en la seleccionada
+  document.querySelectorAll('.treatment-option-card').forEach(c => c.classList.remove('active'));
+  elementoCard.classList.add('active');
+  elementoCard.querySelector('input').checked = true;
 
-          const filter = btn.getAttribute('data-filter');
+  // Actualizar datos internos
+  estadoCapilar.tratamientoKey = keyTratamiento;
+  estadoCapilar.tratamientoNombre = elementoCard.querySelector('strong').innerText;
 
-          packageCards.forEach(card => {
-            if (filter === 'all' || card.getAttribute('data-category') === filter) {
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
-          });
-        });
-      });
-    });
+  // Asignar nuevos precios base según el tratamiento elegido
+  if (keyTratamiento === 'gbaja') {
+    estadoCapilar.precios = { corto: 800, mediano: 1500, largo: 1800};
+  } else if (keyTratamiento === 'galta') {
+    estadoCapilar.precios = { corto: 1000, mediano: 1900, largo: 2400};
+  }
+
+  recalcularYActualizarUI();
+}
+
+function actualizarLargo(elementoPill, keyLargo, textoLargo) {
+  // Quitar clase activa de las píldoras de largo
+  document.querySelectorAll('.length-pill').forEach(p => p.classList.remove('active'));
+  elementoPill.classList.add('active');
+  elementoPill.querySelector('input').checked = true;
+
+  // Actualizar datos internos
+  estadoCapilar.largoActualKey = keyLargo;
+  estadoCapilar.largoTexto = textoLargo;
+
+  recalcularYActualizarUI();
+}
+
+function recalcularYActualizarUI() {
+  const precioFinal = estadoCapilar.precios[estadoCapilar.largoActualKey];
+
+  // 1. Mostrar precio con pequeña animación visual
+  const precioEl = document.getElementById('hair-estimated-price');
+  precioEl.style.transform = 'scale(1.1)';
+  precioEl.innerText = `$${precioFinal}`;
+  setTimeout(() => { precioEl.style.transform = 'scale(1)'; }, 200);
+
+  // 2. Construir enlace dinámico de WhatsApp
+  const telefono = "5650560824";
+  const mensaje = `Hola Total Beauty. Me interesa el ${estadoCapilar.tratamientoNombre} para cabello ${estadoCapilar.largoTexto} con un estimado de $${precioFinal}. Me gustaría agendar mi valoración.`;
+  const urlWhatsApp = `https://api.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensaje)}`;
+  
+  document.getElementById('hair-whatsapp-btn').setAttribute('href', urlWhatsApp);
+}
   </script>
 </body>
 </html>
