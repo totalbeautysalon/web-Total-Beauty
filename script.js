@@ -953,17 +953,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('phoneGalleryGrid');
     if (!grid) return;
 
-    const photoSet = new Set();
+    // Mapa para almacenar fotos unicas garantizadas (clave normalizada en minusculas para evitar duplicados por mayusculas/minusculas)
+    const photoMap = new Map();
+
     const addPhoto = (name) => {
       if (!name || typeof name !== 'string') return;
-      let clean = name.trim().replace(/\\/g, '/');
-      if (!/\.(jpe?g|png|webp|gif)$/i.test(clean)) return;
-      if (clean === 'manifest.json' || clean === 'galeria.js') return;
-      const path = clean.startsWith('fotosacademia/') ? clean : `fotosacademia/${clean}`;
-      photoSet.add(path);
+      let raw = name.replace(/\\/g, '/');
+      if (raw.startsWith('fotosacademia/')) {
+        raw = raw.replace(/^fotosacademia\//, '');
+      }
+      if (!/\.(jpe?g|png|webp|gif)$/i.test(raw)) return;
+      if (raw === 'manifest.json' || raw === 'galeria.js') return;
+
+      // Clave normalizada insensible a mayusculas/minusculas y espacios marginales
+      const key = raw.trim().toLowerCase();
+      if (!photoMap.has(key)) {
+        photoMap.set(key, `fotosacademia/${raw}`);
+      }
     };
 
-    // 1. Deteccion en tiempo real desde la API de GitHub (detecta cualquier foto agregada a la carpeta sin tocar codigo)
+    // 1. Deteccion en tiempo real desde la API de GitHub (detecta fotos nuevas subidas al repositorio al instante)
     try {
       const ghRes = await fetch('https://api.github.com/repos/totalbeautysalon/web-Total-Beauty/contents/fotosacademia?_t=' + Date.now(), {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
@@ -977,7 +986,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     } catch (e) {
-      // Continuar con siguientes fuentes si GitHub API tiene limite o esta offline
+      // Continuar con siguientes fuentes
     }
 
     // 2. Catalogo manifest.json en fotosacademia (con limpieza de BOM y cache buster)
@@ -991,32 +1000,27 @@ document.addEventListener('DOMContentLoaded', () => {
         list.forEach(addPhoto);
       }
     } catch (e) {
-      // Continuar si la lectura falla
+      // Continuar si falla lectura
     }
 
-    // 3. Catalogo precargado de fotosacademia/galeria.js (soporte local directo)
+    // 3. Catalogo precargado de fotosacademia/galeria.js
     if (window.TOTAL_BEAUTY_GALERIA && Array.isArray(window.TOTAL_BEAUTY_GALERIA)) {
       window.TOTAL_BEAUTY_GALERIA.forEach(addPhoto);
     }
 
-    // 4. Deteccion activa por patron de nombres comunes para fotos recien agregadas
-    const candidates = [];
-    // Patrones de camaras y telefonos (ej. IMG_9120 ... IMG_9160)
-    for (let i = 9120; i <= 9160; i++) {
-      candidates.push(`fotosacademia/IMG_${i}.JPG`);
-      candidates.push(`fotosacademia/IMG_${i}.jpg`);
-    }
-    // Patrones genericos numerados
-    for (let i = 1; i <= 50; i++) {
-      const pad = String(i).padStart(2, '0');
-      candidates.push(`fotosacademia/foto${pad}.jpg`);
-      candidates.push(`fotosacademia/foto${i}.jpg`);
-      candidates.push(`fotosacademia/${i}.png`);
-      candidates.push(`fotosacademia/ (${i}).png`);
-    }
+    // 4. Sondeo de respaldo unicamente si ninguna de las fuentes anteriores retorno imagenes
+    if (photoMap.size === 0) {
+      const candidates = [];
+      for (let i = 9120; i <= 9160; i++) {
+        candidates.push(`fotosacademia/IMG_${i}.JPG`);
+      }
+      for (let i = 1; i <= 30; i++) {
+        const pad = String(i).padStart(2, '0');
+        candidates.push(`fotosacademia/foto${pad}.jpg`);
+        candidates.push(`fotosacademia/${i}.png`);
+        candidates.push(`fotosacademia/ (${i}).png`);
+      }
 
-    const unprobed = candidates.filter(c => !photoSet.has(c));
-    if (unprobed.length > 0) {
       const testImg = (src) => new Promise(resolve => {
         const img = new Image();
         img.onload = () => resolve(src);
@@ -1024,16 +1028,16 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = src;
       });
 
-      const tested = await Promise.all(unprobed.map(testImg));
-      tested.filter(Boolean).forEach(src => photoSet.add(src));
+      const tested = await Promise.all(candidates.map(testImg));
+      tested.filter(Boolean).forEach(addPhoto);
     }
 
-    let photos = Array.from(photoSet);
+    let photos = Array.from(photoMap.values());
 
-    // Orden inteligente: fotos mas recientes primero
+    // Ordenamiento inteligente: fotos mas recientes al inicio
     photos.sort((a, b) => {
-      const nameA = a.replace('fotosacademia/', '');
-      const nameB = b.replace('fotosacademia/', '');
+      const nameA = a.replace(/^fotosacademia\//, '');
+      const nameB = b.replace(/^fotosacademia\//, '');
       return nameB.localeCompare(nameA, undefined, { numeric: true, sensitivity: 'base' });
     });
 
