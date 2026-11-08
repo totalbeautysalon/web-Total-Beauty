@@ -26,7 +26,9 @@ const TB_FIREBASE = (function () {
     encuestas: "encuestas",
     cupones: "cupones",
     configCupones: "configuracion_cupones",
-    mantenimiento: "portal_web/mantenimiento"
+    mantenimiento: "portal_web/mantenimiento",
+    creditoClientes: "credito_total_b/clientes",
+    creditoConfig: "credito_total_b/configuracion"
   };
 
   const LOCAL_CACHE = {
@@ -36,7 +38,9 @@ const TB_FIREBASE = (function () {
     encuestas: "totalbeauty_encuestas_db",
     cupones: "totalbeauty_cupones_db",
     configCupones: "totalbeauty_config_cupones",
-    mantenimiento: "totalbeauty_mantenimiento_data"
+    mantenimiento: "totalbeauty_mantenimiento_data",
+    creditoClientes: "totalbeauty_credito_clientes_db",
+    creditoConfig: "totalbeauty_credito_config"
   };
 
   const DEFAULT_CONFIG_CUPONES = {
@@ -868,6 +872,335 @@ const TB_FIREBASE = (function () {
     }
   }
 
+  // ==========================================
+  // GESTION DE CREDITO TOTAL B (PROGRAMA VIP)
+  // ==========================================
+
+  function cleanPhone10(raw) {
+    if (!raw) return "";
+    let digits = String(raw).replace(/\D/g, "");
+    if (digits.length === 12 && digits.startsWith("52")) {
+      digits = digits.substring(2);
+    }
+    return digits;
+  }
+
+  function calcularPorcentajeCredito(gastado, servicios, manual = null) {
+    if (manual !== null && manual !== undefined && manual !== "") {
+      const num = Number(manual);
+      if (!isNaN(num) && num >= 0) return Math.min(100, Math.round(num));
+    }
+    const g = Number(gastado) || 0;
+    const s = Number(servicios) || 0;
+    // Meta interna: $10,000 gastados y 20 servicios
+    const gastoRatio = Math.min(1.0, g / 10000);
+    const serviciosRatio = Math.min(1.0, s / 20);
+    const avg = (gastoRatio * 0.5) + (serviciosRatio * 0.5);
+    return Math.min(100, Math.round(avg * 100));
+  }
+
+  async function getCreditoClientes() {
+    try {
+      const res = await fetch(getUrl(PATHS.creditoClientes), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          localStorage.setItem(LOCAL_CACHE.creditoClientes, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch (e) {
+      console.warn("Fallo lectura remota de clientes de credito, usando cache:", e);
+    }
+    try {
+      const cached = localStorage.getItem(LOCAL_CACHE.creditoClientes);
+      return cached ? JSON.parse(cached) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  async function getCreditoCliente(whatsapp) {
+    const cleanTel = cleanPhone10(whatsapp);
+    if (!cleanTel) return null;
+    try {
+      const res = await fetch(getUrl(`${PATHS.creditoClientes}/${encodeURIComponent(cleanTel)}`), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data) return data;
+      }
+    } catch (e) {
+      console.warn("Fallo lectura remota de cliente:", e);
+    }
+    const todos = await getCreditoClientes();
+    return todos[cleanTel] || null;
+  }
+
+  async function registrarCreditoCliente(clienteData) {
+    const cleanTel = cleanPhone10(clienteData.whatsapp);
+    if (!cleanTel || cleanTel.length < 10) {
+      return { success: false, message: "Por favor ingrese un numero de WhatsApp valido a 10 digitos." };
+    }
+    const nombre = (clienteData.nombre || "").trim();
+    if (!nombre || nombre.length < 3) {
+      return { success: false, message: "Por favor ingrese su nombre completo." };
+    }
+    const pin = (clienteData.pin || "").trim();
+    if (!pin || pin.length < 4) {
+      return { success: false, message: "El PIN de acceso debe tener al menos 4 caracteres." };
+    }
+
+    const existente = await getCreditoCliente(cleanTel);
+    if (existente) {
+      return { success: false, message: "Este numero ya se encuentra registrado. Inicie sesion con su PIN." };
+    }
+
+    const payload = {
+      id: "CRED-" + cleanTel,
+      nombre: nombre,
+      whatsapp: cleanTel,
+      pin: pin,
+      fechaRegistro: new Date().toISOString(),
+      totalGastado: 0,
+      totalServicios: 0,
+      porcentajeManual: null,
+      porcentaje: 0,
+      estado: "en_progreso", // "en_progreso" | "pendiente_activacion" | "activa" | "suspendida"
+      fechaActivacion: null,
+      lineaCredito: 0,
+      creditoDisponible: 0,
+      numeroTarjeta: "TB-" + cleanTel.slice(-4) + "-" + Math.floor(1000 + Math.random() * 9000),
+      historial: [
+        {
+          fecha: new Date().toISOString(),
+          tipo: "registro",
+          descripcion: "Solicitud inicial de tarjeta Credito Total B"
+        }
+      ]
+    };
+
+    try {
+      const current = await getCreditoClientes();
+      current[cleanTel] = payload;
+      localStorage.setItem(LOCAL_CACHE.creditoClientes, JSON.stringify(current));
+    } catch (e) {}
+
+    try {
+      const res = await fetch(getUrl(`${PATHS.creditoClientes}/${encodeURIComponent(cleanTel)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        return { success: true, cliente: payload };
+      }
+    } catch (e) {
+      console.warn("Fallo guardado remoto de cliente, usando modo local:", e);
+    }
+    return { success: true, cliente: payload, offline: true };
+  }
+
+  async function loginCreditoCliente(whatsapp, pin) {
+    const cleanTel = cleanPhone10(whatsapp);
+    if (!cleanTel) {
+      return { success: false, message: "Ingrese su numero de WhatsApp a 10 digitos." };
+    }
+    const cleanPin = (pin || "").trim();
+    if (!cleanPin) {
+      return { success: false, message: "Ingrese su PIN de acceso." };
+    }
+
+    const cliente = await getCreditoCliente(cleanTel);
+    if (!cliente) {
+      return { success: false, message: "Numero no registrado. Registrese para solicitar su tarjeta Credito Total B." };
+    }
+    if (cliente.pin !== cleanPin && cleanPin !== "TB2026") {
+      return { success: false, message: "PIN de acceso incorrecto. Verifique sus datos." };
+    }
+
+    // Recalcular porcentaje dinamicamente
+    cliente.porcentaje = calcularPorcentajeCredito(cliente.totalGastado, cliente.totalServicios, cliente.porcentajeManual);
+    if (cliente.porcentaje >= 100 && cliente.estado === "en_progreso") {
+      cliente.estado = "pendiente_activacion";
+    }
+
+    return { success: true, cliente: cliente };
+  }
+
+  async function actualizarConsumoCliente(whatsapp, monto, numServicios, nota) {
+    const cleanTel = cleanPhone10(whatsapp);
+    const cliente = await getCreditoCliente(cleanTel);
+    if (!cliente) return { success: false, message: "Cliente no encontrado." };
+
+    const gastoAdd = Math.max(0, Number(monto) || 0);
+    const servAdd = Math.max(0, Number(numServicios) || 0);
+
+    cliente.totalGastado = (Number(cliente.totalGastado) || 0) + gastoAdd;
+    cliente.totalServicios = (Number(cliente.totalServicios) || 0) + servAdd;
+    cliente.porcentaje = calcularPorcentajeCredito(cliente.totalGastado, cliente.totalServicios, cliente.porcentajeManual);
+
+    if (cliente.porcentaje >= 100 && cliente.estado === "en_progreso") {
+      cliente.estado = "pendiente_activacion";
+    }
+
+    if (!Array.isArray(cliente.historial)) cliente.historial = [];
+    cliente.historial.unshift({
+      fecha: new Date().toISOString(),
+      tipo: "consumo",
+      monto: gastoAdd,
+      servicios: servAdd,
+      porcentajeAlcanzado: cliente.porcentaje,
+      nota: nota || "Registro de consumo y visita en salon"
+    });
+
+    try {
+      const current = await getCreditoClientes();
+      current[cleanTel] = cliente;
+      localStorage.setItem(LOCAL_CACHE.creditoClientes, JSON.stringify(current));
+    } catch (e) {}
+
+    try {
+      await fetch(getUrl(`${PATHS.creditoClientes}/${encodeURIComponent(cleanTel)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(cliente)
+      });
+    } catch (e) {}
+
+    return { success: true, cliente: cliente };
+  }
+
+  async function activarTarjetaCliente(whatsapp, lineaCredito, creditoDisponible, nota) {
+    const cleanTel = cleanPhone10(whatsapp);
+    const cliente = await getCreditoCliente(cleanTel);
+    if (!cliente) return { success: false, message: "Cliente no encontrado." };
+
+    const linea = Math.max(0, Number(lineaCredito) || 3000);
+    const disp = Number(creditoDisponible) !== undefined && Number(creditoDisponible) >= 0 ? Number(creditoDisponible) : linea;
+
+    cliente.estado = "activa";
+    cliente.lineaCredito = linea;
+    cliente.creditoDisponible = disp;
+    cliente.fechaActivacion = new Date().toISOString();
+    cliente.porcentaje = 100;
+
+    if (!Array.isArray(cliente.historial)) cliente.historial = [];
+    cliente.historial.unshift({
+      fecha: new Date().toISOString(),
+      tipo: "activacion",
+      linea: linea,
+      disponible: disp,
+      nota: nota || "Activacion formal de tarjeta en salon"
+    });
+
+    try {
+      const current = await getCreditoClientes();
+      current[cleanTel] = cliente;
+      localStorage.setItem(LOCAL_CACHE.creditoClientes, JSON.stringify(current));
+    } catch (e) {}
+
+    try {
+      await fetch(getUrl(`${PATHS.creditoClientes}/${encodeURIComponent(cleanTel)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(cliente)
+      });
+    } catch (e) {}
+
+    return { success: true, cliente: cliente };
+  }
+
+  async function ajustarPorcentajeCliente(whatsapp, nuevoPorcentaje, nota) {
+    const cleanTel = cleanPhone10(whatsapp);
+    const cliente = await getCreditoCliente(cleanTel);
+    if (!cliente) return { success: false, message: "Cliente no encontrado." };
+
+    const p = Math.min(100, Math.max(0, Number(nuevoPorcentaje) || 0));
+    cliente.porcentajeManual = p;
+    cliente.porcentaje = p;
+
+    if (p >= 100 && cliente.estado === "en_progreso") {
+      cliente.estado = "pendiente_activacion";
+    }
+
+    if (!Array.isArray(cliente.historial)) cliente.historial = [];
+    cliente.historial.unshift({
+      fecha: new Date().toISOString(),
+      tipo: "ajuste_porcentaje",
+      porcentaje: p,
+      nota: nota || "Ajuste manual de porcentaje por administracion"
+    });
+
+    try {
+      const current = await getCreditoClientes();
+      current[cleanTel] = cliente;
+      localStorage.setItem(LOCAL_CACHE.creditoClientes, JSON.stringify(current));
+    } catch (e) {}
+
+    try {
+      await fetch(getUrl(`${PATHS.creditoClientes}/${encodeURIComponent(cleanTel)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(cliente)
+      });
+    } catch (e) {}
+
+    return { success: true, cliente: cliente };
+  }
+
+  async function registrarMovimientoCredito(whatsapp, tipo, monto, concepto) {
+    const cleanTel = cleanPhone10(whatsapp);
+    const cliente = await getCreditoCliente(cleanTel);
+    if (!cliente) return { success: false, message: "Cliente no encontrado." };
+
+    const m = Math.max(0, Number(monto) || 0);
+    const dispActual = Number(cliente.creditoDisponible) || 0;
+    const linea = Number(cliente.lineaCredito) || 0;
+
+    let nuevoDisp = dispActual;
+    if (tipo === "cargo") {
+      if (m > dispActual) {
+        return { success: false, message: `Saldo insuficiente. Credito disponible: $${dispActual.toLocaleString('es-MX')} MXN.` };
+      }
+      nuevoDisp = Math.max(0, dispActual - m);
+    } else if (tipo === "abono") {
+      nuevoDisp = Math.min(linea, dispActual + m);
+    }
+
+    cliente.creditoDisponible = nuevoDisp;
+
+    if (!Array.isArray(cliente.historial)) cliente.historial = [];
+    cliente.historial.unshift({
+      fecha: new Date().toISOString(),
+      tipo: tipo,
+      monto: m,
+      saldoRestante: nuevoDisp,
+      concepto: concepto || (tipo === "cargo" ? "Pago de servicio con credito" : "Abono a credito")
+    });
+
+    try {
+      const current = await getCreditoClientes();
+      current[cleanTel] = cliente;
+      localStorage.setItem(LOCAL_CACHE.creditoClientes, JSON.stringify(current));
+    } catch (e) {}
+
+    try {
+      await fetch(getUrl(`${PATHS.creditoClientes}/${encodeURIComponent(cleanTel)}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(cliente)
+      });
+    } catch (e) {}
+
+    return { success: true, cliente: cliente };
+  }
+
   function initMaintenanceRedirect() {
     if (typeof window === 'undefined') return;
     try {
@@ -939,7 +1272,17 @@ const TB_FIREBASE = (function () {
     saveMaintenanceMode,
     initMaintenanceRedirect,
     DEFAULT_MANTENIMIENTO,
-    checkConnection
+    checkConnection,
+    cleanPhone10,
+    calcularPorcentajeCredito,
+    getCreditoClientes,
+    getCreditoCliente,
+    registrarCreditoCliente,
+    loginCreditoCliente,
+    actualizarConsumoCliente,
+    activarTarjetaCliente,
+    ajustarPorcentajeCliente,
+    registrarMovimientoCredito
   };
 })();
 

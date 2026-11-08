@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Crédito Total B | Tarjeta Exclusiva Salón &amp; Academia</title>
+  <meta name="description" content="Crédito Total B: Tu tarjeta exclusiva para consentirte hoy en todos nuestros servicios y pagarlos después. Total Beauty Salón &amp; Academia.">
+
+  <!-- Tipografías Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="credito-page-body">
+
+  <div class="credito-ambient-bg" aria-hidden="true">
+    <div class="credito-ambient-orb orb-1"></div>
+    <div class="credito-ambient-orb orb-2"></div>
+    <div class="credito-ambient-pattern"></div>
+  </div>
+
+  <div class="credito-container">
+
+    <!-- Encabezado de Navegación -->
+    <header class="credito-header">
+      <a href="index.html" class="credito-btn-back" aria-label="Volver al Inicio">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Volver al Inicio</span>
+      </a>
+
+      <div class="credito-brand-center">
+        <span class="credito-brand-tag">CLUB PRIVILEGE VIP</span>
+        <h1 class="credito-brand-title">TOTAL BEAUTY</h1>
+        <span class="credito-brand-sub">SALÓN &amp; ACADEMIA</span>
+      </div>
+
+      <div class="credito-header-spacer" aria-hidden="true"></div>
+    </header>
+
+    <!-- Sección Hero y Tarjeta Virtual 3D -->
+    <section class="credito-hero-section">
+      <div class="credito-hero-intro">
+        <span class="credito-vip-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          PROGRAMA EXCLUSIVO DE CRÉDITO
+        </span>
+        <h2 class="credito-hero-title">Tarjeta Crédito Total B</h2>
+        <p class="credito-hero-subtitle">
+          Consiéntete hoy en todos tus servicios favoritos de belleza y págalos después. Regístrate, acumula tu avance y desbloquea tu tarjeta exclusiva.
+        </p>
+      </div>
+
+      <!-- Tarjeta Virtual Interactiva 3D -->
+      <div class="credito-card-wrapper" id="virtualCardWrapper">
+        <div class="credito-card-3d" id="virtualCard">
+          <div class="credito-card-gloss" aria-hidden="true"></div>
+          <div class="credito-card-mesh" aria-hidden="true"></div>
+          
+          <div class="credito-card-top">
+            <div class="credito-card-emblem">
+              <span class="credito-card-tb">TB</span>
+              <span class="credito-card-brand-txt">TOTAL BEAUTY</span>
+            </div>
+            <div class="credito-card-contactless" aria-label="Símbolo contactless">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                <path d="M8.5 15.5a6 6 0 0 1 7 0"></path>
+                <path d="M12 18.5a1 1 0 0 1 0 0"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="credito-card-chip-row">
+            <div class="credito-card-chip" aria-label="Chip EMV dorado">
+              <div class="chip-line horizontal"></div>
+              <div class="chip-line vertical"></div>
+            </div>
+            <span class="credito-card-tier" id="cardTierLabel">BLACK VIP CARD</span>
+          </div>
+
+          <div class="credito-card-mid">
+            <div class="credito-card-number" id="cardNumberDisplay">TB &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; VIP</div>
+          </div>
+
+          <div class="credito-card-bottom">
+            <div class="credito-card-holder">
+              <span class="credito-card-label">TITULAR EXCLUSIVA</span>
+              <span class="credito-card-name" id="cardHolderDisplay">CLIENTA PRIVILEGE</span>
+            </div>
+            <div class="credito-card-status-pill" id="cardStatusPill">
+              <span class="status-indicator"></span>
+              <span id="cardStatusText">EN ACUMULACIÓN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Beneficios Resumidos -->
+    <div class="credito-benefits-row">
+      <div class="credito-benefit-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>Servicios Hoy, Pago Diferido</span>
+      </div>
+      <div class="credito-benefit-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>Exclusivo para Clientas Frecuentes</span>
+      </div>
+      <div class="credito-benefit-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Activación Presencial en Salón</span>
+      </div>
+    </div>
+
+    <!-- Contenedor Principal de Vistas -->
+    <main class="credito-portal-box">
+
+      <!-- Pestañas de Acceso (Solo visibles cuando NO hay sesión activa) -->
+      <nav class="credito-tabs-nav" id="creditoTabsNav" aria-label="Opciones de Acceso">
+        <button type="button" class="credito-tab-btn active" id="tabBtnRegistro" onclick="switchCreditoView('registro')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          <span>Solicitar Registro</span>
+        </button>
+
+        <button type="button" class="credito-tab-btn" id="tabBtnLogin" onclick="switchCreditoView('login')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Consultar Mi Avance</span>
+        </button>
+      </nav>
+
+      <!-- VISTA 1: FORMULARIO DE REGISTRO -->
+      <section class="credito-view" id="viewRegistro">
+        <div class="credito-form-header">
+          <h3 class="credito-form-title">Solicita tu Tarjeta Crédito Total B</h3>
+          <p class="credito-form-desc">
+            Ingresa tus datos para crear tu cuenta personal. Tu avance comenzará a acumularse automáticamente con cada visita.
+          </p>
+        </div>
+
+        <form id="formRegistroCredito" onsubmit="handleRegistroCredito(event)" novalidate>
+          <div class="credito-field-group">
+            <label for="regNombre" class="credito-label">Nombre Completo</label>
+            <div class="credito-input-wrap">
+              <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" id="regNombre" class="credito-input" placeholder="Ej. Mariana Hernández Cruz" required autocomplete="name">
+            </div>
+          </div>
+
+          <div class="credito-field-group">
+            <label for="regWhatsapp" class="credito-label">Número de WhatsApp (10 dígitos)</label>
+            <div class="credito-input-wrap">
+              <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <input type="tel" id="regWhatsapp" class="credito-input" placeholder="7711234567" maxlength="10" required autocomplete="tel">
+            </div>
+            <span class="credito-help-text">Este número se asociará de forma exclusiva a tu tarjeta.</span>
+          </div>
+
+          <div class="credito-fields-row">
+            <div class="credito-field-group">
+              <label for="regPin" class="credito-label">Crear PIN (4 dígitos)</label>
+              <div class="credito-input-wrap">
+                <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input type="password" id="regPin" class="credito-input" placeholder="••••" maxlength="6" required inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="credito-field-group">
+              <label for="regPinConfirm" class="credito-label">Confirmar PIN</label>
+              <div class="credito-input-wrap">
+                <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <input type="password" id="regPinConfirm" class="credito-input" placeholder="••••" maxlength="6" required inputmode="numeric">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="credito-btn-primary" id="btnSubmitRegistro">
+            <span>Solicitar Mi Tarjeta Crédito Total B</span>
+            <svg class="btn-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
+          <p class="credito-switch-hint">
+            ¿Ya tienes tu registro previo?
+            <button type="button" class="btn-text-link" onclick="switchCreditoView('login')">Consulta tu avance aquí</button>
+          </p>
+        </form>
+      </section>
+
+      <!-- VISTA 2: FORMULARIO DE CONSULTA / LOGIN -->
+      <section class="credito-view" id="viewLogin" style="display: none;">
+        <div class="credito-form-header">
+          <h3 class="credito-form-title">Consulta de Avance y Estado</h3>
+          <p class="credito-form-desc">
+            Ingresa tu WhatsApp y tu PIN de seguridad para consultar el porcentaje de avance o el saldo disponible de tu tarjeta.
+          </p>
+        </div>
+
+        <form id="formLoginCredito" onsubmit="handleLoginCredito(event)" novalidate>
+          <div class="credito-field-group">
+            <label for="loginWhatsapp" class="credito-label">Número de WhatsApp (10 dígitos)</label>
+            <div class="credito-input-wrap">
+              <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <input type="tel" id="loginWhatsapp" class="credito-input" placeholder="7711234567" maxlength="10" required autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="credito-field-group">
+            <label for="loginPin" class="credito-label">PIN de Seguridad (4 dígitos)</label>
+            <div class="credito-input-wrap">
+              <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="loginPin" class="credito-input" placeholder="••••" maxlength="6" required inputmode="numeric">
+            </div>
+          </div>
+
+          <button type="submit" class="credito-btn-primary" id="btnSubmitLogin">
+            <span>Consultar Mi Estado de Crédito</span>
+            <svg class="btn-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
+          <p class="credito-switch-hint">
+            ¿Aún no has solicitado tu tarjeta?
+            <button type="button" class="btn-text-link" onclick="switchCreditoView('registro')">Solicita tu registro aquí</button>
+          </p>
+        </form>
+      </section>
+
+      <!-- VISTA 3: DASHBOARD VIP DE CLIENTA (ÁREA PRIVADA) -->
+      <section class="credito-view" id="viewDashboard" style="display: none;">
+        <div class="credito-client-header">
+          <div class="credito-client-greeting">
+            <span class="credito-client-badge">MEMBRESÍA VIP</span>
+            <h3 class="credito-client-name" id="dashClientName">Mariana Hernández</h3>
+            <span class="credito-client-phone" id="dashClientPhone">WhatsApp: 771 ••• ••89</span>
+          </div>
+          <button type="button" class="credito-btn-logout" onclick="handleLogoutCredito()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+
+        <!-- ESTADO A: EN PROGRESO (< 100%) -->
+        <div class="credito-status-block" id="blockEnProgreso">
+          <div class="credito-gauge-card">
+            <div class="credito-gauge-wrap">
+              <svg class="credito-gauge-svg" viewBox="0 0 120 120">
+                <circle class="gauge-bg" cx="60" cy="60" r="52"></circle>
+                <circle class="gauge-bar" id="gaugeProgressCircle" cx="60" cy="60" r="52" stroke-dasharray="326.72" stroke-dashoffset="326.72"></circle>
+              </svg>
+              <div class="credito-gauge-center">
+                <span class="gauge-number" id="dashPercentNumber">0%</span>
+                <span class="gauge-caption">Avance</span>
+              </div>
+            </div>
+
+            <div class="credito-gauge-info">
+              <span class="gauge-kicker">PROGRESO HACIA TU TARJETA</span>
+              <h4 class="gauge-headline">Estás en camino a tu Crédito Total B</h4>
+              <p class="gauge-desc">
+                Cada servicio que realizas en Total Beauty Salón suma de manera automática a tu récord personal. Al alcanzar el 100%, tu tarjeta quedará lista para activarse en salón.
+              </p>
+              
+              <div class="credito-bar-container">
+                <div class="credito-bar-track">
+                  <div class="credito-bar-fill" id="dashLinearProgress" style="width: 0%;"></div>
+                </div>
+                <div class="credito-bar-legend">
+                  <span>0% Inicio</span>
+                  <span id="dashPercentLegend">0% Actual</span>
+                  <span>100% Meta</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="credito-info-callout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <div>
+              <strong>Tu avance se actualiza en cada visita</strong>
+              <p>Menciona tu número de WhatsApp al pagar en recepción para que cada uno de tus servicios quede registrado en tu perfil.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTADO B: 100% ALCANZADO (PENDIENTE DE ACTIVACIÓN EN SALÓN) -->
+        <div class="credito-status-block" id="blockPendienteActivacion" style="display: none;">
+          <div class="credito-congrats-card">
+            <div class="congrats-sparkle-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <span class="congrats-tag">OBJETIVO 100% CUMPLIDO</span>
+            <h4 class="congrats-title">¡Felicidades! Tu Tarjeta Crédito Total B está Aprobada</h4>
+            <p class="congrats-text">
+              Has alcanzado el 100% requerido. Para activar formalmente tu tarjeta y habilitar tu línea de crédito asignada, <strong>preséntate en Total Beauty Salón durante tu próximo servicio</strong>.
+            </p>
+
+            <div class="congrats-steps-box">
+              <div class="congrats-step">
+                <span class="step-num">1</span>
+                <div>
+                  <strong>Agenda o acude a tu próximo servicio</strong>
+                  <p>Cualquier servicio de pestañas, cejas, uñas, corte, peinado o maquillaje en Total Beauty.</p>
+                </div>
+              </div>
+              <div class="congrats-step">
+                <span class="step-num">2</span>
+                <div>
+                  <strong>Muestra esta pantalla en recepción</strong>
+                  <p>Nuestro equipo validará tu 100% y activará de inmediato tu tarjeta y crédito disponible.</p>
+                </div>
+              </div>
+              <div class="congrats-step">
+                <span class="step-num">3</span>
+                <div>
+                  <strong>¡Comienza a consentirte y pagar después!</strong>
+                  <p>Disfruta de la comodidad de diferir o pagar tus servicios con tu crédito exclusivo.</p>
+                </div>
+              </div>
+            </div>
+
+            <a href="https://wa.me/525650560824?text=Hola%20Total%20Beauty,%20he%20alcanzado%20el%20100%25%20de%20mi%20avance%20en%20Crédito%20Total%20B%20y%20deseo%20agendar%20mi%20cita%20para%20activar%20mi%20tarjeta." target="_blank" rel="noopener noreferrer" class="credito-btn-whatsapp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <span>Agendar Cita en WhatsApp para Activar Mi Tarjeta</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ESTADO C: TARJETA ACTIVA (ACTIVADA EN SALÓN POR ADMINISTRACIÓN) -->
+        <div class="credito-status-block" id="blockActiva" style="display: none;">
+          <div class="credito-active-card">
+            <div class="active-badge-ribbon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>TARJETA ACTIVA Y AUTORIZADA</span>
+            </div>
+
+            <div class="credito-balance-grid">
+              <div class="balance-tile highlight">
+                <span class="balance-label">Crédito Disponible para Servicios</span>
+                <span class="balance-amount" id="dashCreditoDisponible">$0.00 MXN</span>
+                <span class="balance-sub">Listo para usar en salón</span>
+              </div>
+              <div class="balance-tile">
+                <span class="balance-label">Línea Total Asignada</span>
+                <span class="balance-amount" id="dashLineaCredito">$0.00 MXN</span>
+                <span class="balance-sub">Límite otorgado por Total Beauty</span>
+              </div>
+            </div>
+
+            <div class="active-how-to-use">
+              <h5>¿Cómo usar tu Crédito Total B?</h5>
+              <p>Al finalizar tu servicio en recepción, indica que deseas cubrir tu cuenta con tu <strong>Crédito Total B</strong> proporcionando tu número de WhatsApp. El importe se descontará de tu saldo disponible.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Separador Minimalista -->
+    <div class="luxury-divider" aria-hidden="true">
+      <span class="luxury-divider-line"></span>
+      <span class="luxury-divider-diamond"></span>
+      <span class="luxury-divider-line"></span>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="credito-footer">
+      <p class="credito-legal-note">
+        Crédito Total B es un programa de lealtad y financiamiento privado operado exclusivamente por Total Beauty Salón &amp; Academia. Sujeto a términos y políticas del establecimiento.
+      </p>
+      <p class="footer-copyright">
+        &copy; Total Beauty Salón &amp; Academia. Todos los derechos reservados.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Toast de Notificaciones -->
+  <div id="creditoToast" class="credito-toast" role="alert" aria-live="assertive"></div>
+
+  <!-- Scripts -->
+  <script src="firebase-config.js"></script>
+  <script src="credito.js"></script>
+</body>
+</html>

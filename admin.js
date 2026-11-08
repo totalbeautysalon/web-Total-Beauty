@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCoursesData();
     loadStudentsData();
     loadMaintenanceAdminData();
+    loadCreditoTotalBData();
   }
 
   window.handleAdminLogin = function (e) {
@@ -1681,10 +1682,544 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.loadMaintenanceAdminData = loadMaintenanceAdminData;
 
+  // ==========================================================================
+  // 9. MÓDULO DE GESTIÓN: CRÉDITO TOTAL B (PROGRAMA PRIVILEGE)
+  // ==========================================================================
+  let cachedCreditoClients = {};
+
+  async function loadCreditoTotalBData(showToastNotice = false) {
+    try {
+      cachedCreditoClients = await TB_FIREBASE.getCreditoClientes();
+      updateCreditoKPIs();
+      renderCreditoTable(cachedCreditoClients);
+      if (showToastNotice) {
+        showToast("Datos de Crédito Total B actualizados exitosamente");
+      }
+    } catch (err) {
+      console.error("Error al cargar clientes de crédito:", err);
+      if (showToastNotice) {
+        showToast("No se pudo conectar con Firebase para actualizar crédito.");
+      }
+    }
+  }
+
+  function updateCreditoKPIs() {
+    const clients = Object.values(cachedCreditoClients || {});
+    let total = clients.length;
+    let progreso = 0;
+    let pendientes = 0;
+    let activas = 0;
+    let saldoTotal = 0;
+
+    clients.forEach(c => {
+      const p = TB_FIREBASE.calcularPorcentajeCredito(c.totalGastado, c.totalServicios, c.porcentajeManual);
+      const estado = c.estado || 'en_progreso';
+
+      if (estado === 'activa') {
+        activas++;
+        saldoTotal += (Number(c.creditoDisponible) || 0);
+      } else if (estado === 'pendiente_activacion' || p >= 100) {
+        pendientes++;
+      } else {
+        progreso++;
+      }
+    });
+
+    const elTotal = document.getElementById('kpiCreditoTotal');
+    const elProg = document.getElementById('kpiCreditoProgreso');
+    const elPend = document.getElementById('kpiCreditoPendientes');
+    const elAct = document.getElementById('kpiCreditoActivas');
+    const elSaldo = document.getElementById('kpiCreditoSaldoTotal');
+
+    if (elTotal) elTotal.textContent = total;
+    if (elProg) elProg.textContent = progreso;
+    if (elPend) elPend.textContent = pendientes;
+    if (elAct) elAct.textContent = activas;
+    if (elSaldo) elSaldo.textContent = `$${saldoTotal.toLocaleString('es-MX', { minimumFractionDigits: 0 })}`;
+  }
+
+  function renderCreditoTable(clientsMap) {
+    const tbody = document.getElementById('creditoTableBody');
+    if (!tbody) return;
+
+    const list = Object.values(clientsMap || {});
+
+    if (list.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+            No se encontraron solicitudes ni clientas registradas en Crédito Total B.
+          </td>
+        </tr>`;
+      return;
+    }
+
+    // Ordenar: primero pendientes de activación, luego activas, luego en progreso por porcentaje descendente
+    list.sort((a, b) => {
+      const pA = TB_FIREBASE.calcularPorcentajeCredito(a.totalGastado, a.totalServicios, a.porcentajeManual);
+      const pB = TB_FIREBASE.calcularPorcentajeCredito(b.totalGastado, b.totalServicios, b.porcentajeManual);
+
+      const scoreState = (st, p) => {
+        if (st === 'pendiente_activacion' || p >= 100 && st !== 'activa') return 3;
+        if (st === 'activa') return 2;
+        return 1;
+      };
+
+      const diff = scoreState(b.estado, pB) - scoreState(a.estado, pA);
+      if (diff !== 0) return diff;
+      return pB - pA;
+    });
+
+    let html = '';
+    list.forEach(c => {
+      const tel = c.whatsapp || '';
+      const p = TB_FIREBASE.calcularPorcentajeCredito(c.totalGastado, c.totalServicios, c.porcentajeManual);
+      let estado = c.estado || 'en_progreso';
+      if (p >= 100 && estado === 'en_progreso') estado = 'pendiente_activacion';
+
+      let fechaStr = '-';
+      if (c.fechaRegistro) {
+        try {
+          const d = new Date(c.fechaRegistro);
+          fechaStr = d.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+        } catch (e) {}
+      }
+
+      const gastado = Number(c.totalGastado || 0);
+      const servicios = Number(c.totalServicios || 0);
+      const disp = Number(c.creditoDisponible || 0);
+      const linea = Number(c.lineaCredito || 0);
+
+      let estadoBadge = '';
+      if (estado === 'activa') {
+        estadoBadge = '<span class="status-badge status-available" style="background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid #60a5fa;">Activa en Salón</span>';
+      } else if (estado === 'pendiente_activacion' || p >= 100) {
+        estadoBadge = '<span class="status-badge status-used" style="background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid #4ade80;">100% Por Activar</span>';
+      } else if (estado === 'suspendida') {
+        estadoBadge = '<span class="status-badge status-expired">Suspendida</span>';
+      } else {
+        estadoBadge = '<span class="status-badge" style="background: rgba(212, 175, 55, 0.12); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.4);">En Progreso</span>';
+      }
+
+      html += `
+        <tr>
+          <td>
+            <div style="font-weight: 600; color: #ffffff;">${escapeHtml(c.nombre || 'Sin Nombre')}</div>
+            <a href="https://wa.me/52${tel}" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; color: #d4af37; text-decoration: none;">
+              WhatsApp: ${tel}
+            </a>
+          </td>
+          <td style="font-size: 0.82rem; color: #cccccc;">${fechaStr}</td>
+          <td>
+            <div style="font-weight: 600; color: #f0f0f0;">$${gastado.toLocaleString('es-MX', { minimumFractionDigits: 0 })} MXN</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">${servicios} visitas / servicios</div>
+          </td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="flex: 1; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; min-width: 60px;">
+                <div style="height: 100%; width: ${p}%; background: linear-gradient(90deg, #d4af37, #f7e07c); border-radius: 4px;"></div>
+              </div>
+              <span style="font-weight: 700; font-size: 0.84rem; color: #d4af37; min-width: 34px;">${p}%</span>
+            </div>
+            ${c.porcentajeManual !== null && c.porcentajeManual !== undefined ? '<span style="font-size: 0.68rem; color: #dedede;">(Manual)</span>' : ''}
+          </td>
+          <td>${estadoBadge}</td>
+          <td>
+            ${estado === 'activa' 
+              ? `<strong style="color: #60a5fa;">$${disp.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong><div style="font-size: 0.72rem; color: var(--text-muted);">Línea: $${linea.toLocaleString('es-MX')}</div>`
+              : '<span style="color: var(--text-muted); font-size: 0.8rem;">Sin activar</span>'
+            }
+          </td>
+          <td>
+            <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+              <button type="button" class="btn-action-small" onclick="openModalConsumoCredito('${tel}')" title="Registrar gasto de servicio y visitas">
+                <span>+ Consumo</span>
+              </button>
+              <button type="button" class="btn-action-small" onclick="openModalAjustePorcentaje('${tel}')" title="Ajustar porcentaje manualmente">
+                <span>% Manual</span>
+              </button>
+              ${estado === 'pendiente_activacion' || (p >= 100 && estado !== 'activa')
+                ? `<button type="button" class="btn-action-small" style="background: rgba(74, 222, 128, 0.2); border-color: #4ade80; color: #ffffff;" onclick="openModalActivarTarjeta('${tel}')" title="Activar en salón y asignar línea de crédito">
+                    <strong>Activar Salón</strong>
+                  </button>`
+                : ''
+              }
+              ${estado === 'activa'
+                ? `<button type="button" class="btn-action-small" style="background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; color: #ffffff;" onclick="openModalMovimientoCredito('${tel}')" title="Cargo o abono a saldo">
+                    <span>Saldo</span>
+                  </button>`
+                : ''
+              }
+              <button type="button" class="btn-action-small" onclick="openModalHistorialCredito('${tel}')" title="Ver historial y movimientos">
+                <span>Expediente</span>
+              </button>
+            </div>
+          </td>
+        </tr>`;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  function filterCreditoTable() {
+    const searchVal = (document.getElementById('searchCreditoInput')?.value || '').toLowerCase().trim();
+    const estadoVal = document.getElementById('filterCreditoEstado')?.value || 'todos';
+
+    const filtered = {};
+    Object.entries(cachedCreditoClients || {}).forEach(([tel, c]) => {
+      const matchSearch = !searchVal || 
+        (c.nombre && c.nombre.toLowerCase().includes(searchVal)) || 
+        (c.whatsapp && c.whatsapp.includes(searchVal));
+
+      const p = TB_FIREBASE.calcularPorcentajeCredito(c.totalGastado, c.totalServicios, c.porcentajeManual);
+      let effectiveState = c.estado || 'en_progreso';
+      if (p >= 100 && effectiveState === 'en_progreso') effectiveState = 'pendiente_activacion';
+
+      const matchEstado = (estadoVal === 'todos') || (effectiveState === estadoVal);
+
+      if (matchSearch && matchEstado) {
+        filtered[tel] = c;
+      }
+    });
+
+    renderCreditoTable(filtered);
+  }
+
+  // --- MODAL CONSUMO ---
+  window.openModalConsumoCredito = function (whatsapp) {
+    const c = cachedCreditoClients[whatsapp];
+    if (!c) return;
+
+    document.getElementById('consumoTargetWhatsapp').value = whatsapp;
+    document.getElementById('modalConsumoClientName').textContent = c.nombre || 'Clienta';
+    document.getElementById('modalConsumoClientPhone').textContent = `WhatsApp: ${c.whatsapp}`;
+    const p = TB_FIREBASE.calcularPorcentajeCredito(c.totalGastado, c.totalServicios, c.porcentajeManual);
+    document.getElementById('modalConsumoCurrentStats').textContent = 
+      `Consumo acumulado: $${Number(c.totalGastado || 0).toLocaleString('es-MX')} MXN • ${Number(c.totalServicios || 0)} servicios • Avance: ${p}%`;
+
+    document.getElementById('inputConsumoMonto').value = '';
+    document.getElementById('inputConsumoServicios').value = '1';
+    document.getElementById('inputConsumoNota').value = '';
+
+    const modal = document.getElementById('modalConsumoCredito');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeModalConsumoCredito = function () {
+    const modal = document.getElementById('modalConsumoCredito');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleGuardarConsumo = async function (e) {
+    e.preventDefault();
+    const tel = document.getElementById('consumoTargetWhatsapp').value;
+    const monto = document.getElementById('inputConsumoMonto').value;
+    const servicios = document.getElementById('inputConsumoServicios').value;
+    const nota = document.getElementById('inputConsumoNota').value;
+
+    const btn = document.getElementById('btnSubmitConsumo');
+    if (btn) btn.disabled = true;
+
+    try {
+      const resp = await TB_FIREBASE.actualizarConsumoCliente(tel, monto, servicios, nota);
+      if (resp.success) {
+        showToast("Consumo registrado exitosamente y porcentaje actualizado.");
+        closeModalConsumoCredito();
+        await loadCreditoTotalBData();
+      } else {
+        showToast(resp.message || "Error al registrar consumo.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error de conexión al registrar consumo.");
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  // --- MODAL AJUSTE PORCENTAJE ---
+  window.openModalAjustePorcentaje = function (whatsapp) {
+    const c = cachedCreditoClients[whatsapp];
+    if (!c) return;
+
+    document.getElementById('ajusteTargetWhatsapp').value = whatsapp;
+    document.getElementById('modalAjusteClientName').textContent = c.nombre || 'Clienta';
+    document.getElementById('modalAjusteClientPhone').textContent = `WhatsApp: ${c.whatsapp}`;
+
+    const currentP = TB_FIREBASE.calcularPorcentajeCredito(c.totalGastado, c.totalServicios, c.porcentajeManual);
+    document.getElementById('inputNuevoPorcentaje').value = currentP;
+    document.getElementById('inputAjusteNota').value = '';
+
+    const modal = document.getElementById('modalAjustePorcentaje');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeModalAjustePorcentaje = function () {
+    const modal = document.getElementById('modalAjustePorcentaje');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleGuardarAjustePorcentaje = async function (e) {
+    e.preventDefault();
+    const tel = document.getElementById('ajusteTargetWhatsapp').value;
+    const p = document.getElementById('inputNuevoPorcentaje').value;
+    const nota = document.getElementById('inputAjusteNota').value;
+
+    const btn = document.getElementById('btnSubmitAjuste');
+    if (btn) btn.disabled = true;
+
+    try {
+      const resp = await TB_FIREBASE.ajustarPorcentajeCliente(tel, p, nota);
+      if (resp.success) {
+        showToast("Porcentaje ajustado exitosamente.");
+        closeModalAjustePorcentaje();
+        await loadCreditoTotalBData();
+      } else {
+        showToast(resp.message || "Error al ajustar porcentaje.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error al guardar el ajuste.");
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  // --- MODAL ACTIVACIÓN EN SALÓN ---
+  window.openModalActivarTarjeta = function (whatsapp) {
+    const c = cachedCreditoClients[whatsapp];
+    if (!c) return;
+
+    document.getElementById('activarTargetWhatsapp').value = whatsapp;
+    document.getElementById('modalActivarClientName').textContent = c.nombre || 'Clienta';
+    document.getElementById('modalActivarClientPhone').textContent = `WhatsApp: ${c.whatsapp}`;
+
+    document.getElementById('inputLineaCredito').value = '3000';
+    document.getElementById('inputCreditoInicial').value = '3000';
+    document.getElementById('inputActivarNota').value = 'Activación presencial de tarjeta en salón durante servicio';
+
+    const modal = document.getElementById('modalActivarTarjeta');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeModalActivarTarjeta = function () {
+    const modal = document.getElementById('modalActivarTarjeta');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleConfirmarActivacion = async function (e) {
+    e.preventDefault();
+    const tel = document.getElementById('activarTargetWhatsapp').value;
+    const linea = document.getElementById('inputLineaCredito').value;
+    const disp = document.getElementById('inputCreditoInicial').value;
+    const nota = document.getElementById('inputActivarNota').value;
+
+    const btn = document.getElementById('btnSubmitActivar');
+    if (btn) btn.disabled = true;
+
+    try {
+      const resp = await TB_FIREBASE.activarTarjetaCliente(tel, linea, disp, nota);
+      if (resp.success) {
+        showToast("Tarjeta Crédito Total B activada exitosamente con saldo asignado.");
+        closeModalActivarTarjeta();
+        await loadCreditoTotalBData();
+      } else {
+        showToast(resp.message || "Error al activar tarjeta.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error de conexión durante la activación.");
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  // --- MODAL MOVIMIENTO DE SALDO ---
+  window.openModalMovimientoCredito = function (whatsapp) {
+    const c = cachedCreditoClients[whatsapp];
+    if (!c) return;
+
+    document.getElementById('movTargetWhatsapp').value = whatsapp;
+    document.getElementById('modalMovClientName').textContent = c.nombre || 'Clienta';
+    const disp = Number(c.creditoDisponible || 0);
+    const linea = Number(c.lineaCredito || 0);
+    document.getElementById('modalMovClientBalance').textContent = 
+      `Crédito disponible actual: $${disp.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN (Línea: $${linea.toLocaleString('es-MX')})`;
+
+    document.getElementById('selectTipoMovimiento').value = 'cargo';
+    document.getElementById('inputMovMonto').value = '';
+    document.getElementById('inputMovConcepto').value = '';
+
+    const modal = document.getElementById('modalMovimientoCredito');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeModalMovimientoCredito = function () {
+    const modal = document.getElementById('modalMovimientoCredito');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleGuardarMovimientoCredito = async function (e) {
+    e.preventDefault();
+    const tel = document.getElementById('movTargetWhatsapp').value;
+    const tipo = document.getElementById('selectTipoMovimiento').value;
+    const monto = document.getElementById('inputMovMonto').value;
+    const concepto = document.getElementById('inputMovConcepto').value;
+
+    const btn = document.getElementById('btnSubmitMov');
+    if (btn) btn.disabled = true;
+
+    try {
+      const resp = await TB_FIREBASE.registrarMovimientoCredito(tel, tipo, monto, concepto);
+      if (resp.success) {
+        showToast(`Movimiento (${tipo.toUpperCase()}) registrado exitosamente.`);
+        closeModalMovimientoCredito();
+        await loadCreditoTotalBData();
+      } else {
+        showToast(resp.message || "Error al procesar el movimiento.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error al guardar movimiento de crédito.");
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  // --- MODAL NUEVO CLIENTE ADMIN ---
+  window.openModalNuevoClienteCredito = function () {
+    document.getElementById('inputAdminNuevoNombre').value = '';
+    document.getElementById('inputAdminNuevoWhatsapp').value = '';
+    document.getElementById('inputAdminNuevoPin').value = '1234';
+
+    const modal = document.getElementById('modalNuevoClienteCredito');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeModalNuevoClienteCredito = function () {
+    const modal = document.getElementById('modalNuevoClienteCredito');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleCrearClienteAdmin = async function (e) {
+    e.preventDefault();
+    const nombre = (document.getElementById('inputAdminNuevoNombre')?.value || '').trim();
+    const whatsapp = (document.getElementById('inputAdminNuevoWhatsapp')?.value || '').trim();
+    const pin = (document.getElementById('inputAdminNuevoPin')?.value || '').trim();
+
+    const btn = document.getElementById('btnSubmitNuevoCliente');
+    if (btn) btn.disabled = true;
+
+    try {
+      const resp = await TB_FIREBASE.registrarCreditoCliente({
+        nombre: nombre,
+        whatsapp: whatsapp,
+        pin: pin
+      });
+
+      if (resp.success) {
+        showToast("Clienta registrada exitosamente en Crédito Total B.");
+        closeModalNuevoClienteCredito();
+        await loadCreditoTotalBData();
+      } else {
+        showToast(resp.message || "Error al registrar.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error de conexión al registrar clienta.");
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  // --- MODAL HISTORIAL Y EXPEDIENTE ---
+  window.openModalHistorialCredito = function (whatsapp) {
+    const c = cachedCreditoClients[whatsapp];
+    if (!c) return;
+
+    const summaryBox = document.getElementById('historialClientSummary');
+    const timelineBox = document.getElementById('historialTimelineList');
+    if (!summaryBox || !timelineBox) return;
+
+    const p = TB_FIREBASE.calcularPorcentajeCredito(c.totalGastado, c.totalServicios, c.porcentajeManual);
+    const disp = Number(c.creditoDisponible || 0);
+    const linea = Number(c.lineaCredito || 0);
+
+    summaryBox.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+        <div>
+          <h4 style="font-size: 1.05rem; color: #ffffff; margin: 0 0 0.25rem 0;">${escapeHtml(c.nombre || 'Clienta')}</h4>
+          <span style="font-size: 0.82rem; color: #d4af37;">WhatsApp: ${c.whatsapp}</span>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">No. Tarjeta: ${c.numeroTarjeta || 'TB-VIP'}</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Avance Acumulado</div>
+          <div style="font-size: 1.25rem; font-weight: 800; color: #d4af37;">${p}%</div>
+          <div style="font-size: 0.76rem; color: #ffffff;">Disponible: $${disp.toLocaleString('es-MX')} (Línea: $${linea.toLocaleString('es-MX')})</div>
+        </div>
+      </div>
+      <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 1.5rem; font-size: 0.8rem; color: #dedede;">
+        <span><strong>Gastado:</strong> $${Number(c.totalGastado || 0).toLocaleString('es-MX')} MXN</span>
+        <span><strong>Servicios:</strong> ${Number(c.totalServicios || 0)}</span>
+        <span><strong>Estado:</strong> ${c.estado || 'en_progreso'}</span>
+      </div>`;
+
+    const historial = Array.isArray(c.historial) ? c.historial : [];
+    if (historial.length === 0) {
+      timelineBox.innerHTML = '<p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; padding: 1rem;">No hay eventos registrados en este expediente.</p>';
+    } else {
+      let itemsHtml = '';
+      historial.forEach(h => {
+        let fStr = '-';
+        if (h.fecha) {
+          try {
+            fStr = new Date(h.fecha).toLocaleString('es-MX', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          } catch (e) {}
+        }
+
+        let tipoLabel = h.tipo || 'evento';
+        let badgeColor = '#d4af37';
+        if (h.tipo === 'activacion') badgeColor = '#4ade80';
+        if (h.tipo === 'cargo') badgeColor = '#f87171';
+        if (h.tipo === 'abono') badgeColor = '#60a5fa';
+
+        itemsHtml += `
+          <div style="padding: 0.65rem 0.75rem; margin-bottom: 0.5rem; background: rgba(255, 255, 255, 0.03); border-left: 3px solid ${badgeColor}; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.2rem;">
+              <span style="font-weight: 700; color: ${badgeColor}; text-transform: uppercase;">${tipoLabel}</span>
+              <span>${fStr}</span>
+            </div>
+            <div style="font-size: 0.84rem; color: #ffffff;">
+              ${h.monto !== undefined ? `<strong>$${Number(h.monto).toLocaleString('es-MX')} MXN</strong> - ` : ''}
+              ${escapeHtml(h.nota || h.concepto || h.descripcion || 'Sin descripción')}
+            </div>
+          </div>`;
+      });
+      timelineBox.innerHTML = itemsHtml;
+    }
+
+    const modal = document.getElementById('modalHistorialCredito');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeModalHistorialCredito = function () {
+    const modal = document.getElementById('modalHistorialCredito');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.loadCreditoTotalBData = loadCreditoTotalBData;
+  window.filterCreditoTable = filterCreditoTable;
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (interstitialCanClose) window.closeInterstitialPreview();
       window.closeSurveyDetailModal();
+      if (typeof closeModalConsumoCredito === 'function') closeModalConsumoCredito();
+      if (typeof closeModalAjustePorcentaje === 'function') closeModalAjustePorcentaje();
+      if (typeof closeModalActivarTarjeta === 'function') closeModalActivarTarjeta();
+      if (typeof closeModalMovimientoCredito === 'function') closeModalMovimientoCredito();
+      if (typeof closeModalNuevoClienteCredito === 'function') closeModalNuevoClienteCredito();
+      if (typeof closeModalHistorialCredito === 'function') closeModalHistorialCredito();
     }
   });
 });

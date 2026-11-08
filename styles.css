@@ -6323,3 +6323,1255 @@ select,
     gap: 1rem;
   }
 }
+
+
+/* ==========================================================================
+   PROGRAMA VIP: CRÉDITO TOTAL B
+   TOTAL BEAUTY SALÓN & ACADEMIA
+   ========================================================================== */
+
+/* 1. Tarjeta en Menú Principal (index.html) */
+.option-card-credito {
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, rgba(18, 18, 24, 0.95) 70%);
+  position: relative;
+  overflow: hidden;
+}
+
+.option-card-credito::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.12), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+}
+
+.option-card-credito:hover::before {
+  left: 200%;
+}
+
+.option-card-credito:hover {
+  border-color: #d4af37;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 24px rgba(212, 175, 55, 0.25);
+}
+
+.credito-card-preview-thumb {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background: linear-gradient(135deg, #0e0e13 0%, #1c1c24 50%, #0b0b0e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.credito-thumb-inner {
+  width: 100%;
+  max-width: 270px;
+  height: 145px;
+  background: radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.22) 0%, rgba(14, 14, 18, 0.95) 60%), #121218;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  position: relative;
+  transition: transform 0.4s ease;
+}
+
+.option-card-credito:hover .credito-thumb-inner {
+  transform: translateY(-4px) scale(1.02);
+  border-color: #f7e07c;
+}
+
+.credito-thumb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.credito-thumb-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #f7e07c;
+}
+
+.credito-thumb-chip {
+  width: 24px;
+  height: 18px;
+  background: linear-gradient(135deg, #d4af37, #aa8420);
+  border-radius: 3px;
+  border: 1px solid #f7e07c;
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+}
+
+.credito-thumb-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.credito-thumb-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #dedede;
+  text-transform: uppercase;
+}
+
+.credito-thumb-number {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.credito-thumb-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.credito-thumb-tier {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #d4af37;
+}
+
+.credito-thumb-contactless {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: -0.05em;
+}
+
+.badge-gold {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.9), rgba(170, 132, 32, 0.95)) !important;
+  color: #0d0d11 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4) !important;
+}
+
+.btn-credito {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8420 100%) !important;
+  color: #0d0d11 !important;
+  font-weight: 700 !important;
+}
+
+.btn-credito:hover {
+  background: linear-gradient(135deg, #f7e07c 0%, #d4af37 100%) !important;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4) !important;
+}
+
+
+/* 2. Página Completa Crédito (credito.html) */
+.credito-page-body {
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0e;
+  color: #f5f5f7;
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.credito-ambient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.credito-ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.22;
+}
+
+.credito-ambient-orb.orb-1 {
+  width: 460px;
+  height: 460px;
+  top: -100px;
+  right: -50px;
+  background: radial-gradient(circle, #d4af37 0%, rgba(212, 175, 55, 0) 70%);
+}
+
+.credito-ambient-orb.orb-2 {
+  width: 520px;
+  height: 520px;
+  bottom: -150px;
+  left: -100px;
+  background: radial-gradient(circle, #8a6d1b 0%, rgba(138, 109, 27, 0) 70%);
+}
+
+.credito-ambient-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 0);
+  background-size: 32px 32px;
+  opacity: 0.4;
+}
+
+.credito-container {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  box-sizing: border-box;
+}
+
+/* Encabezado */
+.credito-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.credito-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  background: rgba(22, 22, 28, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 8px;
+  color: #dedede;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.credito-btn-back:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #d4af37;
+  color: #ffffff;
+  transform: translateX(-3px);
+}
+
+.credito-brand-center {
+  text-align: center;
+}
+
+.credito-brand-tag {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #d4af37;
+  margin-bottom: 0.15rem;
+}
+
+.credito-brand-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  margin: 0;
+  color: #ffffff;
+}
+
+.credito-brand-sub {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #b0b0b8;
+}
+
+.credito-header-spacer {
+  width: 120px;
+}
+
+@media (max-width: 640px) {
+  .credito-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .credito-header-spacer {
+    display: none;
+  }
+}
+
+/* Hero Section & 3D Card */
+.credito-hero-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.credito-vip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.95rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #f7e07c;
+  margin-bottom: 0.85rem;
+}
+
+.credito-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.65rem 0;
+  letter-spacing: 0.04em;
+}
+
+.credito-hero-subtitle {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #b5b5be;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+/* Contenedor 3D de la Tarjeta */
+.credito-card-wrapper {
+  perspective: 1000px;
+  max-width: 400px;
+  margin: 0 auto 2rem;
+  cursor: pointer;
+}
+
+.credito-card-3d {
+  width: 100%;
+  aspect-ratio: 1.586 / 1; /* Proporción estándar tarjeta de crédito */
+  background: radial-gradient(circle at 75% 25%, rgba(212, 175, 55, 0.28) 0%, rgba(20, 20, 26, 0.95) 55%), #0d0d12;
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 16px;
+  padding: 1.35rem 1.65rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out, box-shadow 0.3s ease;
+}
+
+.credito-card-3d:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(212, 175, 55, 0.35);
+}
+
+.credito-card-gloss {
+  position: absolute;
+  top: -60%;
+  left: -40%;
+  width: 180%;
+  height: 180%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
+  transform: rotate(-25deg);
+  pointer-events: none;
+}
+
+.credito-card-mesh {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.03) 0, rgba(212, 175, 55, 0.03) 1px, transparent 0, transparent 12px);
+  pointer-events: none;
+}
+
+.credito-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.credito-card-emblem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.credito-card-tb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f7e07c, #aa8420);
+  color: #0d0d11;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.credito-card-brand-txt {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+}
+
+.credito-card-contactless {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.credito-card-chip-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.credito-card-chip {
+  width: 42px;
+  height: 32px;
+  background: linear-gradient(135deg, #d4af37 0%, #fae285 45%, #aa8420 100%);
+  border-radius: 6px;
+  border: 1px solid #fff2a8;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.credito-card-chip .chip-line.horizontal {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(0,0,0,0.3);
+}
+
+.credito-card-chip .chip-line.vertical {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  width: 1px;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+}
+
+.credito-card-tier {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #d4af37;
+  text-transform: uppercase;
+}
+
+.credito-card-mid {
+  position: relative;
+  z-index: 2;
+}
+
+.credito-card-number {
+  font-family: 'Courier New', monospace;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+}
+
+.credito-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  z-index: 2;
+}
+
+.credito-card-holder {
+  display: flex;
+  flex-direction: column;
+}
+
+.credito-card-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  color: #9e9ea8;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.credito-card-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #f5f5f7;
+  text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.credito-card-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(22, 22, 28, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #d4af37;
+}
+
+.credito-card-status-pill .status-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d4af37;
+  box-shadow: 0 0 6px #d4af37;
+}
+
+.credito-card-status-pill.status-aprobada {
+  border-color: #4ade80;
+  color: #4ade80;
+}
+.credito-card-status-pill.status-aprobada .status-indicator {
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+}
+
+.credito-card-status-pill.status-activa {
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+.credito-card-status-pill.status-activa .status-indicator {
+  background: #60a5fa;
+  box-shadow: 0 0 6px #60a5fa;
+}
+
+/* Beneficios */
+.credito-benefits-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.credito-benefit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  background: rgba(25, 25, 34, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #e4e4ec;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.credito-benefit-pill svg {
+  color: #d4af37;
+}
+
+/* Caja Portal Principal */
+.credito-portal-box {
+  background: rgba(18, 18, 24, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 18px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 600px) {
+  .credito-portal-box {
+    padding: 1.5rem 1.1rem;
+  }
+}
+
+/* Pestañas */
+.credito-tabs-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: rgba(10, 10, 14, 0.8);
+  padding: 0.4rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  margin-bottom: 2rem;
+}
+
+.credito-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  color: #a0a0ab;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.credito-tab-btn:hover {
+  color: #ffffff;
+}
+
+.credito-tab-btn.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(170, 132, 32, 0.25));
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #f7e07c;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.credito-form-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.credito-form-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.4rem 0;
+}
+
+.credito-form-desc {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #b0b0bc;
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+/* Campos de Formulario */
+.credito-field-group {
+  margin-bottom: 1.25rem;
+}
+
+.credito-fields-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 500px) {
+  .credito-fields-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.credito-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #dedede;
+  margin-bottom: 0.45rem;
+}
+
+.credito-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.credito-input-wrap .field-icon {
+  position: absolute;
+  left: 1rem;
+  color: #aa8420;
+  pointer-events: none;
+}
+
+.credito-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.85rem;
+  background: rgba(12, 12, 16, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.92rem;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+
+.credito-input:focus {
+  outline: none;
+  border-color: #d4af37;
+  background: rgba(18, 18, 24, 0.95);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+}
+
+.credito-help-text {
+  font-size: 0.72rem;
+  color: #8c8c98;
+  margin-top: 0.35rem;
+  display: block;
+}
+
+.credito-btn-primary {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.95rem 1.5rem;
+  background: linear-gradient(135deg, #d4af37 0%, #aa8420 100%);
+  border: none;
+  border-radius: 10px;
+  color: #0d0d11;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.35);
+}
+
+.credito-btn-primary:hover {
+  background: linear-gradient(135deg, #f7e07c 0%, #d4af37 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.5);
+}
+
+.credito-btn-primary:active {
+  transform: translateY(0);
+}
+
+.credito-btn-primary.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.credito-switch-hint {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #a0a0ab;
+  margin-top: 1.25rem;
+}
+
+.btn-text-link {
+  background: none;
+  border: none;
+  color: #f7e07c;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0 0.25rem;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Dashboard de Clienta */
+.credito-client-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.credito-client-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #d4af37;
+  margin-bottom: 0.25rem;
+}
+
+.credito-client-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.credito-client-phone {
+  font-size: 0.8rem;
+  color: #a0a0ab;
+  display: block;
+  margin-top: 0.15rem;
+}
+
+.credito-btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #cccccc;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.credito-btn-logout:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Medidor Gauge & Progreso */
+.credito-gauge-card {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: radial-gradient(circle at 10% 50%, rgba(212, 175, 55, 0.1) 0%, rgba(14, 14, 18, 0.95) 60%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 14px;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .credito-gauge-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.25rem;
+    padding: 1.35rem;
+  }
+}
+
+.credito-gauge-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.credito-gauge-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.gauge-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 10;
+}
+
+.gauge-bar {
+  fill: none;
+  stroke: url(#goldGradient) #d4af37;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+.credito-gauge-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.gauge-number {
+  font-family: 'Cinzel', serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #f7e07c;
+  line-height: 1;
+}
+
+.gauge-caption {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #a0a0ab;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+.credito-gauge-info {
+  flex: 1;
+}
+
+.gauge-kicker {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #d4af37;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.gauge-headline {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.4rem 0;
+}
+
+.gauge-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #b0b0bc;
+  margin: 0 0 1.25rem 0;
+}
+
+.credito-bar-container {
+  width: 100%;
+}
+
+.credito-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.credito-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #aa8420 0%, #d4af37 60%, #f7e07c 100%);
+  border-radius: 999px;
+  transition: width 1s ease-out;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+.credito-bar-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #9999a5;
+  margin-top: 0.35rem;
+}
+
+.credito-info-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background: rgba(212, 175, 55, 0.06);
+  border-left: 3px solid #d4af37;
+  border-radius: 6px;
+  color: #e0e0e8;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.credito-info-callout svg {
+  color: #d4af37;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.credito-info-callout strong {
+  display: block;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+}
+
+.credito-info-callout p {
+  margin: 0;
+}
+
+/* Tarjeta Felicitaciones 100% Alcanzado */
+.credito-congrats-card {
+  text-align: center;
+  background: radial-gradient(circle at 50% 20%, rgba(74, 222, 128, 0.15) 0%, rgba(14, 18, 16, 0.95) 70%);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 16px;
+  padding: 2.25rem 1.75rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(74, 222, 128, 0.15);
+}
+
+.congrats-sparkle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.25), rgba(34, 197, 94, 0.1));
+  border: 1px solid #4ade80;
+  color: #4ade80;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.35);
+}
+
+.congrats-tag {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #4ade80;
+  margin-bottom: 0.4rem;
+}
+
+.congrats-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+}
+
+.congrats-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #dedede;
+  max-width: 580px;
+  margin: 0 auto 1.75rem auto;
+}
+
+.congrats-steps-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.congrats-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.congrats-step .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #4ade80;
+  color: #0d0d11;
+  font-weight: 800;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.congrats-step strong {
+  display: block;
+  font-size: 0.84rem;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.congrats-step p {
+  font-size: 0.76rem;
+  color: #a5a5b0;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.credito-btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.95rem 1.85rem;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  border-radius: 10px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+}
+
+.credito-btn-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.5);
+}
+
+/* Tarjeta Activa */
+.credito-active-card {
+  background: radial-gradient(circle at 50% 0%, rgba(96, 165, 250, 0.15) 0%, rgba(16, 20, 26, 0.95) 70%);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.active-badge-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 1rem;
+  background: rgba(96, 165, 250, 0.18);
+  border: 1px solid #60a5fa;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #60a5fa;
+  margin-bottom: 1.5rem;
+}
+
+.credito-balance-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+@media (max-width: 540px) {
+  .credito-balance-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.balance-tile {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.balance-tile.highlight {
+  border-color: rgba(96, 165, 250, 0.5);
+  background: rgba(96, 165, 250, 0.06);
+}
+
+.balance-label {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #a5a5b4;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.balance-amount {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.balance-tile.highlight .balance-amount {
+  color: #60a5fa;
+}
+
+.balance-sub {
+  font-size: 0.74rem;
+  color: #8c8c99;
+}
+
+.active-how-to-use {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid #60a5fa;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+}
+
+.active-how-to-use h5 {
+  font-size: 0.88rem;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+}
+
+.active-how-to-use p {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #b8b8c4;
+  margin: 0;
+}
+
+/* Pie de Página Crédito */
+.credito-footer {
+  text-align: center;
+  padding-top: 1.5rem;
+}
+
+.credito-legal-note {
+  font-size: 0.74rem;
+  color: #7a7a85;
+  max-width: 600px;
+  margin: 0 auto 0.75rem auto;
+  line-height: 1.5;
+}
+
+/* Toast */
+.credito-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1c1c24;
+  border: 1px solid #d4af37;
+  color: #ffffff;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(212, 175, 55, 0.25);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  max-width: 90vw;
+}
+
+.credito-toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}

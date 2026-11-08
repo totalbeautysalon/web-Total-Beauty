@@ -102,7 +102,129 @@
           </div>
         </div>
       </div>
-    </main>
+    
+      <!-- ==========================================
+           MÓDULO 9: CRÉDITO TOTAL B (PROGRAMA VIP)
+           ========================================== -->
+      <div id="pane-credito" class="admin-module-pane">
+        
+        <section class="admin-panel-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="admin-section-tag">Programa VIP &bull; Servicios Hoy, Paga Después</span>
+              <h2 class="admin-card-title">Gestión de Crédito Total B</h2>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="admin-subnav-btn" onclick="openModalNuevoClienteCredito()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Nueva Solicitud Manual</span>
+              </button>
+              <button type="button" class="admin-subnav-btn" onclick="loadCreditoTotalBData(true)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                <span>Actualizar Datos</span>
+              </button>
+            </div>
+          </div>
+
+          <p class="admin-card-desc">
+            Administra las clientas registradas, monitorea el avance hacia el 100%, registra consumos realizados en salón, activa formalmente tarjetas aprobadas con su línea de crédito y administra movimientos de saldo.
+          </p>
+
+          <!-- KPIs Crédito Total B -->
+          <div class="admin-kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 1.25rem;">
+            <div class="kpi-card">
+              <span class="kpi-label">Total Solicitudes</span>
+              <span class="kpi-value" id="kpiCreditoTotal">0</span>
+              <span class="kpi-subtext">Clientas registradas</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">En Progreso (&lt; 100%)</span>
+              <span class="kpi-value" id="kpiCreditoProgreso" style="color: #d4af37;">0</span>
+              <span class="kpi-subtext">Acumulando visitas</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Por Activar (100%)</span>
+              <span class="kpi-value" id="kpiCreditoPendientes" style="color: #4ade80;">0</span>
+              <span class="kpi-subtext">Listas en salón</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Tarjetas Activas</span>
+              <span class="kpi-value" id="kpiCreditoActivas" style="color: #60a5fa;">0</span>
+              <span class="kpi-subtext">Con crédito asignado</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Crédito Disponible Total</span>
+              <span class="kpi-value" id="kpiCreditoSaldoTotal" style="font-size: 1.35rem;">$0</span>
+              <span class="kpi-subtext">Líneas activas en salón</span>
+            </div>
+          </div>
+
+          <!-- Barra de Búsqueda y Filtros -->
+          <div class="admin-filters-bar" style="margin-top: 1.5rem;">
+            <div class="filter-input-group" style="flex: 2; min-width: 240px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="text" 
+                id="searchCreditoInput" 
+                class="admin-filter-input" 
+                placeholder="Buscar por clienta o WhatsApp..." 
+                oninput="filterCreditoTable()"
+              >
+            </div>
+
+            <div class="filter-input-group" style="flex: 1; min-width: 180px;">
+              <select id="filterCreditoEstado" class="admin-filter-select" onchange="filterCreditoTable()">
+                <option value="todos">Todos los Estados</option>
+                <option value="en_progreso">En Progreso (&lt; 100%)</option>
+                <option value="pendiente_activacion">100% Por Activar en Salón</option>
+                <option value="activa">Tarjetas Activas</option>
+                <option value="suspendida">Suspendidas</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tabla de Clientas de Crédito -->
+          <div class="admin-table-wrapper" style="margin-top: 1.25rem;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Clienta / WhatsApp</th>
+                  <th>Registro</th>
+                  <th title="Meta interna oculta a clientes: $10,000 y 20 servicios">Consumo Real (Gastado / Visitas)</th>
+                  <th>Avance %</th>
+                  <th>Estado</th>
+                  <th>Crédito Disponible</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="creditoTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                    Cargando información del programa de crédito...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+      </div>
+
+</main>
 
     <!-- VISTA 2: DASHBOARD ADMINISTRATIVO COMPLETO -->
     <main id="adminDashboardSection" class="admin-dashboard-container" style="display: none;">
@@ -215,6 +337,14 @@
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
           </svg>
           <span>Modo Mantenimiento</span>
+        </button>
+
+        <button type="button" class="admin-tab-btn" data-tab="pane-credito" onclick="switchAdminTab('pane-credito')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          <span>Crédito Total B</span>
         </button>
       </nav>
 
@@ -1233,5 +1363,262 @@
   <!-- Scripts -->
   <script src="firebase-config.js"></script>
   <script src="admin.js"></script>
+
+  <!-- MODAL: REGISTRAR CONSUMO DE CLIENTA -->
+  <div id="modalConsumoCredito" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalConsumoTitle">
+    <div class="modal-box" style="max-width: 520px;">
+      <button type="button" class="modal-close-btn" onclick="closeModalConsumoCredito()" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Crédito Total B &bull; Registro en Salón</div>
+      <h3 id="modalConsumoTitle" class="modal-title">Registrar Consumo de Servicio</h3>
+
+      <div class="credito-modal-client-info" style="margin: 1rem 0; padding: 0.85rem; background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 8px;">
+        <div style="font-weight: 700; color: #ffffff;" id="modalConsumoClientName">-</div>
+        <div style="font-size: 0.82rem; color: #dedede;" id="modalConsumoClientPhone">-</div>
+        <div style="font-size: 0.78rem; color: #d4af37; margin-top: 0.25rem;" id="modalConsumoCurrentStats">-</div>
+      </div>
+
+      <form id="formRegistrarConsumo" onsubmit="handleGuardarConsumo(event)">
+        <input type="hidden" id="consumoTargetWhatsapp">
+
+        <div class="student-form-group">
+          <label for="inputConsumoMonto" class="student-form-label">Monto del Servicio Cobrado ($ MXN)</label>
+          <input type="number" id="inputConsumoMonto" class="student-form-input" min="0" step="10" placeholder="ej. 650" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputConsumoServicios" class="student-form-label">Número de Servicios Realizados en la Visita</label>
+          <input type="number" id="inputConsumoServicios" class="student-form-input" min="1" step="1" value="1" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputConsumoNota" class="student-form-label">Concepto o Detalle del Servicio</label>
+          <input type="text" id="inputConsumoNota" class="student-form-input" placeholder="ej. Uñas acrílicas + Diseño">
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn-student-secondary" onclick="closeModalConsumoCredito()">Cancelar</button>
+          <button type="submit" id="btnSubmitConsumo" class="btn-student-submit">
+            <span>Guardar y Actualizar %</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AJUSTE MANUAL DE PORCENTAJE -->
+  <div id="modalAjustePorcentaje" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalAjusteTitle">
+    <div class="modal-box" style="max-width: 480px;">
+      <button type="button" class="modal-close-btn" onclick="closeModalAjustePorcentaje()" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Administración &bull; Avance Manual</div>
+      <h3 id="modalAjusteTitle" class="modal-title">Ajustar Porcentaje de Avance</h3>
+
+      <div class="credito-modal-client-info" style="margin: 1rem 0; padding: 0.85rem; background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 8px;">
+        <div style="font-weight: 700; color: #ffffff;" id="modalAjusteClientName">-</div>
+        <div style="font-size: 0.82rem; color: #dedede;" id="modalAjusteClientPhone">-</div>
+      </div>
+
+      <form id="formAjustarPorcentaje" onsubmit="handleGuardarAjustePorcentaje(event)">
+        <input type="hidden" id="ajusteTargetWhatsapp">
+
+        <div class="student-form-group">
+          <label for="inputNuevoPorcentaje" class="student-form-label">Nuevo Porcentaje Asignado (0 a 100%)</label>
+          <input type="number" id="inputNuevoPorcentaje" class="student-form-input" min="0" max="100" step="1" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputAjusteNota" class="student-form-label">Motivo del Ajuste Manual</label>
+          <input type="text" id="inputAjusteNota" class="student-form-input" placeholder="ej. Bonificación por fidelidad" required>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn-student-secondary" onclick="closeModalAjustePorcentaje()">Cancelar</button>
+          <button type="submit" id="btnSubmitAjuste" class="btn-student-submit">
+            <span>Guardar Porcentaje</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ACTIVACIÓN EN SALÓN -->
+  <div id="modalActivarTarjeta" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalActivarTitle">
+    <div class="modal-box" style="max-width: 520px;">
+      <button type="button" class="modal-close-btn" onclick="closeModalActivarTarjeta()" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Total Beauty Salón &bull; Activación Presencial</div>
+      <h3 id="modalActivarTitle" class="modal-title">Activar Tarjeta de Crédito</h3>
+
+      <div class="credito-modal-client-info" style="margin: 1rem 0; padding: 0.85rem; background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 8px;">
+        <div style="font-weight: 700; color: #ffffff;" id="modalActivarClientName">-</div>
+        <div style="font-size: 0.82rem; color: #dedede;" id="modalActivarClientPhone">-</div>
+        <p style="font-size: 0.78rem; color: #4ade80; margin-top: 0.4rem;">
+          La clienta se encuentra en salón para formalizar su activación. Define el cupo o línea de crédito disponible para sus servicios.
+        </p>
+      </div>
+
+      <form id="formActivarTarjeta" onsubmit="handleConfirmarActivacion(event)">
+        <input type="hidden" id="activarTargetWhatsapp">
+
+        <div class="student-form-group">
+          <label for="inputLineaCredito" class="student-form-label">Línea de Crédito Autorizada ($ MXN)</label>
+          <input type="number" id="inputLineaCredito" class="student-form-input" min="500" step="100" value="3000" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputCreditoInicial" class="student-form-label">Crédito Inicial Disponible ($ MXN)</label>
+          <input type="number" id="inputCreditoInicial" class="student-form-input" min="0" step="100" value="3000" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputActivarNota" class="student-form-label">Nota de Activación en Salón</label>
+          <input type="text" id="inputActivarNota" class="student-form-input" placeholder="ej. Tarjeta activada durante servicio de pestañas">
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn-student-secondary" onclick="closeModalActivarTarjeta()">Cancelar</button>
+          <button type="submit" id="btnSubmitActivar" class="btn-student-submit">
+            <span>Activar Tarjeta Oficialmente</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: GESTIONAR MOVIMIENTO DE SALDO (CARGO / ABONO) -->
+  <div id="modalMovimientoCredito" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalMovimientoTitle">
+    <div class="modal-box" style="max-width: 500px;">
+      <button type="button" class="modal-close-btn" onclick="closeModalMovimientoCredito()" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Crédito Total B &bull; Movimiento de Cuenta</div>
+      <h3 id="modalMovimientoTitle" class="modal-title">Cargo o Abono de Saldo</h3>
+
+      <div class="credito-modal-client-info" style="margin: 1rem 0; padding: 0.85rem; background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 8px;">
+        <div style="font-weight: 700; color: #ffffff;" id="modalMovClientName">-</div>
+        <div style="font-size: 0.82rem; color: #dedede;" id="modalMovClientBalance">-</div>
+      </div>
+
+      <form id="formMovimientoCredito" onsubmit="handleGuardarMovimientoCredito(event)">
+        <input type="hidden" id="movTargetWhatsapp">
+
+        <div class="student-form-group">
+          <label for="selectTipoMovimiento" class="student-form-label">Tipo de Movimiento</label>
+          <select id="selectTipoMovimiento" class="student-form-input" required>
+            <option value="cargo">Cargo por Servicio (Resta saldo disponible)</option>
+            <option value="abono">Abono o Pago de Clienta (Suma saldo disponible)</option>
+          </select>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputMovMonto" class="student-form-label">Importe ($ MXN)</label>
+          <input type="number" id="inputMovMonto" class="student-form-input" min="1" step="10" placeholder="ej. 500" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputMovConcepto" class="student-form-label">Concepto / Comprobante</label>
+          <input type="text" id="inputMovConcepto" class="student-form-input" placeholder="ej. Pago de servicio de cejas y peinado" required>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn-student-secondary" onclick="closeModalMovimientoCredito()">Cancelar</button>
+          <button type="submit" id="btnSubmitMov" class="btn-student-submit">
+            <span>Aplicar Movimiento</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NUEVA SOLICITUD MANUAL -->
+  <div id="modalNuevoClienteCredito" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalNuevoClienteTitle">
+    <div class="modal-box" style="max-width: 500px;">
+      <button type="button" class="modal-close-btn" onclick="closeModalNuevoClienteCredito()" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Administración &bull; Alta Manual</div>
+      <h3 id="modalNuevoClienteTitle" class="modal-title">Registrar Clienta al Programa</h3>
+
+      <form id="formNuevoClienteAdmin" onsubmit="handleCrearClienteAdmin(event)">
+        <div class="student-form-group">
+          <label for="inputAdminNuevoNombre" class="student-form-label">Nombre Completo</label>
+          <input type="text" id="inputAdminNuevoNombre" class="student-form-input" placeholder="ej. Sandra Gómez Rivera" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputAdminNuevoWhatsapp" class="student-form-label">WhatsApp (10 dígitos)</label>
+          <input type="tel" id="inputAdminNuevoWhatsapp" class="student-form-input" placeholder="7711234567" maxlength="10" required>
+        </div>
+
+        <div class="student-form-group">
+          <label for="inputAdminNuevoPin" class="student-form-label">PIN de Acceso (4 dígitos)</label>
+          <input type="password" id="inputAdminNuevoPin" class="student-form-input" placeholder="1234" maxlength="6" value="1234" required>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn-student-secondary" onclick="closeModalNuevoClienteCredito()">Cancelar</button>
+          <button type="submit" id="btnSubmitNuevoCliente" class="btn-student-submit">
+            <span>Crear Registro</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALLE E HISTORIAL DE CLIENTA -->
+  <div id="modalHistorialCredito" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalHistorialTitle">
+    <div class="modal-box" style="max-width: 600px;">
+      <button type="button" class="modal-close-btn" onclick="closeModalHistorialCredito()" aria-label="Cerrar ventana">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-tag">Crédito Total B &bull; Expediente</div>
+      <h3 id="modalHistorialTitle" class="modal-title">Historial y Movimientos</h3>
+
+      <div id="historialClientSummary" style="margin: 1rem 0; padding: 0.85rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px;">
+        <!-- Inyectado dinámicamente -->
+      </div>
+
+      <div style="font-size: 0.82rem; font-weight: 700; color: #d4af37; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
+        Línea de Tiempo de Eventos
+      </div>
+
+      <div id="historialTimelineList" style="max-height: 280px; overflow-y: auto; padding-right: 0.5rem;">
+        <!-- Inyectado dinámicamente -->
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button type="button" class="btn-student-secondary" onclick="closeModalHistorialCredito()">Cerrar Expediente</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
