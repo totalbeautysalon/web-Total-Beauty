@@ -103,127 +103,6 @@
         </div>
       </div>
     
-      <!-- ==========================================
-           MÓDULO 9: CRÉDITO TOTAL B (PROGRAMA VIP)
-           ========================================== -->
-      <div id="pane-credito" class="admin-module-pane">
-        
-        <section class="admin-panel-card">
-          <div class="admin-card-header">
-            <div>
-              <span class="admin-section-tag">Programa VIP &bull; Servicios Hoy, Paga Después</span>
-              <h2 class="admin-card-title">Gestión de Crédito Total B</h2>
-            </div>
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button type="button" class="admin-subnav-btn" onclick="openModalNuevoClienteCredito()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                <span>Nueva Solicitud Manual</span>
-              </button>
-              <button type="button" class="admin-subnav-btn" onclick="loadCreditoTotalBData(true)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="23 4 23 10 17 10"></polyline>
-                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                </svg>
-                <span>Actualizar Datos</span>
-              </button>
-            </div>
-          </div>
-
-          <p class="admin-card-desc">
-            Administra las clientas registradas, monitorea el avance hacia el 100%, registra consumos realizados en salón, activa formalmente tarjetas aprobadas con su línea de crédito y administra movimientos de saldo.
-          </p>
-
-          <!-- KPIs Crédito Total B -->
-          <div class="admin-kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 1.25rem;">
-            <div class="kpi-card">
-              <span class="kpi-label">Total Solicitudes</span>
-              <span class="kpi-value" id="kpiCreditoTotal">0</span>
-              <span class="kpi-subtext">Clientas registradas</span>
-            </div>
-
-            <div class="kpi-card">
-              <span class="kpi-label">En Progreso (&lt; 100%)</span>
-              <span class="kpi-value" id="kpiCreditoProgreso" style="color: #d4af37;">0</span>
-              <span class="kpi-subtext">Acumulando visitas</span>
-            </div>
-
-            <div class="kpi-card">
-              <span class="kpi-label">Por Activar (100%)</span>
-              <span class="kpi-value" id="kpiCreditoPendientes" style="color: #4ade80;">0</span>
-              <span class="kpi-subtext">Listas en salón</span>
-            </div>
-
-            <div class="kpi-card">
-              <span class="kpi-label">Tarjetas Activas</span>
-              <span class="kpi-value" id="kpiCreditoActivas" style="color: #60a5fa;">0</span>
-              <span class="kpi-subtext">Con crédito asignado</span>
-            </div>
-
-            <div class="kpi-card">
-              <span class="kpi-label">Crédito Disponible Total</span>
-              <span class="kpi-value" id="kpiCreditoSaldoTotal" style="font-size: 1.35rem;">$0</span>
-              <span class="kpi-subtext">Líneas activas en salón</span>
-            </div>
-          </div>
-
-          <!-- Barra de Búsqueda y Filtros -->
-          <div class="admin-filters-bar" style="margin-top: 1.5rem;">
-            <div class="filter-input-group" style="flex: 2; min-width: 240px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <input 
-                type="text" 
-                id="searchCreditoInput" 
-                class="admin-filter-input" 
-                placeholder="Buscar por clienta o WhatsApp..." 
-                oninput="filterCreditoTable()"
-              >
-            </div>
-
-            <div class="filter-input-group" style="flex: 1; min-width: 180px;">
-              <select id="filterCreditoEstado" class="admin-filter-select" onchange="filterCreditoTable()">
-                <option value="todos">Todos los Estados</option>
-                <option value="en_progreso">En Progreso (&lt; 100%)</option>
-                <option value="pendiente_activacion">100% Por Activar en Salón</option>
-                <option value="activa">Tarjetas Activas</option>
-                <option value="suspendida">Suspendidas</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Tabla de Clientas de Crédito -->
-          <div class="admin-table-wrapper" style="margin-top: 1.25rem;">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Clienta / WhatsApp</th>
-                  <th>Registro</th>
-                  <th title="Meta interna oculta a clientes: $10,000 y 20 servicios">Consumo Real (Gastado / Visitas)</th>
-                  <th>Avance %</th>
-                  <th>Estado</th>
-                  <th>Crédito Disponible</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="creditoTableBody">
-                <tr>
-                  <td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-                    Cargando información del programa de crédito...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </section>
-
-      </div>
-
 </main>
 
     <!-- VISTA 2: DASHBOARD ADMINISTRATIVO COMPLETO -->
@@ -1266,6 +1145,128 @@
             </div>
 
           </form>
+
+        </section>
+
+      </div>
+
+    
+      <!-- ==========================================
+           MÓDULO 9: CRÉDITO TOTAL B (PROGRAMA VIP)
+           ========================================== -->
+      <div id="pane-credito" class="admin-module-pane">
+        
+        <section class="admin-panel-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="admin-section-tag">Programa VIP &bull; Servicios Hoy, Paga Después</span>
+              <h2 class="admin-card-title">Gestión de Crédito Total B</h2>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="admin-subnav-btn" onclick="openModalNuevoClienteCredito()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Nueva Solicitud Manual</span>
+              </button>
+              <button type="button" class="admin-subnav-btn" onclick="loadCreditoTotalBData(true)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                <span>Actualizar Datos</span>
+              </button>
+            </div>
+          </div>
+
+          <p class="admin-card-desc">
+            Administra las clientas registradas, monitorea el avance hacia el 100%, registra consumos realizados en salón, activa formalmente tarjetas aprobadas con su línea de crédito y administra movimientos de saldo.
+          </p>
+
+          <!-- KPIs Crédito Total B -->
+          <div class="admin-kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 1.25rem;">
+            <div class="kpi-card">
+              <span class="kpi-label">Total Solicitudes</span>
+              <span class="kpi-value" id="kpiCreditoTotal">0</span>
+              <span class="kpi-subtext">Clientas registradas</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">En Progreso (&lt; 100%)</span>
+              <span class="kpi-value" id="kpiCreditoProgreso" style="color: #d4af37;">0</span>
+              <span class="kpi-subtext">Acumulando visitas</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Por Activar (100%)</span>
+              <span class="kpi-value" id="kpiCreditoPendientes" style="color: #4ade80;">0</span>
+              <span class="kpi-subtext">Listas en salón</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Tarjetas Activas</span>
+              <span class="kpi-value" id="kpiCreditoActivas" style="color: #60a5fa;">0</span>
+              <span class="kpi-subtext">Con crédito asignado</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Crédito Disponible Total</span>
+              <span class="kpi-value" id="kpiCreditoSaldoTotal" style="font-size: 1.35rem;">$0</span>
+              <span class="kpi-subtext">Líneas activas en salón</span>
+            </div>
+          </div>
+
+          <!-- Barra de Búsqueda y Filtros -->
+          <div class="admin-filters-bar" style="margin-top: 1.5rem;">
+            <div class="filter-input-group" style="flex: 2; min-width: 240px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="text" 
+                id="searchCreditoInput" 
+                class="admin-filter-input" 
+                placeholder="Buscar por clienta o WhatsApp..." 
+                oninput="filterCreditoTable()"
+              >
+            </div>
+
+            <div class="filter-input-group" style="flex: 1; min-width: 180px;">
+              <select id="filterCreditoEstado" class="admin-filter-select" onchange="filterCreditoTable()">
+                <option value="todos">Todos los Estados</option>
+                <option value="en_progreso">En Progreso (&lt; 100%)</option>
+                <option value="pendiente_activacion">100% Por Activar en Salón</option>
+                <option value="activa">Tarjetas Activas</option>
+                <option value="suspendida">Suspendidas</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tabla de Clientas de Crédito -->
+          <div class="admin-table-wrapper" style="margin-top: 1.25rem;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Clienta / WhatsApp</th>
+                  <th>Registro</th>
+                  <th title="Meta interna oculta a clientes: $10,000 y 20 servicios">Consumo Real (Gastado / Visitas)</th>
+                  <th>Avance %</th>
+                  <th>Estado</th>
+                  <th>Crédito Disponible</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="creditoTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                    Cargando información del programa de crédito...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
         </section>
 

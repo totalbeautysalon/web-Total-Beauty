@@ -28,9 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const firebaseStatusPill = document.getElementById('firebaseStatusPill');
   const firebaseStatusText = document.getElementById('firebaseStatusText');
 
-  // Inicialización
-  init();
-
   async function init() {
     checkFirebaseStatus();
     checkExistingSession();
@@ -87,17 +84,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) logoutBtn.style.display = 'none';
   }
 
-  function showDashboard() {
+  async function showDashboard() {
     if (authSection) authSection.style.display = 'none';
     if (dashboardSection) dashboardSection.style.display = 'block';
     if (logoutBtn) logoutBtn.style.display = 'inline-flex';
 
-    loadSurveysAndCouponsData();
-    loadAnnouncementData();
-    loadCoursesData();
-    loadStudentsData();
-    loadMaintenanceAdminData();
-    loadCreditoTotalBData();
+    if (typeof loadSurveysAndCouponsData === 'function') {
+      try { await loadSurveysAndCouponsData(); } catch (e) { console.warn("Error cargando encuestas/cupones:", e); }
+    }
+    if (typeof loadAnnouncementData === 'function') {
+      try { await loadAnnouncementData(); } catch (e) { console.warn("Error cargando anuncio:", e); }
+    }
+    if (typeof loadCoursesData === 'function') {
+      try { await loadCoursesData(); } catch (e) { console.warn("Error cargando cursos:", e); }
+    }
+    if (typeof loadStudentsData === 'function') {
+      try { await loadStudentsData(); } catch (e) { console.warn("Error cargando alumnas:", e); }
+    }
+    if (typeof loadMaintenanceAdminData === 'function') {
+      try { await loadMaintenanceAdminData(); } catch (e) { console.warn("Error cargando mantenimiento:", e); }
+    }
+    if (typeof loadCreditoTotalBData === 'function') {
+      try { await loadCreditoTotalBData(); } catch (e) { console.warn("Error cargando credito:", e); }
+    }
   }
 
   window.handleAdminLogin = function (e) {
@@ -146,6 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
         pane.classList.remove('active');
       }
     });
+
+    if (paneId === 'pane-credito' && typeof loadCreditoTotalBData === 'function') {
+      loadCreditoTotalBData();
+    } else if (paneId === 'pane-mantenimiento' && typeof loadMaintenanceAdminData === 'function') {
+      loadMaintenanceAdminData();
+    }
 
     window.scrollTo({ top: 120, behavior: 'smooth' });
   };
@@ -2222,4 +2237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof closeModalHistorialCredito === 'function') closeModalHistorialCredito();
     }
   });
+
+  // Inicialización oficial de todos los módulos tras haber registrado funciones y variables
+  init();
 });

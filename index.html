@@ -219,26 +219,43 @@
 
       <!-- Opción 4: CRÉDITO TOTAL B (Navega a credito.html) -->
       <a href="credito.html" class="option-card option-card-credito" aria-label="Ingresar a Crédito Total B">
-        <div class="option-image-wrap">
-          <div class="credito-card-preview-thumb">
-            <div class="credito-thumb-inner">
-              <div class="credito-thumb-header">
-                <span class="credito-thumb-brand">TOTAL BEAUTY</span>
-                <span class="credito-thumb-chip"></span>
-              </div>
-              <div class="credito-thumb-body">
-                <span class="credito-thumb-title">CRÉDITO TOTAL B</span>
-                <span class="credito-thumb-number">•••• •••• •••• VIP</span>
-              </div>
-              <div class="credito-thumb-footer">
-                <span class="credito-thumb-tier">BLACK CARD</span>
-                <span class="credito-thumb-contactless">)))</span>
-              </div>
+      <div class="credito-card-wrapper" id="virtualCardWrapper">
+        <div class="credito-card-3d" id="virtualCard">
+          <div class="credito-card-gloss" aria-hidden="true"></div>
+          <div class="credito-card-mesh" aria-hidden="true"></div>
+          
+          <div class="credito-card-top">
+            <div class="credito-card-emblem">
+              <span class="credito-card-"><img src="assets/images/logo.png" alt="" width="30%" style="display: flex; margin: auto;"></span>
+              <span class="credito-card-brand-txt"></span>
+            </div>
+            <div class="credito-card-contactless" aria-label="Símbolo contactless">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                <path d="M8.5 15.5a6 6 0 0 1 7 0"></path>
+                <path d="M12 18.5a1 1 0 0 1 0 0"></path>
+              </svg>
             </div>
           </div>
-          <div class="image-overlay"></div>
-          <span class="option-category-badge badge-gold">Exclusivo VIP</span>
+ <span class="option-category-badge">Tarjeta Exclusiva</span>
+          <div class="credito-card-chip-row">
+
+            <span class="credito-card-tier" id="cardTierLabel">VIP CARD TOTAL B</span>
+          </div>
+
+          <div class="credito-card-mid">
+            <div class="credito-card-number" id="cardNumberDisplay">TB - &bull;&bull;&bull;&bull; - &bull;&bull;&bull;&bull; </div>
+          </div>
+
+          <div class="credito-card-bottom">
+            <div class="credito-card-holder">
+              <span class="credito-card-label">TARJETA EXCLUSIVA</span>
+              <span class="credito-card-name" id="cardHolderDisplay">LUNA HERNANDEZ LOPEZ</span>
+            </div>
+  
+          </div>
         </div>
+      </div>
 
         <div class="option-content">
           <span class="option-subtitle">Servicios Hoy • Paga Después</span>
